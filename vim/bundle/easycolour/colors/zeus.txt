@@ -60,8 +60,8 @@ Dark:
 	CursorLine:Black,#258BC5,Style=Bold
 	MarkedLine:#374A4F,#48FF05
 	diffmeno:#374A4F,Red
-
-
+	NERDTreeExecFile:#df9506
+	
 
 
 # No light colour scheme defined
