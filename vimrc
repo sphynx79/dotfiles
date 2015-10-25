@@ -54,15 +54,16 @@ return has('macunix')
  let g:sphynx_Active_GoldenRatio = 1
  let g:sphynx_Active_Html5 = 1
  let g:sphynx_Active_IndentLine = 1
- let g:sphynx_Active_L9 = 1
+ let g:sphynx_Active_L9 = 0
  let g:sphynx_Active_MatchTag = 1
  let g:sphynx_Active_NerdTree = 1
  let g:sphynx_Active_Noerrmsg = 1
  let g:sphynx_Active_RainbowParenthes = 1
- let g:sphynx_Active_SnipMate = 1
- let g:sphynx_Active_SnipMgr = 1
+ let g:sphynx_Active_SnipMate = 0
+ let g:sphynx_Active_SnipMgr = 0
  let g:sphynx_Active_Tabular = 1
- let g:sphynx_Active_Tagbar = 1
+ let g:sphynx_Active_Tagbar = 0
+ let g:sphynx_Active_Mark_Lines = 1
  let g:sphynx_Active_TComment = 1
  let g:sphynx_Active_Ultisnips = 1
  let g:sphynx_Active_UniteMark = 1
@@ -71,7 +72,7 @@ return has('macunix')
  let g:sphynx_Active_UniteVim = 1
  let g:sphynx_Active_VCoolor = 1
  let g:sphynx_Active_VimAirline = 1
- let g:sphynx_Active_VimAutocomplpop = 1
+ let g:sphynx_Active_VimAutocomplpop = 0
  let g:sphynx_Active_VimAutoformat = 1
  let g:sphynx_Active_VimCoffeScript = 1
  let g:sphynx_Active_VimColoresque = 1
@@ -79,7 +80,7 @@ return has('macunix')
  let g:sphynx_Active_VimEasymotion = 1
  let g:sphynx_Active_VimEasytags = 1
  let g:sphynx_Active_VimLess = 1
- let g:sphynx_Active_VimLocalComplete = 1
+ let g:sphynx_Active_VimLocalComplete = 0
  let g:sphynx_Active_VimMaximizer = 1
  let g:sphynx_Active_VimMisc = 1
  let g:sphynx_Active_VimMove = 1
@@ -89,27 +90,16 @@ return has('macunix')
  let g:sphynx_Active_VimSignature = 1
  let g:sphynx_Active_VimProcMac = 1
  let g:sphynx_Active_VimProcWin = 1
- let g:sphynx_Active_VimShell = 1
- let g:sphynx_Active_YouCompleteMe = 1
+ let g:sphynx_Active_VimShell = 0
+ let g:sphynx_Active_YouCompleteMe_mac = 1
+ let g:sphynx_Active_YouCompleteMe_win = 1
  if OSX()
-     let g:sphynx_Active_VimAutocomplpop = 0
-     let g:sphynx_Active_SnipMate = 0
-     let g:sphynx_Active_SnipMgr = 0
-     let g:sphynx_Active_L9 = 0
-     let g:sphynx_Active_VimLocalComplete = 0
      let g:sphynx_Active_VimProcWin = 0
-     let g:sphynx_Active_VimShell = 0
-     let g:sphynx_Active_Tagbar = 0
+     let g:sphynx_Active_YouCompleteMe_win = 0
  elseif WINDOWS()
-     let g:sphynx_Active_VimAutocomplpop = 0
-     let g:sphynx_Active_SnipMate = 0
-     let g:sphynx_Active_SnipMgr = 0
-     let g:sphynx_Active_Dash = 0
-     let g:sphynx_Active_VimLocalComplete = 0
      let g:sphynx_Active_VimProcMac = 0
-     let g:sphynx_Active_VimShell = 0
-     let g:sphynx_Active_Tagbar = 0
-     let g:sphynx_Active_L9 = 0
+     let g:sphynx_Active_Dash = 0
+     let g:sphynx_Active_YouCompleteMe_mac = 0
  elseif LINUX()
 
  endif
@@ -180,6 +170,9 @@ return has('macunix')
  endif
  if !g:sphynx_Active_TComment
      call add(g:pathogen_disabled, 'tComment') 
+ endif
+ if !g:sphynx_Active_Mark_Lines
+     call add(g:pathogen_disabled, 'MarkLines') 
  endif
  if !g:sphynx_Active_Ultisnips
      call add(g:pathogen_disabled, 'ultisnips') 
@@ -256,8 +249,11 @@ return has('macunix')
  if !g:sphynx_Active_VimShell
      call add(g:pathogen_disabled, 'vimshell.vim') 
  endif
- if !g:sphynx_Active_YouCompleteMe
-     call add(g:pathogen_disabled, 'YouCompleteMe') 
+ if !g:sphynx_Active_YouCompleteMe_mac
+     call add(g:pathogen_disabled, 'YouCompleteMe_mac') 
+ endif
+ if !g:sphynx_Active_YouCompleteMe_win
+     call add(g:pathogen_disabled, 'YouCompleteMe_win') 
  endif
  "call add(g:pathogen_disabled, 'ctrlp.vim')          " Disabilito un plugin
  call pathogen#infect()                               " Comando utilizzato per far funzionare il plugin Pathogen (serve per gestire i plugin)
@@ -1196,7 +1192,7 @@ return has('macunix')
 " }SnipMgr
 
 "  Youcompleteme {
-    if g:sphynx_Active_YouCompleteMe 
+    if g:sphynx_Active_YouCompleteMe_win || g:sphynx_Active_YouCompleteMe_mac
         let g:acp_enableAtStartup = 0                     " mi assicuro di disabilitare AutoComplPop
         let g:ycm_use_ultisnips_completer = 1             " enable ultisnip integration
         let g:ycm_collect_identifiers_from_tags_files = 1 " enable completion from tags

@@ -17,14 +17,14 @@ namespace :setup do
          if  File.exists? target
             if File.symlink?(target) 
                puts "    - Remove link : #{target}"
-               if File.file? target
+               begin
                   rm target, verbose: false
-               else
+               rescue
                   rmdir target, verbose: false
                end
             end
-
          end
       end
    end
 end
+
