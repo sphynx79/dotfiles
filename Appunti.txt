@@ -1,0 +1,14 @@
+Installation
+
+cd ~
+git clone git://github.com/edjames/dotfiles ~/.dotfiles
+cd ~/.dotfiles
+rake install
+You will be prompted before any existing files are overwritten. Symlinks are created for each dotfile in this project.
+
+
+Updating
+
+cd ~/.dotfiles
+git pull
+reload

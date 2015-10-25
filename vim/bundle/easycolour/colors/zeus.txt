@@ -1,0 +1,69 @@
+# Saving this file will update the current colour scheme.
+Basis:bandit
+Colours:
+	Violet:#EE82EE
+	CoralRed:#FF4040
+	DavysGrey:#555555
+Dark:
+   Normal:#7C95A0,#04242B
+	DefinedName:#CCC0C0
+	EnumerationValue:#FFCCFF
+	EnumerationName:DarkKhaki
+	Member:#258BC5
+	Comment:#374A4F,Style=Italic
+	Union:DarkKhaki
+	GlobalVariable:#F0E6CC
+	LocalVariable:#F0E6CC
+	GlobalConstant:#F0E6CC
+	String:#28978E
+	Class:#9A7D0C
+	Function:#709D00                          
+	Identifier:#237CB5            
+	Conditional:#BDB76B			
+	Todo:#D3377B,Style=Bold
+	Operator:#8E670B
+	Constant:#2AA198
+	Statement:#709D00
+	Method:#709D00
+	Delimiter:#BF3B53
+	Special:Red
+	GlobalVariable:#897710
+	LocalVariable:#897710
+	Type:#A98504
+	StorageClass:#FF22FF
+	Structure:#FF22FF
+	Define,Macro:#CCC7C6,Style=Bold
+	DefinedName:Violet
+	LineNr:#5E7B83
+	LineNr:BG=#062F39
+	FoldColumn:#7D97A1,#062F39
+	Visual:Black,#258BC5,Style=Bold
+	Include:#FF8000
+	Folded:#A0A0A0,#06333D
+	Label:#FF22FF
+	PreProc:#258BC5
+	MatchParen:#F0E6CC,#2AA198
+	StatusLine:#FF22FF,Black
+	SignColumn:#A0A0A0,#06333D
+   Exception:#FF22FF
+	Cursor:#F0E6CC,#2AA198
+	rubyGlobalVariable:#8888FF
+	rubyInstanceVariable:#0C8DD5
+	htmlH1:#BE482F
+	htmlTitle:#BE482F
+	Directory:#0C8DD5
+	Nerdtreeopenable:#D16704
+	rubyMethodNameTag:#709D00
+	Tagbarscope:#0C8DD5
+	vertsplit:NONE,NONE
+	erubyBlock:#FF22FF
+	CursorLine:Black,#258BC5,Style=Bold
+	MarkedLine:#374A4F,#48FF05
+	diffmeno:#374A4F,Red
+
+
+
+
+# No light colour scheme defined
+
+# vim: ff=unix:noet:ft=EasyColour

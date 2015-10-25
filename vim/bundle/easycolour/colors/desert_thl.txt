@@ -1,0 +1,44 @@
+# Saving this file will update the current colour scheme.
+Basis:FlatColor
+Colours:
+	Violet:#EE82EE
+	CoralRed:#FF4040
+	DavysGrey:#555555
+Dark:
+   Normal:#7C95A0,#04242B
+	DefinedName:#CCC0C0
+	EnumerationValue:#FFCCFF
+	EnumerationName:DarkKhaki
+	Member:#258BC5
+	Comment:#4D6166
+	Union:DarkKhaki
+	GlobalVariable:#F0E6CC
+	LocalVariable:#F0E6CC
+	GlobalConstant:#F0E6CC
+	String:#28978E
+	Class:#FF8000
+	Function:#237CB5                            
+	Identifier:#237CB5            
+	Conditional:#BDB76B			
+	Todo:#D3377B,Style=Bold
+	Operator:#8E670B
+
+	Constant:#2AA198
+	Statement:#709D00
+	Method:#709D00
+	Delimiter:#CB2F2C
+	Special:Red
+	GlobalVariable:#897710
+	LocalVariable:#897710
+	Type:#A98504
+	StorageClass:#FF22FF
+	Structure:#FF22FF
+	Define,Macro:#D8CC9D
+	DefinedName:Violet
+	LineNr:#5E7B83
+	LineNr:BG=#062F39
+	Visual:White,#CD853F
+	
+# No light colour scheme defined
+
+# vim: ff=unix:noet:ft=EasyColour
