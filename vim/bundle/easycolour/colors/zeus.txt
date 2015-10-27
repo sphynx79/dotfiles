@@ -61,6 +61,9 @@ Dark:
 	MarkedLine:#374A4F,#48FF05
 	diffmeno:#374A4F,Red
 	NERDTreeExecFile:#df9506
+	NERDTreeClosable:#258BC5
+	Nerdtreeopenable:#258BC5
+
 	
 
 
