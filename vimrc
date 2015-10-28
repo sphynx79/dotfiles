@@ -45,6 +45,7 @@ return has('macunix')
  "  Sphynx options {
  let g:sphynx_Active_Accelerated_smooth_scroll = 1
  let g:sphynx_Active_Bufkill = 1
+ let g:sphynx_Active_Colorv = 1
  let g:sphynx_Active_Dash = 1
  let g:sphynx_Active_DelimitMate = 1
  let g:sphynx_Active_Easycolour = 1
@@ -89,6 +90,7 @@ return has('macunix')
  let g:sphynx_Active_VimProcMac = 1
  let g:sphynx_Active_VimProcWin = 1
  let g:sphynx_Active_VimShell = 0
+ let g:sphynx_Active_WebapiVim = 1
  let g:sphynx_Active_YouCompleteMe_mac = 1
  let g:sphynx_Active_YouCompleteMe_win = 1
  if OSX()
@@ -111,6 +113,9 @@ return has('macunix')
  endif
  if !g:sphynx_Active_Bufkill
      call add(g:pathogen_disabled, 'bufkill.vim') 
+ endif
+ if !g:sphynx_Active_Colorv 
+     call add(g:pathogen_disabled, 'colorv.vim') 
  endif
  if !g:sphynx_Active_Dash
      call add(g:pathogen_disabled, 'dash.vim') 
@@ -240,7 +245,10 @@ return has('macunix')
  endif
  if !g:sphynx_Active_VimShell
      call add(g:pathogen_disabled, 'vimshell.vim') 
- endif
+ endif g:sphynx_Active_WebapiVim 
+ if !g:sphynx_Active_WebapiVim
+     call add(g:pathogen_disabled, 'webapi-vim') 
+ endif 
  if !g:sphynx_Active_YouCompleteMe_mac
      call add(g:pathogen_disabled, 'YouCompleteMe_mac') 
  endif
