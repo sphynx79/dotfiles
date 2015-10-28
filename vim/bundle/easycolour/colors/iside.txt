@@ -1,0 +1,27 @@
+# Saving this file will update the current colour scheme.
+Basis:macvim
+Colours:
+	Violet:#EE82EE
+	CoralRed:#FF4040
+	DavysGrey:#555555
+Dark:
+	FoldColumn:#6D7F7F,BG=#232323
+	Folded:#6D7F7F,BG=#232323
+	LineNr:BG=#232323
+	SignColumn:#A0A0A0,BG=#232323
+	Search:BG=#FFD424,Style=Bold
+	NERDTreeExecFile:#df9506
+	NERDTreeClosable:#258BC5
+	Nerdtreeopenable:#258BC5
+	Directory:#258BC5
+                                
+
+
+
+
+
+
+	
+# No light colour scheme defined
+
+# vim: ff=unix:noet:ft=EasyColour

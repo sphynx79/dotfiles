@@ -13,12 +13,14 @@ endfunction
  " } Identify platform
 
 
-colorscheme zeus 
+"colorscheme zeus 
+" colorscheme macvim 
+colorscheme iside 
 let did_install_syntax_menu = 0
 if WINDOWS()
   set guifont=Sauce_Code_Powerline:h8      " Font family and font size.
 elseif OSX()
-  set guifont=Sauce_Code_Powerline:h12      " Font family and font size.
+  set guifont=Source\ Code\ Pro\ for\ Powerline:h12      " Font family and font size.
 endif 
 set antialias                     " MacVim: smooth fonts.
 set encoding=utf-8                " Use UTF-8 everywhere.

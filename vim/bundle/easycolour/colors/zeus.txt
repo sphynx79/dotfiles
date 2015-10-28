@@ -56,13 +56,17 @@ Dark:
 	rubyMethodNameTag:#709D00
 	Tagbarscope:#0C8DD5
 	vertsplit:NONE,NONE
-	erubyBlock:#FF22FF
+	erubyBlock:#9B30FF
 	CursorLine:Black,#258BC5,Style=Bold
 	MarkedLine:#374A4F,#48FF05
 	diffmeno:#374A4F,Red
 	NERDTreeExecFile:#df9506
 	NERDTreeClosable:#258BC5
 	Nerdtreeopenable:#258BC5
+	CtrlSpaceNormal:#0C8DD5,#062F39
+	CtrlSpaceSelected:Black,#258BC5,Style=Bold
+
+ 
 
 	
 

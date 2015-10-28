@@ -245,7 +245,7 @@ return has('macunix')
  endif
  if !g:sphynx_Active_VimShell
      call add(g:pathogen_disabled, 'vimshell.vim') 
- endif g:sphynx_Active_WebapiVim 
+ endif 
  if !g:sphynx_Active_WebapiVim
      call add(g:pathogen_disabled, 'webapi-vim') 
  endif 
@@ -366,7 +366,7 @@ return has('macunix')
  " disabilita il messaggio iniziale
  set shortmess+=I
 
- set foldcolumn=2                                     " set margin left foldin area
+ set foldcolumn=3                                     " set margin left foldin area
 
  set so=5                                             " Set 7 lines to the cursor - when moving vertically using j/k
 
@@ -1000,7 +1000,7 @@ return has('macunix')
         " abilito i font speciali quelli con la path
         let g:airline_powerline_fonts = 1
         " seleziono il tema
-        let g:airline_theme     = 'solarized'
+        let g:airline_theme     = 'flatlandia'
         let g:Powerline_symbols = 'unicode'
         if !exists('g:airline_powerline_fonts')
         " Use the default set of separators with a few customizations
