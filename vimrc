@@ -70,12 +70,10 @@ return has('macunix')
  let g:sphynx_Active_UniteRails = 1
  let g:sphynx_Active_UniteTag = 1
  let g:sphynx_Active_UniteVim = 1
- let g:sphynx_Active_VCoolor = 1
  let g:sphynx_Active_VimAirline = 1
  let g:sphynx_Active_VimAutocomplpop = 0
  let g:sphynx_Active_VimAutoformat = 1
  let g:sphynx_Active_VimCoffeScript = 1
- let g:sphynx_Active_VimColoresque = 1
  let g:sphynx_Active_VimCtrlspace = 1
  let g:sphynx_Active_VimEasymotion = 1
  let g:sphynx_Active_VimEasytags = 1
@@ -189,9 +187,6 @@ return has('macunix')
  if !g:sphynx_Active_UniteVim
      call add(g:pathogen_disabled, 'unite.vim') 
  endif
- if !g:sphynx_Active_VCoolor
-     call add(g:pathogen_disabled, 'vCoolor.vim') 
- endif
  if !g:sphynx_Active_VimAirline
      call add(g:pathogen_disabled, 'vim-airline') 
  endif
@@ -204,9 +199,6 @@ return has('macunix')
  if !g:sphynx_Active_VimCoffeScript 
      call add(g:pathogen_disabled, 'vim-coffee-script') 
  endif 
- if ! g:sphynx_Active_VimColoresque
-     call add(g:pathogen_disabled, 'vim-coloresque') 
- endif
  if !g:sphynx_Active_VimCtrlspace
      call add(g:pathogen_disabled, 'vim-ctrlspace') 
  endif
