@@ -63,7 +63,7 @@ return has('macunix')
  let g:sphynx_Active_SnipMate = 0
  let g:sphynx_Active_SnipMgr = 0
  let g:sphynx_Active_Tabular = 1
- let g:sphynx_Active_Tagbar = 0
+ let g:sphynx_Active_Tagbar = 1
  let g:sphynx_Active_Mark_Lines = 1
  let g:sphynx_Active_TComment = 1
  let g:sphynx_Active_Ultisnips = 1
@@ -170,6 +170,9 @@ return has('macunix')
  endif
  if !g:sphynx_Active_Tabular
      call add(g:pathogen_disabled, 'tabular') 
+ endif
+ if !g:sphynx_Active_Tagbar
+     call add(g:pathogen_disabled, 'tagbar') 
  endif
  if !g:sphynx_Active_TComment
      call add(g:pathogen_disabled, 'tComment') 
@@ -630,7 +633,7 @@ return has('macunix')
  map <leader>q :bd<cr>
 
  " Close all the buffers
- map <leader>qa :1,1000 bd!<cr>
+ map <leader>qa :bufdo bd<cr>
  " }Shortcut => Buffer & window 
 
  "  Shortcut => Editing {
@@ -680,10 +683,23 @@ return has('macunix')
  " }Shortcut => Search & Replace
 
  "  Ctags {
- " va al tag sotto il cursore
- map <silent><leader><Left> <C-T>
- " va al tag sotto il cursore
- map <silent><leader><Right> <C-]>
+    " va al tag sotto il cursore
+    map <silent><leader><Left> <C-T>
+    " va al tag sotto il cursore
+    "map <silent><leader><Right> <C-]>
+
+    " alternative to <C-]>
+    " place your cursor on an id or class and hit <leader>]
+    " to jump to the definition
+    map <silent><leader><Right> :tag /<c-r>=expand('<cword>')<cr><cr>
+
+    " alternative to <C-w>}
+    " place your cursor on an id or class and hit <leader>}
+    " to show a preview of the definition. This doesn't seem to be
+    " very useful for CSS but it rocks for JavaScript 
+    map <silent><leader><Up> :ptag /<c-r>=expand('<cword>')<cr><cr>
+
+
  " }Ctags
 
  "  Diff mode {
@@ -811,7 +827,7 @@ return has('macunix')
 "  NerdTree {
     if g:sphynx_Active_NerdTree
         """""""""""""""""""""""""""""""""""""""""PARAMETRI""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-        let NERDTreeQuitOnOpen = 1
+        let NERDTreeQuitOnOpen = 0
         let NERDTreeMouseMode = 2 
         let NERDTreeIgnore=['\.pyc', '\~$', '\.swo$', '\.swp$', '\.git', '\.hg', '\.svn', '\.bzr']
         let NERDTreeChDirMode=0
