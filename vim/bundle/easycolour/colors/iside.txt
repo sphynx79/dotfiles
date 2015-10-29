@@ -15,6 +15,7 @@ Dark:
 	Nerdtreeopenable:#258BC5
 	Directory:#258BC5
 	Comment:#303030,Style=Italic
+	NonText:#258BC5
 
                                 
 
