@@ -45,6 +45,7 @@ return has('macunix')
  "  Sphynx options {
  let g:sphynx_Active_Accelerated_smooth_scroll = 1
  let g:sphynx_Active_Bufkill = 1
+ let g:sphynx_Active_Colorv = 1
  let g:sphynx_Active_Dash = 1
  let g:sphynx_Active_DelimitMate = 1
  let g:sphynx_Active_Easycolour = 1
@@ -62,7 +63,7 @@ return has('macunix')
  let g:sphynx_Active_SnipMate = 0
  let g:sphynx_Active_SnipMgr = 0
  let g:sphynx_Active_Tabular = 1
- let g:sphynx_Active_Tagbar = 0
+ let g:sphynx_Active_Tagbar = 1
  let g:sphynx_Active_Mark_Lines = 1
  let g:sphynx_Active_TComment = 1
  let g:sphynx_Active_Ultisnips = 1
@@ -70,12 +71,10 @@ return has('macunix')
  let g:sphynx_Active_UniteRails = 1
  let g:sphynx_Active_UniteTag = 1
  let g:sphynx_Active_UniteVim = 1
- let g:sphynx_Active_VCoolor = 1
  let g:sphynx_Active_VimAirline = 1
  let g:sphynx_Active_VimAutocomplpop = 0
  let g:sphynx_Active_VimAutoformat = 1
  let g:sphynx_Active_VimCoffeScript = 1
- let g:sphynx_Active_VimColoresque = 1
  let g:sphynx_Active_VimCtrlspace = 1
  let g:sphynx_Active_VimEasymotion = 1
  let g:sphynx_Active_VimEasytags = 1
@@ -91,6 +90,7 @@ return has('macunix')
  let g:sphynx_Active_VimProcMac = 1
  let g:sphynx_Active_VimProcWin = 1
  let g:sphynx_Active_VimShell = 0
+ let g:sphynx_Active_WebapiVim = 1
  let g:sphynx_Active_YouCompleteMe_mac = 1
  let g:sphynx_Active_YouCompleteMe_win = 1
  if OSX()
@@ -113,6 +113,9 @@ return has('macunix')
  endif
  if !g:sphynx_Active_Bufkill
      call add(g:pathogen_disabled, 'bufkill.vim') 
+ endif
+ if !g:sphynx_Active_Colorv 
+     call add(g:pathogen_disabled, 'colorv.vim') 
  endif
  if !g:sphynx_Active_Dash
      call add(g:pathogen_disabled, 'dash.vim') 
@@ -168,6 +171,9 @@ return has('macunix')
  if !g:sphynx_Active_Tabular
      call add(g:pathogen_disabled, 'tabular') 
  endif
+ if !g:sphynx_Active_Tagbar
+     call add(g:pathogen_disabled, 'tagbar') 
+ endif
  if !g:sphynx_Active_TComment
      call add(g:pathogen_disabled, 'tComment') 
  endif
@@ -189,9 +195,6 @@ return has('macunix')
  if !g:sphynx_Active_UniteVim
      call add(g:pathogen_disabled, 'unite.vim') 
  endif
- if !g:sphynx_Active_VCoolor
-     call add(g:pathogen_disabled, 'vCoolor.vim') 
- endif
  if !g:sphynx_Active_VimAirline
      call add(g:pathogen_disabled, 'vim-airline') 
  endif
@@ -204,9 +207,6 @@ return has('macunix')
  if !g:sphynx_Active_VimCoffeScript 
      call add(g:pathogen_disabled, 'vim-coffee-script') 
  endif 
- if ! g:sphynx_Active_VimColoresque
-     call add(g:pathogen_disabled, 'vim-coloresque') 
- endif
  if !g:sphynx_Active_VimCtrlspace
      call add(g:pathogen_disabled, 'vim-ctrlspace') 
  endif
@@ -248,7 +248,10 @@ return has('macunix')
  endif
  if !g:sphynx_Active_VimShell
      call add(g:pathogen_disabled, 'vimshell.vim') 
- endif
+ endif 
+ if !g:sphynx_Active_WebapiVim
+     call add(g:pathogen_disabled, 'webapi-vim') 
+ endif 
  if !g:sphynx_Active_YouCompleteMe_mac
      call add(g:pathogen_disabled, 'YouCompleteMe_mac') 
  endif
@@ -366,7 +369,7 @@ return has('macunix')
  " disabilita il messaggio iniziale
  set shortmess+=I
 
- set foldcolumn=2                                     " set margin left foldin area
+ set foldcolumn=3                                     " set margin left foldin area
 
  set so=5                                             " Set 7 lines to the cursor - when moving vertically using j/k
 
@@ -630,7 +633,7 @@ return has('macunix')
  map <leader>q :bd<cr>
 
  " Close all the buffers
- map <leader>qa :1,1000 bd!<cr>
+ map <leader>qa :bufdo bd<cr>
  " }Shortcut => Buffer & window 
 
  "  Shortcut => Editing {
@@ -680,10 +683,23 @@ return has('macunix')
  " }Shortcut => Search & Replace
 
  "  Ctags {
- " va al tag sotto il cursore
- map <silent><leader><Left> <C-T>
- " va al tag sotto il cursore
- map <silent><leader><Right> <C-]>
+    " va al tag sotto il cursore
+    map <silent><leader><Left> <C-T>
+    " va al tag sotto il cursore
+    "map <silent><leader><Right> <C-]>
+
+    " alternative to <C-]>
+    " place your cursor on an id or class and hit <leader>]
+    " to jump to the definition
+    map <silent><leader><Right> :tag /<c-r>=expand('<cword>')<cr><cr>
+
+    " alternative to <C-w>}
+    " place your cursor on an id or class and hit <leader>}
+    " to show a preview of the definition. This doesn't seem to be
+    " very useful for CSS but it rocks for JavaScript 
+    map <silent><leader><Up> :ptag /<c-r>=expand('<cword>')<cr><cr>
+
+
  " }Ctags
 
  "  Diff mode {
@@ -811,7 +827,7 @@ return has('macunix')
 "  NerdTree {
     if g:sphynx_Active_NerdTree
         """""""""""""""""""""""""""""""""""""""""PARAMETRI""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-        let NERDTreeQuitOnOpen = 1
+        let NERDTreeQuitOnOpen = 0
         let NERDTreeMouseMode = 2 
         let NERDTreeIgnore=['\.pyc', '\~$', '\.swo$', '\.swp$', '\.git', '\.hg', '\.svn', '\.bzr']
         let NERDTreeChDirMode=0
@@ -1000,7 +1016,7 @@ return has('macunix')
         " abilito i font speciali quelli con la path
         let g:airline_powerline_fonts = 1
         " seleziono il tema
-        let g:airline_theme     = 'solarized'
+        let g:airline_theme     = 'flatlandia'
         let g:Powerline_symbols = 'unicode'
         if !exists('g:airline_powerline_fonts')
         " Use the default set of separators with a few customizations
