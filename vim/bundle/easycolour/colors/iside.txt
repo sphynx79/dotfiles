@@ -16,6 +16,8 @@ Dark:
 	Directory:#258BC5
 	Comment:#303030,Style=Italic
 	NonText:#258BC5
+	Visual:#7F899D,#CAE1FF
+	Cursor:#FFFFF5,#4A708B
 
                                 
 
