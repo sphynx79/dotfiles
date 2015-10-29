@@ -9,7 +9,7 @@ Dark:
 	Folded:#6D7F7F,BG=#232323
 	LineNr:BG=#232323
 	SignColumn:#A0A0A0,BG=#232323
-	Search:BG=#FFD424,Style=Bold
+	Search:black,#FFFF19
 	NERDTreeExecFile:#df9506
 	NERDTreeClosable:#258BC5
 	Nerdtreeopenable:#258BC5
