@@ -1,6 +1,0 @@
-[submodule "vim/bundle/vim-tagbar-css"]
-	path = vim/bundle/vim-tagbar-css
-   url = https://github.com/majutsushi/tagbar
-[submodule "vim/bundle/unite-tag"]
-	path = vim/bundle/unite-tag
-	url = https://github.com/majutsushi/tagbar
