@@ -1392,7 +1392,13 @@ return has('macunix')
 "  Test {
 
     " Funzione che crea 'header per i miei file
-    "autocmd BufNewFile *.rb call MakeFileHeader('=begin','','=end')
+    autocmd BufNewFile *.rb,*.rbw call MakeFileHeader('=begin','','=end')
+
+    autocmd Bufwritepre,filewritepre *.rb,*.rbw call  Autosave()
+    autocmd FocusLost * call  Autosave()
+
+
+
     let g:header_comment_author="Boscolo Michele"
 
     function! MakeFileHeader(fc,mc,lc)
@@ -1425,17 +1431,23 @@ return has('macunix')
         set nopaste
     endfunction
 
-
-    let g:autosave_on_focus_change=1
     function! Autosave ()
-        if &modified && g:autosave_on_focus_change
-            "execute "normal ma"
-            "exe "1," . 11 . "g/Last Modified :.*/s//Last Modified : " .strftime("%d %b %Y %X")
-            "execute "normal `a"
-            "execute "normal ma"
-            write
+        if &modified
+              if match(getline(5),"Boscolo Michele") >= 0
+                execute "normal ma"
+                exe "1," . 11 . "g/Last Modified :.*/s//Last Modified : " .strftime("%d %b %Y %X")
+                execute "normal `a"
+                execute "normal ma"
+                write
+                echohl WarningMsg | echo "Aggiornato Header" | echohl None
+                sleep 500m
+              else
+                write
+              endif
         endif
     endfunction
+
+
 
     "autocmd  FocusGained  *.rb   :call Highlight_cursor()
     "function! Highlight_cursor ()
@@ -1463,4 +1475,11 @@ return has('macunix')
     "endif
 
 " }
+
+
+
+
+
+
+
 
