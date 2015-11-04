@@ -67,101 +67,86 @@ t.integer :lock_version, :null => false, :default => 0
 $0
 endsnippet
 
-# FIXME: handling literal bracket pair inside of nested tab groups?
-snippet tcr "Create references column"
-t.references :${1:taggable}${2:, :polymorphic => ${3:{ :default => '${4:Photo}' \}}}
-$0
-endsnippet
 
 snippet resources "Create resources controller class"
 class ${1:Model}sController < ApplicationController
 	before_filter :find_${1/./\l$0/}, :only => [:show, :edit, :update, :destroy]
 
 	# GET /${1/./\l$0/}s
-	# GET /${1/./\l$0/}s.xml
 	def index
-		@${1/./\l$0/}s = ${1:Model}.all
+		@${1/./\l$0/}s = $1.all.order("created_at DESC")
 
 		respond_to do |wants|
 			wants.html # index.html.erb
-			wants.xml  { render :xml => @${1/./\l$0/}s }
 		end
 	end
 
 	# GET /${1/./\l$0/}s/1
-	# GET /${1/./\l$0/}s/1.xml
 	def show
 		respond_to do |wants|
 			wants.html # show.html.erb
-			wants.xml  { render :xml => @${1/./\l$0/} }
 		end
 	end
 
 	# GET /${1/./\l$0/}s/new
-	# GET /${1/./\l$0/}s/new.xml
 	def new
-		@${1/./\l$0/} = ${1:Model}.new
+		@${1/./\l$0/} = $1.new
 
 		respond_to do |wants|
 			wants.html # new.html.erb
-			wants.xml  { render :xml => @${1/./\l$0/} }
 		end
 	end
-
+	
 	# GET /${1/./\l$0/}s/1/edit
 	def edit
 	end
 
 	# POST /${1/./\l$0/}s
-	# POST /${1/./\l$0/}s.xml
 	def create
-		@${1/./\l$0/} = ${1:Model}.new(params[:${1/./\l$0/}])
+		@${1/./\l$0/} = $1.new(${1/./\l$0/}_params)
 
 		respond_to do |wants|
 			if @${1/./\l$0/}.save
-				flash[:notice] = '${1:Model} was successfully created.'
+				flash[:notice] = '$1 was successfully created.'
 				wants.html { redirect_to(@${1/./\l$0/}) }
-				wants.xml  { render :xml => @${1/./\l$0/}, :status => :created, :location => @${1/./\l$0/} }
 			else
 				wants.html { render :action => "new" }
-				wants.xml  { render :xml => @${1/./\l$0/}.errors, :status => :unprocessable_entity }
 			end
 		end
 	end
 
 	# PUT /${1/./\l$0/}s/1
-	# PUT /${1/./\l$0/}s/1.xml
 	def update
 		respond_to do |wants|
 			if @${1/./\l$0/}.update_attributes(params[:${1/./\l$0/}])
-				flash[:notice] = '${1:Model} was successfully updated.'
+				flash[:notice] = '$1 was successfully updated.'
 				wants.html { redirect_to(@${1/./\l$0/}) }
-				wants.xml  { head :ok }
 			else
 				wants.html { render :action => "edit" }
-				wants.xml  { render :xml => @${1/./\l$0/}.errors, :status => :unprocessable_entity }
 			end
 		end
 	end
 
 	# DELETE /${1/./\l$0/}s/1
-	# DELETE /${1/./\l$0/}s/1.xml
 	def destroy
 		@${1/./\l$0/}.destroy
 
 		respond_to do |wants|
 			wants.html { redirect_to(${1/./\l$0/}s_url) }
-			wants.xml  { head :ok }
 		end
 	end
 
 	private
-		def find_${1/./\l$0/}
-			@${1/./\l$0/} = ${1:Model}.find(params[:id])
-		end
+
+	def ${1/./\l$0/}_params
+		params.require(:${1/./\l$0/}).permit(${2:Params})
+	end
+
+	def find_${1/./\l$0/}
+		@${1/./\l$0/} = $1.find(params[:id])
+	end
 
 end
-
 endsnippet
 
 snippet tcs "Create string column"
@@ -900,5 +885,32 @@ it 'routes to #${1:action}' do
 	${2:get}('/${3:url}').should route_to('`!v substitute(expand('%:t:r'), '_routing_spec$', '', '')`#$1'${4:, ${5:params}})${6}
 end
 endsnippet
+
+
+snippet befaction "before_action"
+before_action :${1:find_job}, only: [${2:count}]
+$0 
+endsnippet
+
+snippet beg "\begin{something} .. \end{}"
+\begin{${1:something}}
+	${0:${VISUAL}}
+\end{$1}
+endsnippet
+
+snippet simpleform "simple_form_for(@model) do |f|"
+= simple_form_for(${1:Model}) do |f|
+	= f.input :${2:Field}
+	= f.input :workout
+	= f.input :mood
+	= f.input :length
+	%br/
+	= f.button :submit
+endsnippet
+
+
+
+
+
 
 # vim:ft=snippets:
