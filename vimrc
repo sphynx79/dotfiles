@@ -1393,6 +1393,9 @@ return has('macunix')
 
     " Funzione che crea 'header per i miei file
     autocmd BufNewFile *.rb,*.rbw call MakeFileHeader('=begin','','=end')
+    autocmd BufNewFile *.haml call MakeFileHeader('-#','-#','-#')
+    autocmd BufNewFile *.html.erb,*.erb  call MMakeFileHeader('<%#','#','%>')
+
 
     autocmd Bufwritepre,filewritepre *.rb,*.rbw call  Autosave()
     autocmd FocusLost * call  Autosave()
