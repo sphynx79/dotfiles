@@ -19,8 +19,8 @@ function! NERDTreeAddHeader()
                           \ "", curDirNode.path.str() . g:NERDTreePath.Slash(), "file")
 
     if newNodeName ==# ''
-        call s:echo("Node Creation Aborted.")
-        return
+        echohl WarningMsg | echo "Node Creation Aborted." | echohl None
+        return 
     endif
 
     try
@@ -35,17 +35,19 @@ function! NERDTreeAddHeader()
             call parentNode.addChild(newTreeNode, 1)
             call NERDTreeRender()
             call newTreeNode.putCursorHere(1, 0)
-            call newTreeNode.openVSplit()
+            call newTreeNode.open({'where': 'h'})
             if (&ft=='ruby' || &ft=='rbw')
                 call MakeFileHeader('=begin','','=end')
-            elseif (&ft=='haml')
+             elseif (&ft=='haml')
                 call MakeFileHeader('-#','-#','-#')
             elseif (&ft=='eruby.html')
                 call MakeFileHeader('<%#','#','%>')
-            endif
+            else
 
+            endif
         endif
-    catch /^NERDTree/
-        call s:echoWarning("Node Not Created.")
-    endtry 
+    catch 
+        echohl WarningMsg | echo "Node Not Created." | echohl None
+    endtry
 endfunction
+

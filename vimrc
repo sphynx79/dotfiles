@@ -1392,9 +1392,9 @@ return has('macunix')
 "  Test {
 
     " Funzione che crea 'header per i miei file
-    autocmd BufNewFile *.rb,*.rbw call MakeFileHeader('=begin','','=end')
-    autocmd BufNewFile *.haml call MakeFileHeader('-#','-#','-#')
-    autocmd BufNewFile *.html.erb,*.erb  call MMakeFileHeader('<%#','#','%>')
+    autocmd BufNewFile *.rb,*.rbw silent call MakeFileHeader('=begin','','=end')
+    autocmd BufNewFile *.haml silent call MakeFileHeader('-#','-#','-#')
+    autocmd BufNewFile *.html.erb,*.erb silent call MakeFileHeader('<%#','#','%>')
 
 
     autocmd Bufwritepre,filewritepre *.rb,*.rbw call  Autosave()
@@ -1478,11 +1478,6 @@ return has('macunix')
     "endif
 
 " }
-
-
-
-
-
 
 
 
