@@ -33,9 +33,6 @@ endfunction
 " Insert the header when we create a new file.
 " VARIABLES:
 " author = User who create the file.
-" file = Path to the file.
-" created = Date of the file creation.
-" modified = Date of the last modification.
 
 function MakeFileHeader()
 
@@ -43,12 +40,11 @@ function MakeFileHeader()
 
    set paste
    let s:author = ""
-   let s:copyright = ""
    if exists('g:header_comment_author')
       let s:author = g:header_comment_author
    else
       echohl WarningMsg | echo "g:header_comment_author is not defined in .vimrc" | echohl None
-      sleep 2
+      sleep 4
    end
 
    let s:comment = s:fc . "\r"
