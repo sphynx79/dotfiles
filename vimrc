@@ -1392,47 +1392,42 @@ return has('macunix')
 "  Test {
 
     " Funzione che crea 'header per i miei file
-    autocmd BufNewFile *.rb,*.rbw silent call MakeFileHeader('=begin','','=end')
-    autocmd BufNewFile *.haml silent call MakeFileHeader('-#','-#','-#')
+    autocmd BufNewFile *.rb,*.rbw silent call MakeFileHeader()
+    autocmd BufNewFile *.haml silent call MakeFileHeader(','-#','-#')
     autocmd BufNewFile *.html.erb,*.erb silent call MakeFileHeader('<%#','#','%>')
 
 
     autocmd Bufwritepre,filewritepre *.rb,*.rbw call  Autosave()
-    autocmd FocusLost * call  Autosave()
+    "autocmd FocusLost * call  Autosave()
 
 
 
-    let g:header_comment_author="Boscolo Michele"
+    "let g:header_comment_author="Boscolo Michele"
 
-    function! MakeFileHeader(fc,mc,lc)
-        set paste
-        let s:author = ""
-        let s:copyright = ""
-        if exists('g:header_comment_author')
-            let s:author = g:header_comment_author
-        else
-            echo "g:header_comment_author is not defined in .vimrc"
-        end
-        if exists('g:header_comment_copyright')
-            let s:copyright = g:header_comment_copyright
-        else
-            echo "g:header_comment_copyright is not defined in .vimrc"
-        end
-
-        let s:comment = a:fc . "\r"
-        let s:comment .= "\r"
-        let s:comment .= a:mc . "File Name     : " . expand('%:t') . "\r"
-        let s:comment .= "\r"
-        let s:comment .= a:mc . "Author        : " . s:author . "\r"
-        let s:comment .= "\r"
-        let s:comment .= a:mc . "Creation Date : " . strftime("%Y-%m-%d") . "\r"
-        let s:comment .= "\r"
-        let s:comment .= a:mc . "Last Modified : " . strftime("%d %b %Y %X") . "\r"
-        let s:comment .= "\r"
-        let s:comment .= a:lc . "\r"
-        exec "normal i" . s:comment
-        set nopaste
-    endfunction
+    " function! MakeFileHeader(fc,mc,lc)
+    "     set paste
+    "     let s:author = ""
+    "     let s:copyright = ""
+    "     if exists('g:header_comment_author')
+    "         let s:author = g:header_comment_author
+    "     else
+    "         echo "g:header_comment_author is not defined in .vimrc"
+    "     end
+    "
+    "     let s:comment = a:fc . "\r"
+    "     let s:comment .= "\r"
+    "     let s:comment .= a:mc . "File Name     : " . expand('%:t') . "\r"
+    "     let s:comment .= "\r"
+    "     let s:comment .= a:mc . "Author        : " . s:author . "\r"
+    "     let s:comment .= "\r"
+    "     let s:comment .= a:mc . "Creation Date : " . strftime("%Y-%m-%d") . "\r"
+    "     let s:comment .= "\r"
+    "     let s:comment .= a:mc . "Last Modified : " . strftime("%d %b %Y %X") . "\r"
+    "     let s:comment .= "\r"
+    "     let s:comment .= a:lc . "\r"
+    "     exec "normal i" . s:comment
+    "     set nopaste
+    " endfunction
 
     function! Autosave ()
         if &modified

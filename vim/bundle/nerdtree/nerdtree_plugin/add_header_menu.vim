@@ -37,11 +37,11 @@ function! NERDTreeAddHeader()
             call newTreeNode.putCursorHere(1, 0)
             call newTreeNode.open({'where': 'h'})
             if (&ft=='ruby' || &ft=='rbw')
-                call MakeFileHeader('=begin','','=end')
+                silent call MakeFileHeader('=begin','','=end')
              elseif (&ft=='haml')
-                call MakeFileHeader('-#','-#','-#')
+               silent call MakeFileHeader('-#','-#','-#')
             elseif (&ft=='eruby.html')
-                call MakeFileHeader('<%#','#','%>')
+               silent call MakeFileHeader('<%#','#','%>')
             else
 
             endif
