@@ -67,7 +67,6 @@ return has('macunix')
  let g:sphynx_Active_Ultisnips = 1
  let g:sphynx_Active_UniteMark = 1
  let g:sphynx_Active_UniteRails = 1
- let g:sphynx_Active_UniteTag = 1
  let g:sphynx_Active_UniteVim = 1
  let g:sphynx_Active_VimAirline = 1
  let g:sphynx_Active_VimAutocomplpop = 0
@@ -180,9 +179,6 @@ return has('macunix')
  endif
  if !g:sphynx_Active_UniteRails
      call add(g:pathogen_disabled, 'unite-rails') 
- endif
- if !g:sphynx_Active_UniteTag
-     call add(g:pathogen_disabled, 'unite-tag') 
  endif
  if !g:sphynx_Active_UniteVim
      call add(g:pathogen_disabled, 'unite.vim') 
@@ -972,7 +968,6 @@ return has('macunix')
         "nnoremap <leader>p :<C-u>Unite -no-split -cursor-line-highlight=Visual -winheight=8 -update-time=10 -buffer-name=files -start-insert file_rec/async:!<cr>
         nnoremap <leader>p :Unite -no-split -winheight=8 -update-time=10 -buffer-name=files -start-insert file_rec/async:!<cr>
         nnoremap <leader>b :Unite -start-insert -winheight=8 -update-time=10 buffer_tab<cr>
-        nnoremap <leader>t :Unite -start-insert -winheight=8 -update-time=10 tag<cr>
         nnoremap <leader>y :Unite -winheight=8 -update-time=10 history/yank<cr>
         nnoremap <leader>m :Unite -winheight=8 -update-time=10 mark<cr>
         "nnoremap <silent> <leader>r :<C-u>Unite -no-split -cursor-line-highlight=Visual -winheight=8 -update-time=10 -buffer-name=register register<CR>
