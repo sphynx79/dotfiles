@@ -30,292 +30,294 @@
 
 "  General {
 
-"  Identify platform {
-silent function! OSX()
-return has('macunix')
- endfunction
- silent function! LINUX()
- return has('unix') && !has('macunix') && !has('win32unix')
- endfunction
- silent function! WINDOWS()
- return  (has('win16') || has('win32') || has('win64'))
- endfunction
+ "  Identify platform {
+
+    silent function! OSX()
+        return has('macunix')
+    endfunction
+    silent function! LINUX()
+        return has('unix') && !has('macunix') && !has('win32unix')
+    endfunction
+    silent function! WINDOWS()
+        return  (has('win16') || has('win32') || has('win64'))
+    endfunction
+
  " } Identify platform
 
  "  Sphynx options {
- let g:sphynx_Active_Accelerated_smooth_scroll = 1
- let g:sphynx_Active_Bufkill = 1
- let g:sphynx_Active_Colorv = 1
- let g:sphynx_Active_Dash = 1
- let g:sphynx_Active_DelimitMate = 1
- let g:sphynx_Active_Easycolour = 1
- let g:sphynx_Active_Emmet = 1
- let g:sphynx_Active_FastFold = 1
- let g:sphynx_Active_Funcoo = 1
- let g:sphynx_Active_GoldenRatio = 1
- let g:sphynx_Active_Html5 = 1
- let g:sphynx_Active_IndentLine = 1
- let g:sphynx_Active_L9 = 0
- let g:sphynx_Active_MatchTag = 1
- let g:sphynx_Active_NerdTree = 1
- let g:sphynx_Active_Noerrmsg = 1
- let g:sphynx_Active_RainbowParenthes = 1
- let g:sphynx_Active_Tabular = 1
- let g:sphynx_Active_Tagbar = 1
- let g:sphynx_Active_Mark_Lines = 1
- let g:sphynx_Active_Marke_Header = 1
- let g:sphynx_Active_TComment = 1
- let g:sphynx_Active_Ultisnips = 1
- let g:sphynx_Active_UniteMark = 1
- let g:sphynx_Active_UniteRails = 1
- let g:sphynx_Active_UniteVim = 1
- let g:sphynx_Active_VimAirline = 1
- let g:sphynx_Active_VimAutocomplpop = 0
- let g:sphynx_Active_VimAutoformat = 1
- let g:sphynx_Active_VimCoffeScript = 1
- let g:sphynx_Active_VimCtrlspace = 1
- let g:sphynx_Active_VimEasymotion = 1
- let g:sphynx_Active_VimEasytags = 1
- let g:sphynx_Active_VimLocalComplete = 0
- let g:sphynx_Active_VimMaximizer = 1
- let g:sphynx_Active_VimMisc = 1
- let g:sphynx_Active_VimMove = 1
- let g:sphynx_Active_VimRails = 1
- let g:sphynx_Active_VimRuby = 1
- let g:sphynx_Active_VimSignature = 1
- let g:sphynx_Active_VimProcMac = 1
- let g:sphynx_Active_VimProcWin = 1
- let g:sphynx_Active_WebapiVim = 1
- let g:sphynx_Active_YouCompleteMe_mac = 1
- let g:sphynx_Active_YouCompleteMe_win = 1
- if OSX()
-     let g:sphynx_Active_VimProcWin = 0
-     let g:sphynx_Active_YouCompleteMe_win = 0
- elseif WINDOWS()
-     let g:sphynx_Active_VimProcMac = 0
-     let g:sphynx_Active_Dash = 0
-     let g:sphynx_Active_YouCompleteMe_mac = 0
- elseif LINUX()
+     let g:sphynx_Active_Accelerated_smooth_scroll = 1
+     let g:sphynx_Active_Bufkill = 1
+     let g:sphynx_Active_Colorv = 1
+     let g:sphynx_Active_Dash = 1
+     let g:sphynx_Active_DelimitMate = 1
+     let g:sphynx_Active_Easycolour = 1
+     let g:sphynx_Active_Emmet = 1
+     let g:sphynx_Active_FastFold = 1
+     let g:sphynx_Active_Funcoo = 1
+     let g:sphynx_Active_GoldenRatio = 1
+     let g:sphynx_Active_Html5 = 1
+     let g:sphynx_Active_IndentLine = 1
+     let g:sphynx_Active_L9 = 0
+     let g:sphynx_Active_MatchTag = 1
+     let g:sphynx_Active_NerdTree = 1
+     let g:sphynx_Active_Noerrmsg = 1
+     let g:sphynx_Active_RainbowParenthes = 1
+     let g:sphynx_Active_Tabular = 1
+     let g:sphynx_Active_Tagbar = 1
+     let g:sphynx_Active_Mark_Lines = 1
+     let g:sphynx_Active_Marke_Header = 1
+     let g:sphynx_Active_TComment = 1
+     let g:sphynx_Active_Ultisnips = 1
+     let g:sphynx_Active_UniteMark = 1
+     let g:sphynx_Active_UniteRails = 1
+     let g:sphynx_Active_UniteVim = 1
+     let g:sphynx_Active_VimAirline = 1
+     let g:sphynx_Active_VimAutocomplpop = 0
+     let g:sphynx_Active_VimAutoformat = 1
+     let g:sphynx_Active_VimCoffeScript = 1
+     let g:sphynx_Active_VimCtrlspace = 1
+     let g:sphynx_Active_VimEasymotion = 1
+     let g:sphynx_Active_VimEasytags = 1
+     let g:sphynx_Active_VimLocalComplete = 0
+     let g:sphynx_Active_VimMaximizer = 1
+     let g:sphynx_Active_VimMisc = 1
+     let g:sphynx_Active_VimMove = 1
+     let g:sphynx_Active_VimRails = 1
+     let g:sphynx_Active_VimRuby = 1
+     let g:sphynx_Active_VimSignature = 1
+     let g:sphynx_Active_VimProcMac = 1
+     let g:sphynx_Active_VimProcWin = 1
+     let g:sphynx_Active_WebapiVim = 1
+     let g:sphynx_Active_YouCompleteMe_mac = 1
+     let g:sphynx_Active_YouCompleteMe_win = 1
+     if OSX()
+         let g:sphynx_Active_VimProcWin = 0
+         let g:sphynx_Active_YouCompleteMe_win = 0
+     elseif WINDOWS()
+         let g:sphynx_Active_VimProcMac = 0
+         let g:sphynx_Active_Dash = 0
+         let g:sphynx_Active_YouCompleteMe_mac = 0
+     elseif LINUX()
 
- endif
+     endif
  " }sphynx options
 
  "  Stratup Pathogen {
- let g:pathogen_disabled = []
+     let g:pathogen_disabled = []
 
- if !g:sphynx_Active_Accelerated_smooth_scroll
-     call add(g:pathogen_disabled, 'accelerated-smooth-scroll') 
- endif
- if !g:sphynx_Active_Bufkill
-     call add(g:pathogen_disabled, 'bufkill.vim') 
- endif
- if !g:sphynx_Active_Colorv 
-     call add(g:pathogen_disabled, 'colorv.vim') 
- endif
- if !g:sphynx_Active_Dash
-     call add(g:pathogen_disabled, 'dash.vim') 
- endif
- if !g:sphynx_Active_DelimitMate
-     call add(g:pathogen_disabled, 'delimitMate.vim') 
- endif
- if !g:sphynx_Active_Easycolour
-     call add(g:pathogen_disabled, 'easycolour') 
- endif
- if !g:sphynx_Active_Emmet 
-     call add(g:pathogen_disabled, 'emmet-vim') 
- endif
- if !g:sphynx_Active_FastFold
-     call add(g:pathogen_disabled, 'FastFold') 
- endif
- if !g:sphynx_Active_Funcoo
-     call add(g:pathogen_disabled, 'funcoo.vim') 
- endif
- if !g:sphynx_Active_GoldenRatio
-     call add(g:pathogen_disabled, 'golden-ratio')
- endif
- if !g:sphynx_Active_Html5
-     call add(g:pathogen_disabled, 'html5.vim') 
- endif
- if !g:sphynx_Active_IndentLine
-     call add(g:pathogen_disabled, 'indentLine') 
- endif
- if !g:sphynx_Active_L9
-     call add(g:pathogen_disabled, 'L9') 
- endif
- if !g:sphynx_Active_VimLocalComplete
-     call add(g:pathogen_disabled, 'vim-localcomplete') 
- endif
- if !g:sphynx_Active_MatchTag
-     call add(g:pathogen_disabled, 'MatchTag') 
- endif
- if !g:sphynx_Active_Marke_Header
-     call add(g:pathogen_disabled, 'MakeHeader') 
- endif
- if !g:sphynx_Active_NerdTree
-     call add(g:pathogen_disabled, 'nerdtree') 
- endif
- if !g:sphynx_Active_Noerrmsg
-     call add(g:pathogen_disabled, 'noerrmsg') 
- endif
- if !g:sphynx_Active_RainbowParenthes
-     call add(g:pathogen_disabled, 'rainbow_parentheses.vim') 
- endif
- if !g:sphynx_Active_Tabular
-     call add(g:pathogen_disabled, 'tabular') 
- endif
- if !g:sphynx_Active_Tagbar
-     call add(g:pathogen_disabled, 'tagbar') 
- endif
- if !g:sphynx_Active_TComment
-     call add(g:pathogen_disabled, 'tComment') 
- endif
- if !g:sphynx_Active_Mark_Lines
-     call add(g:pathogen_disabled, 'MarkLines') 
- endif
- if !g:sphynx_Active_Ultisnips
-     call add(g:pathogen_disabled, 'ultisnips') 
- endif
- if !g:sphynx_Active_UniteMark
-     call add(g:pathogen_disabled, 'unite-mark') 
- endif
- if !g:sphynx_Active_UniteRails
-     call add(g:pathogen_disabled, 'unite-rails') 
- endif
- if !g:sphynx_Active_UniteVim
-     call add(g:pathogen_disabled, 'unite.vim') 
- endif
- if !g:sphynx_Active_VimAirline
-     call add(g:pathogen_disabled, 'vim-airline') 
- endif
- if !g:sphynx_Active_VimAutocomplpop
-     call add(g:pathogen_disabled, 'vim-autocomplpop') 
- endif
- if !g:sphynx_Active_VimAutoformat
-     call add(g:pathogen_disabled, 'vim-autoformat') 
- endif
- if !g:sphynx_Active_VimCoffeScript 
-     call add(g:pathogen_disabled, 'vim-coffee-script') 
- endif 
- if !g:sphynx_Active_VimCtrlspace
-     call add(g:pathogen_disabled, 'vim-ctrlspace') 
- endif
- if !g:sphynx_Active_VimEasymotion
-     call add(g:pathogen_disabled, 'vim-easymotion') 
- endif
- if !g:sphynx_Active_VimEasytags
-     call add(g:pathogen_disabled, 'vim-easytags') 
- endif
- if !g:sphynx_Active_VimMaximizer
-     call add(g:pathogen_disabled, 'vim-maximizer') 
- endif
- if !g:sphynx_Active_VimMisc
-     call add(g:pathogen_disabled, 'vim-misc') 
- endif
- if !g:sphynx_Active_VimMove
-     call add(g:pathogen_disabled, 'vim-move') 
- endif
- if !g:sphynx_Active_VimRails
-     call add(g:pathogen_disabled, 'vim-rails') 
- endif
- if !g:sphynx_Active_VimRuby
-     call add(g:pathogen_disabled, 'vim-ruby') 
- endif
- if !g:sphynx_Active_VimSignature
-     call add(g:pathogen_disabled, 'vim-signature') 
- endif
- if !g:sphynx_Active_VimProcMac
-     call add(g:pathogen_disabled, 'vimproc_mac') 
- endif
- if !g:sphynx_Active_VimProcWin
-     call add(g:pathogen_disabled, 'vimproc_win') 
- endif
- if !g:sphynx_Active_WebapiVim
-     call add(g:pathogen_disabled, 'webapi-vim') 
- endif 
- if !g:sphynx_Active_YouCompleteMe_mac
-     call add(g:pathogen_disabled, 'YouCompleteMe_mac') 
- endif
- if !g:sphynx_Active_YouCompleteMe_win
-     call add(g:pathogen_disabled, 'YouCompleteMe_win') 
- endif
- "call add(g:pathogen_disabled, 'ctrlp.vim')          " Disabilito un plugin
- call pathogen#infect()                               " Comando utilizzato per far funzionare il plugin Pathogen (serve per gestire i plugin)
- call pathogen#helptags()                             " Crea la documentazione per i plugin
+     if !g:sphynx_Active_Accelerated_smooth_scroll
+         call add(g:pathogen_disabled, 'accelerated-smooth-scroll') 
+     endif
+     if !g:sphynx_Active_Bufkill
+         call add(g:pathogen_disabled, 'bufkill.vim') 
+     endif
+     if !g:sphynx_Active_Colorv 
+         call add(g:pathogen_disabled, 'colorv.vim') 
+     endif
+     if !g:sphynx_Active_Dash
+         call add(g:pathogen_disabled, 'dash.vim') 
+     endif
+     if !g:sphynx_Active_DelimitMate
+         call add(g:pathogen_disabled, 'delimitMate.vim') 
+     endif
+     if !g:sphynx_Active_Easycolour
+         call add(g:pathogen_disabled, 'easycolour') 
+     endif
+     if !g:sphynx_Active_Emmet 
+         call add(g:pathogen_disabled, 'emmet-vim') 
+     endif
+     if !g:sphynx_Active_FastFold
+         call add(g:pathogen_disabled, 'FastFold') 
+     endif
+     if !g:sphynx_Active_Funcoo
+         call add(g:pathogen_disabled, 'funcoo.vim') 
+     endif
+     if !g:sphynx_Active_GoldenRatio
+         call add(g:pathogen_disabled, 'golden-ratio')
+     endif
+     if !g:sphynx_Active_Html5
+         call add(g:pathogen_disabled, 'html5.vim') 
+     endif
+     if !g:sphynx_Active_IndentLine
+         call add(g:pathogen_disabled, 'indentLine') 
+     endif
+     if !g:sphynx_Active_L9
+         call add(g:pathogen_disabled, 'L9') 
+     endif
+     if !g:sphynx_Active_VimLocalComplete
+         call add(g:pathogen_disabled, 'vim-localcomplete') 
+     endif
+     if !g:sphynx_Active_MatchTag
+         call add(g:pathogen_disabled, 'MatchTag') 
+     endif
+     if !g:sphynx_Active_Marke_Header
+         call add(g:pathogen_disabled, 'MakeHeader') 
+     endif
+     if !g:sphynx_Active_NerdTree
+         call add(g:pathogen_disabled, 'nerdtree') 
+     endif
+     if !g:sphynx_Active_Noerrmsg
+         call add(g:pathogen_disabled, 'noerrmsg') 
+     endif
+     if !g:sphynx_Active_RainbowParenthes
+         call add(g:pathogen_disabled, 'rainbow_parentheses.vim') 
+     endif
+     if !g:sphynx_Active_Tabular
+         call add(g:pathogen_disabled, 'tabular') 
+     endif
+     if !g:sphynx_Active_Tagbar
+         call add(g:pathogen_disabled, 'tagbar') 
+     endif
+     if !g:sphynx_Active_TComment
+         call add(g:pathogen_disabled, 'tComment') 
+     endif
+     if !g:sphynx_Active_Mark_Lines
+         call add(g:pathogen_disabled, 'MarkLines') 
+     endif
+     if !g:sphynx_Active_Ultisnips
+         call add(g:pathogen_disabled, 'ultisnips') 
+     endif
+     if !g:sphynx_Active_UniteMark
+         call add(g:pathogen_disabled, 'unite-mark') 
+     endif
+     if !g:sphynx_Active_UniteRails
+         call add(g:pathogen_disabled, 'unite-rails') 
+     endif
+     if !g:sphynx_Active_UniteVim
+         call add(g:pathogen_disabled, 'unite.vim') 
+     endif
+     if !g:sphynx_Active_VimAirline
+         call add(g:pathogen_disabled, 'vim-airline') 
+     endif
+     if !g:sphynx_Active_VimAutocomplpop
+         call add(g:pathogen_disabled, 'vim-autocomplpop') 
+     endif
+     if !g:sphynx_Active_VimAutoformat
+         call add(g:pathogen_disabled, 'vim-autoformat') 
+     endif
+     if !g:sphynx_Active_VimCoffeScript 
+         call add(g:pathogen_disabled, 'vim-coffee-script') 
+     endif 
+     if !g:sphynx_Active_VimCtrlspace
+         call add(g:pathogen_disabled, 'vim-ctrlspace') 
+     endif
+     if !g:sphynx_Active_VimEasymotion
+         call add(g:pathogen_disabled, 'vim-easymotion') 
+     endif
+     if !g:sphynx_Active_VimEasytags
+         call add(g:pathogen_disabled, 'vim-easytags') 
+     endif
+     if !g:sphynx_Active_VimMaximizer
+         call add(g:pathogen_disabled, 'vim-maximizer') 
+     endif
+     if !g:sphynx_Active_VimMisc
+         call add(g:pathogen_disabled, 'vim-misc') 
+     endif
+     if !g:sphynx_Active_VimMove
+         call add(g:pathogen_disabled, 'vim-move') 
+     endif
+     if !g:sphynx_Active_VimRails
+         call add(g:pathogen_disabled, 'vim-rails') 
+     endif
+     if !g:sphynx_Active_VimRuby
+         call add(g:pathogen_disabled, 'vim-ruby') 
+     endif
+     if !g:sphynx_Active_VimSignature
+         call add(g:pathogen_disabled, 'vim-signature') 
+     endif
+     if !g:sphynx_Active_VimProcMac
+         call add(g:pathogen_disabled, 'vimproc_mac') 
+     endif
+     if !g:sphynx_Active_VimProcWin
+         call add(g:pathogen_disabled, 'vimproc_win') 
+     endif
+     if !g:sphynx_Active_WebapiVim
+         call add(g:pathogen_disabled, 'webapi-vim') 
+     endif 
+     if !g:sphynx_Active_YouCompleteMe_mac
+         call add(g:pathogen_disabled, 'YouCompleteMe_mac') 
+     endif
+     if !g:sphynx_Active_YouCompleteMe_win
+         call add(g:pathogen_disabled, 'YouCompleteMe_win') 
+     endif
+     "call add(g:pathogen_disabled, 'ctrlp.vim')          " Disabilito un plugin
+     call pathogen#infect()                               " Comando utilizzato per far funzionare il plugin Pathogen (serve per gestire i plugin)
+     call pathogen#helptags()                             " Crea la documentazione per i plugin
  " } Stratup Pathogen
 
  "  Environment {
 
- set guioptions-=T                                     " Hide toolbar.
+     set guioptions-=T                                     " Hide toolbar.
 
- set guioptions-=m                                     " Hide menubar.
+     set guioptions-=m                                     " Hide menubar.
 
- set guioptions-=L                                    " hide the left-hand scrollbar for splits/new windows
+     set guioptions-=L                                    " hide the left-hand scrollbar for splits/new windows
 
- "set guioptions+=M                                    " disable syntax menu
+     "set guioptions+=M                                    " disable syntax menu
 
- set nocompatible                                     " Deve stare prima di qualsiasi altro impostazione, perchè fa cambiare il senso dei settaggio successivi
+     set nocompatible                                     " Deve stare prima di qualsiasi altro impostazione, perchè fa cambiare il senso dei settaggio successivi
 
- set history=700                                      " Sets how many lines of history VIM has to remember
+     set history=700                                      " Sets how many lines of history VIM has to remember
 
- set autowrite                                        " Salva automaticamente il file quando esco
+     set autowrite                                        " Salva automaticamente il file quando esco
 
- set browsedir=last                                   " riapre la navigazione delle directory ricordandosi l'ultima
+     set browsedir=last                                   " riapre la navigazione delle directory ricordandosi l'ultima
 
- filetype indent on                                   " Turn on file type detection
- filetype plugin on                                   " Enable filetype plugins  
+     filetype indent on                                   " Turn on file type detection
+     filetype plugin on                                   " Enable filetype plugins  
 
- set backspace=eol,start,indent                       " Configure backspace so it acts as it should act
+     set backspace=eol,start,indent                       " Configure backspace so it acts as it should act
 
- set whichwrap+=b,s,h,l,<,>,[,]                       " Backspace and cursor keys wrap too
+     set whichwrap+=b,s,h,l,<,>,[,]                       " Backspace and cursor keys wrap too
 
- set ignorecase                                       " Ignore case when searching
+     set ignorecase                                       " Ignore case when searching
 
- set smartcase                                        " When searching try to be smart about cases
+     set smartcase                                        " When searching try to be smart about cases
 
- set noerrorbells                                     " No annoying sound on errors
- set novisualbell
- set vb t_vb= t_vb=
- set tm=500
+     set noerrorbells                                     " No annoying sound on errors
+     set novisualbell
+     set vb t_vb= t_vb=
+     set tm=500
 
- scriptencoding utf-8                                 " Set utf8 as standard encoding and en_US as the standard language
- set encoding=utf-8
+     scriptencoding utf-8                                 " Set utf8 as standard encoding and en_US as the standard language
+     set encoding=utf-8
 
- set spell spelllang=it,en                            " Set English and Italian language
+     set spell spelllang=it,en                            " Set English and Italian language
 
- set completeopt-=preview
+     set completeopt-=preview
 
- set switchbuf=usetab                                 " Now, when using :sb, :sbnext, :sbprev instead of :b, :bnext, :bprev to switch buffers, Vim will check if buffer is open in tab/window and switch to that tab/window.
+     set switchbuf=usetab                                 " Now, when using :sb, :sbnext, :sbprev instead of :b, :bnext, :bprev to switch buffers, Vim will check if buffer is open in tab/window and switch to that tab/window.
 
- set autoread
+     set autoread
 
- set nospell
+     set nospell
 
- " apre posiziona il cursore dove lo avevo lasciato l'ultima volta
- if has("autocmd")
-     au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
- endif
+     " apre posiziona il cursore dove lo avevo lasciato l'ultima volta
+     if has("autocmd")
+         au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
+     endif
 
 
- " di default era .,w,b,u,t,i io ci ho tolto la "i" cosi l'autocompletamento dovrebbe essere più veloce
- " perchè con l'opzione i fa lo scan di tutti i file inclusi
- " . => scan the current buffer ('wrapscan' is ignored)
- " w => scan buffers from other windows
- " b => scan other loaded buffers that are in the buffer list
- " t => tag completion
- " u => scan the unloaded buffers that are in the buffer list
- " i => scan current and included files
- " k => scan the files given with the 'dictionary'
- set complete=.,w,b,u,t
+     " di default era .,w,b,u,t,i io ci ho tolto la "i" cosi l'autocompletamento dovrebbe essere più veloce
+     " perchè con l'opzione i fa lo scan di tutti i file inclusi
+     " . => scan the current buffer ('wrapscan' is ignored)
+     " w => scan buffers from other windows
+     " b => scan other loaded buffers that are in the buffer list
+     " t => tag completion
+     " u => scan the unloaded buffers that are in the buffer list
+     " i => scan current and included files
+     " k => scan the files given with the 'dictionary'
+     set complete=.,w,b,u,t
 
- if WINDOWS()
-     " Prefer unix even though we're on Windows.
-     set fileformats=unix,dos
- endif
+     if WINDOWS()
+         " Prefer unix even though we're on Windows.
+         set fileformats=unix,dos
+     endif
 
- if WINDOWS()
-     let $PATH = 'C:\APPL\Python27;' . $PATH
-     "let $HOME = 'C:\APPL\vim74'
- endif
+     if WINDOWS()
+         let $PATH = 'C:\APPL\Python27;' . $PATH
+         "let $HOME = 'C:\APPL\vim74'
+     endif
 
 
  "  Files, backups and undo {
@@ -346,323 +348,292 @@ return has('macunix')
 
  "  UI Setting {
 
- " disabilita il messaggio iniziale
- set shortmess+=I
+     " disabilita il messaggio iniziale
+     set shortmess+=I
 
- set foldcolumn=3                                     " set margin left foldin area
+     set foldcolumn=3                                     " set margin left foldin area
 
- set so=5                                             " Set 7 lines to the cursor - when moving vertically using j/k
+     set so=5                                             " Set 7 lines to the cursor - when moving vertically using j/k
 
- set title                                            " Set the terminal's title
+     set title                                            " Set the terminal's title
 
- set wildmenu                                         " Turn on the WiLd menu/Enhanced command line completion
- set wildmode=list:longest,full                       " Command <Tab> completion, list matches, then longest common part, then all.
- set wildignore=*.o,*~,*.pyc,*.png,*.jpg,*.gif        " Ignore compiled files
- set wildignore+=log/**
- set wildignore+=vendor/cache/**
- set wildignore+=vendor/rails/**
- set wildignore+=tmp/**
- set wildignore+=log/**
+     set wildmenu                                         " Turn on the WiLd menu/Enhanced command line completion
+     set wildmode=list:longest,full                       " Command <Tab> completion, list matches, then longest common part, then all.
+     set wildignore=*.o,*~,*.pyc,*.png,*.jpg,*.gif        " Ignore compiled files
+     set wildignore+=log/**
+     set wildignore+=vendor/cache/**
+     set wildignore+=vendor/rails/**
+     set wildignore+=tmp/**
+     set wildignore+=log/**
 
 
- if has('cmdline_info')
-     set ruler                                          " Always show current position
-     set rulerformat=%30(%=\:b%n%y%m%r%w\ %l,%c%V\ %P%) " A ruler on steroids
-     set showcmd                                        " Show partial commands in status line and
- endif
+     if has('cmdline_info')
+         set ruler                                          " Always show current position
+         set rulerformat=%30(%=\:b%n%y%m%r%w\ %l,%c%V\ %P%) " A ruler on steroids
+         set showcmd                                        " Show partial commands in status line and
+     endif
 
- set showmode                                         " Display the current mode
+     set showmode                                         " Display the current mode
 
- set cmdheight=1                                      " Height of the command bar
+     set cmdheight=1                                      " Height of the command bar
 
- set hidden                                           " Setta per ogni buffer l'opzione hidden di default, questo mi permette di passare in maniera più pratica tra i buffer(ved. usr_22: nascondere i buffer)
+     set hidden                                           " Setta per ogni buffer l'opzione hidden di default, questo mi permette di passare in maniera più pratica tra i buffer(ved. usr_22: nascondere i buffer)
 
- set hlsearch                                         " Highlight search terms
+     set hlsearch                                         " Highlight search terms
 
- set incsearch                                        " Find as you type search
+     set incsearch                                        " Find as you type search
 
- set magic                                            " For regular expressions turn magic on
+     set magic                                            " For regular expressions turn magic on
 
- set ttyfast
+     set ttyfast
 
- set lazyredraw                                       " Don't redraw while executing macros (good performance config)
+     set lazyredraw                                       " Don't redraw while executing macros (good performance config)
 
- "set showmatch                                        " Show matching brackets when text indicator is over them
+     "set showmatch                                        " Show matching brackets when text indicator is over them
 
- "set mat=2                                            " How many tenths of a second to blink when matching brackets
+     "set mat=2                                            " How many tenths of a second to blink when matching brackets
 
- set number                                           " Mostra il numero di righe
+     set number                                           " Mostra il numero di righe
 
- highlight Pmenu ctermbg=238 gui=bold                 " migliora il colore del menu autocomplete
+     highlight Pmenu ctermbg=238 gui=bold                 " migliora il colore del menu autocomplete
 
- syntax enable                                        " Enable syntax highlighting
+     syntax enable                                        " Enable syntax highlighting
 
- if OSX()                                             " Set extra options when running in GUI mode
-     set guioptions-=T
-     set guioptions+=e
-     set t_Co=256
-     set guitablabel=%M\ %t
- endif
+     if OSX()                                             " Set extra options when running in GUI mode
+         set guioptions-=T
+         set guioptions+=e
+         set t_Co=256
+         set guitablabel=%M\ %t
+     endif
 
- set laststatus=2                                     " Always show the status line
+     set laststatus=2                                     " Always show the status line
 
- " Configurazione utile associata al plugin vim-maximizer
- "set winminwidth=0                                    " setto l'altezza minima per una finestra
- "set winminheight=0                                   " setto la larghezza minima per una finestra
+     " Configurazione utile associata al plugin vim-maximizer
+     "set winminwidth=0                                    " setto l'altezza minima per una finestra
+     "set winminheight=0                                   " setto la larghezza minima per una finestra
 
- set foldcolumn=1
+     set foldcolumn=1
 
- let g:loaded_matchparen=1                           " Disabilito il match delle parentesi
+     let g:loaded_matchparen=1                           " Disabilito il match delle parentesi
 
- "miglioro il rendereing dei font
- if WINDOWS()
-     set renderoptions=type:directx,
-                 \gamma:1.8,contrast:0.5,geom:1,
-                 \renmode:5,taamode:1,level:0.5
- endif
+     "miglioro il rendereing dei font
+     if WINDOWS()
+         set renderoptions=type:directx,
+                     \gamma:1.8,contrast:0.5,geom:1,
+                     \renmode:5,taamode:1,level:0.5
+     endif
 
- "hi vertsplit guifg=NONE guibg=NONE
- set guicursor+=a:blinkon0
+     "hi vertsplit guifg=NONE guibg=NONE
+     set guicursor+=a:blinkon0
 
- " carattere usato per la linea che separa una finestra verticale 
- set fillchars=vert:\│
+     " carattere usato per la linea che separa una finestra verticale 
+     set fillchars=vert:\│
 
- " migliora le performance di vim
- syntax sync maxlines=200
- syntax sync minlines=10
- set nocursorline
+     " migliora le performance di vim
+     syntax sync maxlines=200
+     syntax sync minlines=10
+     set nocursorline
 
  " }UI Setting
 
  "  Key Setting {
- if OSX()
-     let macvim_skip_cmd_opt_movement = 1
- endif
+     if OSX()
+         let macvim_skip_cmd_opt_movement = 1
+     endif
 
- if OSX()
-     let macvim_skip_colorscheme = 1    
- endif
+     if OSX()
+         let macvim_skip_colorscheme = 1    
+     endif
 
- " Receive option keys as meta
- if OSX()
-     set macmeta
- endif
+     " Receive option keys as meta
+     if OSX()
+         set macmeta
+     endif
 
- if OSX()
-     nmap <D-j> <M-j>
-     nmap <D-k> <M-k>
-     vmap <D-j> <M-j>
-     vmap <D-k> <M-k>
- endif 
+     if OSX()
+         nmap <D-j> <M-j>
+         nmap <D-k> <M-k>
+         vmap <D-j> <M-j>
+         vmap <D-k> <M-k>
+     endif 
 
- if WINDOWS()
-     behave mswin
-     source $VIMRUNTIME/mswin.vim
- endif 
+     if WINDOWS()
+         behave mswin
+         source $VIMRUNTIME/mswin.vim
+     endif 
 
- " map leader
- " let mapleader=" "
+     " map leader
+     " let mapleader=" "
 
- " è stato rimappato il ` per poter accedere alla posizione giusta del mio segnalibro  
- map ? i
+     " è stato rimappato il ` per poter accedere alla posizione giusta del mio segnalibro  
+     map ? i
 
- " setto il secondo leader
- let maplocalleader = '-'
+     " setto il secondo leader
+     let maplocalleader = '-'
 
- " mi permette di selezionare in modalità colonna con il mouse
- " vedere http://vim.wikia.com/wiki/Easy_block_selection_with_mouse
- noremap <M-LeftMouse> <4-LeftMouse>
- inoremap <M-LeftMouse> <4-LeftMouse>
- onoremap <M-LeftMouse> <C-C><4-LeftMouse>
- noremap <M-LeftDrag> <LeftDrag>
- inoremap <M-LeftDrag> <LeftDrag>
- onoremap <M-LeftDrag> <C-C><LeftDrag>
+     " mi permette di selezionare in modalità colonna con il mouse
+     " vedere http://vim.wikia.com/wiki/Easy_block_selection_with_mouse
+     noremap <M-LeftMouse> <4-LeftMouse>
+     inoremap <M-LeftMouse> <4-LeftMouse>
+     onoremap <M-LeftMouse> <C-C><4-LeftMouse>
+     noremap <M-LeftDrag> <LeftDrag>
+     inoremap <M-LeftDrag> <LeftDrag>
+     onoremap <M-LeftDrag> <C-C><LeftDrag>
 
- " switch CWD to the directory of the open buffer
- map <leader>cd :lcd %:p:h<cr>:pwd<cr>
+     " switch CWD to the directory of the open buffer
+     map <leader>cd :lcd %:p:h<cr>:pwd<cr>
 
- " apro esplorara risorse per aprire il mio file
- map <Leader>o :browse e<cr>
+     " apro esplorara risorse per aprire il mio file
+     map <Leader>o :browse e<cr>
 
- " apre salva con nome
- map <Leader>s :browse saveas<cr>
+     " apre salva con nome
+     map <Leader>s :browse saveas<cr>
 
- " mi apre subito il mio vimrc
- map <leader>e :e $MYVIMRC<cr>
+     " mi apre subito il mio vimrc
+     map <leader>e :e $MYVIMRC<cr>
 
- " pressing ,ss will toggle and untoggle spell checking
- map <leader>sc :setlocal spell!<cr>
+     " pressing ,ss will toggle and untoggle spell checking
+     map <leader>sc :setlocal spell!<cr>
 
- imap <Esc> <Esc><Esc>
+     imap <Esc> <Esc><Esc>
 
  "  Shortcut => Folding {
- " setto i tasti per il folding
- nmap z<Left>  zc
- nmap z<Right> zo
- nmap z<Up>    :set foldlevel=1<CR>
- nmap z<Down>  zr
+
+     " setto i tasti per il folding
+     nmap z<Left>  zc
+     nmap z<Right> zo
+     nmap z<Up>    :set foldlevel=1<CR>
+     nmap z<Down>  zr
+
  " }Shortcut => Folding
 
  "  Shortcut => Moving around {
- " Treat long lines as break lines (useful when moving around in them)
- map j gj
- map k gk
+     " Treat long lines as break lines (useful when moving around in them)
+     map j gj
+     map k gk
 
- " si posiziona a fine riga
- map 9 $
- " si posiziona a meta riga
- map 8 :call cursor(0, virtcol('$')/2)<CR>
- " si posiziona all'inizio della riga
- map 0 ^
+     " si posiziona a fine riga
+     map 9 $
+     " si posiziona a meta riga
+     map 8 :call cursor(0, virtcol('$')/2)<CR>
+     " si posiziona all'inizio della riga
+     map 0 ^
 
- " Per fare lo scroll della pagina si appogia anche al plugin accelerated-smooth-scroll
- " zz mi centra la pagina sulla riga corrente
- " C-e mi sposto verso giu di una riga
- nmap <leader><leader><Up> <C-b>
- nmap <leader><leader><Down> <C-f>
- nmap <leader><Up> <C-u>
- nmap <leader><Down> <C-d>
- " scorro la pagina di una riga verso giu senza spostare il cursore
- nmap <A-Down> <C-e>
- " scorro la pagina di una riga verso su senza spostare il cursore
- nmap <A-UP> <C-y>
+     " Per fare lo scroll della pagina si appogia anche al plugin accelerated-smooth-scroll
+     " zz mi centra la pagina sulla riga corrente
+     " C-e mi sposto verso giu di una riga
+     nmap <leader><leader><Up> <C-b>
+     nmap <leader><leader><Down> <C-f>
+     nmap <leader><Up> <C-u>
+     nmap <leader><Down> <C-d>
+     " scorro la pagina di una riga verso giu senza spostare il cursore
+     nmap <A-Down> <C-e>
+     " scorro la pagina di una riga verso su senza spostare il cursore
+     nmap <A-UP> <C-y>
 
- " Remap VIM `. per spostarmi ultima riga modificata
- map <silent><leader>le `.
-
+     " Remap VIM `. per spostarmi ultima riga modificata
+     map <silent><leader>le `.
 
  " }Shortcut => Moving around 
 
  "  Shortcut => Buffer & window {
- " per spostarmi tra i buffer
- "nnoremap <silent> <A-Left>  :bprevious<CR>
- "nnoremap <silent> <A-Right> :bnext<CR>
- "inoremap <silent> <A-Left>  :bprevious<CR>
- "inoremap <silent> <A-Right> :bnext<CR>
- "vnoremap <silent> <A-Left>  :bprevious<CR>
- "vnoremap <silent> <A-Right> :bnext<CR>
+     
+     " per spostarmi tra i tab
+     nnoremap <silent> <A-Down>  :tabprevious<CR>
+     nnoremap <silent> <A-Up> :tabnext<CR>
+     inoremap <silent> <A-Down>  :tabprevious<CR>
+     inoremap <silent> <A-Up> :tabnext<CR>
+     vnoremap <silent> <A-Down>  :tabprevious<CR>
+     vnoremap <silent> <A-Up> :tabnext<CR>
 
- " mi sposto tra i buffer con i numeri
- "imap <A-1> <Esc>:b1<CR>i
- "imap <A-2> <Esc>:b2<CR>i
- "imap <A-3> <Esc>:b3<CR>i
- "imap <A-4> <Esc>:b4<CR>i
- "imap <A-5> <Esc>:b5<CR>i
- "imap <A-6> <Esc>:b6<CR>i
- "imap <A-7> <Esc>:b7<CR>i
- "imap <A-8> <Esc>:b8<CR>i
- "imap <A-9> <Esc>:b9<CR>i
- "map <A-1> :b1<CR>
- "map <A-2> :b2<CR>
- "map <A-3> :b3<CR>
- "map <A-4> :b4<CR>
- "map <A-5> :b5<CR>
- "map <A-6> :b6<CR>
- "map <A-7> :b7<CR>
- "map <A-8> :b8<CR>
- "map <A-9> :b9<CR>
- nnoremap <silent> <A-Down>  :tabprevious<CR>
- nnoremap <silent> <A-Up> :tabnext<CR>
- inoremap <silent> <A-Down>  :tabprevious<CR>
- inoremap <silent> <A-Up> :tabnext<CR>
- vnoremap <silent> <A-Down>  :tabprevious<CR>
- vnoremap <silent> <A-Up> :tabnext<CR>
+     " Spostarmi tra le finestre con i tasti direzionali
+     nmap <silent> <C-Up> :wincmd k<CR>
+     nmap <silent> <C-Down> :wincmd j<CR>
+     nmap <silent> <C-Left> :wincmd h<CR>
+     nmap <silent> <C-Right> :wincmd l<CR>
 
- " mi permette di spostarmi tra i buffer con <leader>n.ro buffer
- for n in range(1, 9)
-     exe "nmap <leader>".n." :set foldlevel=".n."<CR>"
- endfor
+     " creare nuove finestre ed è pensato rispetto la finestra o rispetto il buffer
+     " vedere https://technotales.wordpress.com/2010/04/29/vim-splits-a-guide-to-doing-exactly-what-you-want/
+     " window
+     nmap <leader>w<left>  :topleft  vnew<CR>
+     nmap <leader>w<right> :botright vnew<CR>
+     nmap <leader>w<up>    :topleft  new<CR>
+     nmap <leader>w<down>  :botright new<CR>
 
+     " buffer
+     nmap <leader>b<left>   :leftabove  vnew<CR>
+     nmap <leader>b<right>  :rightbelow vnew<CR>
+     nmap <leader>b<up>     :leftabove  new<CR>
+     nmap <leader>b<down>   :rightbelow new<CR>
 
- " Smart way to move between windows
- map <C-j> <C-W>j
- map <C-k> <C-W>k
- map <C-h> <C-W>h
- map <C-l> <C-W>l
+     " shortcut per ridimensionare le finestre
+     nnoremap  <localleader><left>  : vertical resize -6<cr>
+     nnoremap  <localleader><up>    : resize +6<cr>
+     nnoremap  <localleader><down>  : resize -6<cr>
+     nnoremap  <localleader><right> : vertical resize +6<cr>
+     nnoremap  <localleader>-         <C-W>=
+     nnoremap  <localleader><localleader><left>   <C-w>\| 
+     nnoremap  <localleader><localleader><Up>   <C-w>_ 
 
- " Spostarmi tra le finestre con i tasti direzionali
- nmap <silent> <C-Up> :wincmd k<CR>
- nmap <silent> <C-Down> :wincmd j<CR>
- nmap <silent> <C-Left> :wincmd h<CR>
- nmap <silent> <C-Right> :wincmd l<CR>
+     " Close the current buffer
+     map <leader>q :bd<cr>
 
- " creare nuove finestre ed è pensato rispetto la finestra o rispetto il buffer
- " vedere https://technotales.wordpress.com/2010/04/29/vim-splits-a-guide-to-doing-exactly-what-you-want/
- " window
- nmap <leader>w<left>  :topleft  vnew<CR>
- nmap <leader>w<right> :botright vnew<CR>
- nmap <leader>w<up>    :topleft  new<CR>
- nmap <leader>w<down>  :botright new<CR>
-
- " buffer
- nmap <leader>b<left>   :leftabove  vnew<CR>
- nmap <leader>b<right>  :rightbelow vnew<CR>
- nmap <leader>b<up>     :leftabove  new<CR>
- nmap <leader>b<down>   :rightbelow new<CR>
-
- " shortcut per ridimensionare le finestre
- nnoremap  <localleader><left>  : vertical resize -6<cr>
- nnoremap  <localleader><up>    : resize +6<cr>
- nnoremap  <localleader><down>  : resize -6<cr>
- nnoremap  <localleader><right> : vertical resize +6<cr>
- nnoremap  <localleader>-         <C-W>=
- nnoremap  <localleader><localleader><left>   <C-w>\| 
- nnoremap  <localleader><localleader><Up>   <C-w>_ 
-
- " Close the current buffer
- map <leader>q :bd<cr>
-
- " Close all the buffers
- map <leader>qa :bufdo bd<cr>
+     " Close all the buffers
+     map <leader>qa :bufdo bd<cr>
  " }Shortcut => Buffer & window 
 
  "  Shortcut => Editing {
- " in insert mode va a capo e mi inserisce una tabulazione
- imap <C-Return> <CR><CR><C-o>k<Tab>
- " in insert mode mi crea una nuova linea e si posiziona sulla nuova linea
- imap <A-Return> <C-O>o
+ 
+     " in insert mode va a capo e mi inserisce una tabulazione
+     imap <C-Return> <CR><CR><C-o>k<Tab>
+     " in insert mode mi crea una nuova linea e si posiziona sulla nuova linea
+     imap <A-Return> <C-O>o
 
- " Usate per eliminare una parola anche tipo @variabile o se mi trova al centro della parola
- inoremap <C-d> <C-O>B<C-O>dE
- noremap <leader>dw BdEi
+     " Usate per eliminare una parola anche tipo @variabile o se mi trova al centro della parola
+     inoremap <C-d> <C-O>B<C-O>dE
+     noremap <leader>dw BdEi
 
- " Mette le parentesi sul testo selezionato
- vnoremap ( <Esc>`>a)<Esc>`<i(<Esc>
- " Mette le parentesi quadre sul testo selezionato
- vnoremap [ <Esc>`>a]<Esc>`<i[<Esc>
- " Mette gli apici sul testo selezionato
- vnoremap " <Esc>`>a"<Esc>`<i"<Esc>
+     " Mette le parentesi sul testo selezionato
+     vnoremap ( <Esc>`>a)<Esc>`<i(<Esc>
+     " Mette le parentesi quadre sul testo selezionato
+     vnoremap [ <Esc>`>a]<Esc>`<i[<Esc>
+     " Mette gli apici sul testo selezionato
+     vnoremap " <Esc>`>a"<Esc>`<i"<Esc>
 
  "  }Shortcut => Editing
 
  "  Shortcut => Visualization {
- " Clear search highlight
- map <silent> <leader>- :let @/=""<CR>:echo "Cleared search register."<cr>
+ 
+     " Clear search highlight
+     map <silent> <leader>- :let @/=""<CR>:echo "Cleared search register."<cr>
 
- " per evidenziare riga e colonna
- map <silent> <Leader>cl         :set   cursorline! <CR>
- imap <silent> <Leader>cl <Esc>  :set   cursorline! <CR>
- map <silent> <Leader>cc         :set   cursorcolumn! <CR>
- imap <silent> <Leader>cc <Esc>  :set   cursorcolumn! <CR>
- map <silent> <Leader>ca         :set   cursorcolumn!  cursorline! <CR>
- imap <silent> <Leader>ca <Esc>  :set   cursorcolumn!  cursorline! <CR>
+     " per evidenziare riga e colonna
+     map <silent> <Leader>cl         :set   cursorline! <CR>
+     imap <silent> <Leader>cl <Esc>  :set   cursorline! <CR>
+     map <silent> <Leader>cc         :set   cursorcolumn! <CR>
+     imap <silent> <Leader>cc <Esc>  :set   cursorcolumn! <CR>
+     map <silent> <Leader>ca         :set   cursorcolumn!  cursorline! <CR>
+     imap <silent> <Leader>ca <Esc>  :set   cursorcolumn!  cursorline! <CR>
 
  " }Shortcut => Visualization
 
  "  Shortcut => Search & Replace {
- " Visual mode uso * o # per avviare la ricerca della parola sotto il curosre
- vnoremap <silent> * :call VisualSelection('f')<CR>
- vnoremap <silent> # :call VisualSelection('b')<CR>
+ 
+     " Visual mode uso * o # per avviare la ricerca della parola sotto il curosre
+     vnoremap <silent> * :call VisualSelection('f')<CR>
+     vnoremap <silent> # :call VisualSelection('b')<CR>
 
- " start a substitute
- map <leader>r :%s/
- " sostituisce tutte le occorrenze della parola che si trova sotto il cursore
- nmap <leader>sw :%s/<C-r>=expand("<cword>")<CR>/
- " pull word under cursor into Ack for a global search
- map <leader>za :Ack "<C-r>=expand("<cword>")<CR>"
+     " start a substitute
+     map <leader>r :%s/
+     " sostituisce tutte le occorrenze della parola che si trova sotto il cursore
+     nmap <leader>sw :%s/<C-r>=expand("<cword>")<CR>/
+     " pull word under cursor into Ack for a global search
+     map <leader>za :Ack "<C-r>=expand("<cword>")<CR>"
+
  " }Shortcut => Search & Replace
 
  "  Ctags {
+ 
     " va al tag sotto il cursore
     map <silent><leader><Left> <C-T>
     " va al tag sotto il cursore
@@ -673,21 +644,16 @@ return has('macunix')
     " to jump to the definition
     map <silent><leader><Right> :tag /<c-r>=expand('<cword>')<cr><cr>
 
-    " alternative to <C-w>}
-    " place your cursor on an id or class and hit <leader>}
-    " to show a preview of the definition. This doesn't seem to be
-    " very useful for CSS but it rocks for JavaScript 
-    map <silent><leader><Up> :ptag /<c-r>=expand('<cword>')<cr><cr>
-
-
- " }Ctags
+ "}Ctags
 
  "  Diff mode {
- " per spostarmi tra le differenze in modalità diff
- if &diff
-     noremap <M-down> ]cz
-     noremap <M-up> [cz
- endif
+ 
+     " per spostarmi tra le differenze in modalità diff
+     if &diff
+         noremap <M-down> ]cz
+         noremap <M-up> [cz
+     endif
+     
  " }Diff mode
 
  " }Key Setting
@@ -697,14 +663,11 @@ return has('macunix')
 "  Language Support {
 
 "  Ruby & Rails {
+
     let ruby_operators = 1
-    "let ruby_space_errors = 1
-    "let ruby_fold=1                                               " enable foldmethod=syntax for ruby files
     let ruby_no_comment_fold = 1
-    set tags+=gems.tags                                           " aggiungo il supporto ai tag anche per le gemme del progetto
-    "silent command -bar -nargs=1 OpenURL :!open <args>            " Serve per aprire da vim la pagina corrente nel browser con il comando Rpreview
-    "disabilito il balloon
-    set noballooneval
+    " aggiungo il supporto ai tag anche per le gemme del progetto
+    set tags+=gems.tags                                            
 
     "forzo vim ad usare il vecchio regex engine, più veloce per la syntax in ruby
     set re=1
@@ -725,7 +688,6 @@ return has('macunix')
     endif 
 
     if !exists( "*RubyEndToken" )
-
       function RubyEndToken()
         let current_line = getline( '.' )
         let braces_at_end = '{\s*\(|\(,\|\s\|\w\)*|\s*\)\?$'
@@ -742,19 +704,19 @@ return has('macunix')
             return "\<CR>"
           endif
         endfunction
-
     endif
 
     imap <S-CR> <C-R>=RubyEndToken()<CR>
 
-
-
     "Vedere impostazione presenti in Autocmd
+    
 " }Ruby & Rails
 
 "  Xml {
+
     "au FileType xml exe ":silent 1,$!xmllint --format --recover - 2>/dev/null"
     au FileType xml exe ":silent 1,$!xml fo - 2>/dev/null"
+
 " }Xml
 
 " }Language Support
@@ -810,7 +772,7 @@ return has('macunix')
         let g:header_comment_author="Boscolo Michele"
         """""""""""""""""""""""""""""""""""""""""SHORTCUT"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
     endif
-" }MakeHeade
+" }IndentLine
 
 "  NerdTree {
     if g:sphynx_Active_NerdTree
@@ -1238,7 +1200,7 @@ return has('macunix')
         autocmd FileType css  setlocal foldmethod=indent shiftwidth=2 tabstop=2
 
         " Automatically reload vimrc when it's saved
-        "au BufWritePost .vimrc source ~/.vimrc|set foldlevel=0|AirlineRefresh
+        au BufWritePost .vimrc source ~/.vimrc|set foldlevel=0|AirlineRefresh
         au FileType vim set fdm=marker
         au SourceCmd .vimrc set foldlevel=0|AirlineRefresh
 
@@ -1252,15 +1214,11 @@ return has('macunix')
 
         " AIRLINE ==> Risolve un problema di ritardo quando si lascia modalità inserimento
         if ! has('gui_running')
-            set ttimeoutlen=10
+            set ttimeoutlen=11
             au InsertEnter * set timeoutlen=0
             au InsertLeave * set timeoutlen=1000
         endif
  
-        " FOLDING ==> Non modifica il folding quando apro gli apici per inserire una stringa o quando cambio finestra
-        "autocmd InsertEnter * if !exists('w:last_fdm') | let w:last_fdm=&foldmethod | setlocal foldmethod=manual | endif
-        "autocmd InsertLeave,WinLeave * if exists('w:last_fdm') | let &l:foldmethod=w:last_fdm | unlet w:last_fdm | endif
-
         " ULTISNIP ==> Viene utilizzato per migliorare l'integrazione con youcompleteme
         if g:sphynx_Active_Ultisnips
           au BufEnter * exec "inoremap <silent> " . g:UltiSnipsExpandTrigger . " <C-R>=g:UltiSnips_Complete()<cr>"
@@ -1272,7 +1230,7 @@ return has('macunix')
 
 "  Helper functions {
 
-    function MyFoldText()
+    function! MyFoldText()
       let nucolwidth = &fdc + &number*&numberwidth
       let winwd = winwidth(0) - nucolwidth - 5
       let foldlinecount = foldclosedend(v:foldstart) - foldclosed(v:foldstart) + 1
@@ -1284,7 +1242,7 @@ return has('macunix')
     endfunction
 
     " Tooltip per vedere codice in folding
-    function! FoldSpellBalloon()"{{{
+    function! FoldSpellBalloon()
         let foldStart = foldclosed(v:beval_lnum)
         let foldEnd = foldclosedend(v:beval_lnum)
         let lines = []
@@ -1308,7 +1266,8 @@ return has('macunix')
         endif
         " return result
         return join (lines, has("balloon_multiline" ) ? "\n" : " ")
-    endfunction"}}}
+    endfunction
+    
 
 
     " Trasforma in HTML il testo selezionato mantenendo la sintassi
@@ -1338,11 +1297,9 @@ return has('macunix')
 " }Helper functions
 
 "  Folding {
+
     set foldnestmax=2       "deepest fold is 10 levels
     set foldlevel=99        "this is just what i use
-
-    " tooltip che mostra il contenuto del folding
-    " set balloonexpr=FoldSpellBalloon()
 
     " cosa viene visualizzato quando faccio il folding del codice
     set foldtext=MyFoldText()
@@ -1353,55 +1310,28 @@ return has('macunix')
     " fare l'unfold automatico
     set foldopen+=block,insert,jump,mark,percent,quickfix,search,tag,undo
 
-    " set foldclose=all
-
     " abilita il tooltip per vedere cosa c'e dentro il mio fold
-    " set balloonexpr=FoldSpellBalloon()
+     set balloonexpr=FoldSpellBalloon()
+     set ballooneval
+     set balloondelay=400
 
-    " IMPORTANTE
+    " IMPORTANTE: 
     " ho settato dei parametri nella sessione Autocmd per non modificarmi il
     " folding quando inserivo gli apici o cambiavo finestra
+
 " }
 
 "  Test {
 
     " Funzione che crea 'header per i miei file
     autocmd BufNewFile *.rb,*.rbw silent call MakeFileHeader()
-    autocmd BufNewFile *.haml silent call MakeFileHeader(','-#','-#')
-    autocmd BufNewFile *.html.erb,*.erb silent call MakeFileHeader('<%#','#','%>')
+    autocmd BufNewFile *.haml silent call MakeFileHeader()
+    autocmd BufNewFile *.html.erb,*.erb silent call MakeFileHeader()
 
 
     autocmd Bufwritepre,filewritepre *.rb,*.rbw call  Autosave()
-    "autocmd FocusLost * call  Autosave()
-
-
-
-    "let g:header_comment_author="Boscolo Michele"
-
-    " function! MakeFileHeader(fc,mc,lc)
-    "     set paste
-    "     let s:author = ""
-    "     let s:copyright = ""
-    "     if exists('g:header_comment_author')
-    "         let s:author = g:header_comment_author
-    "     else
-    "         echo "g:header_comment_author is not defined in .vimrc"
-    "     end
-    "
-    "     let s:comment = a:fc . "\r"
-    "     let s:comment .= "\r"
-    "     let s:comment .= a:mc . "File Name     : " . expand('%:t') . "\r"
-    "     let s:comment .= "\r"
-    "     let s:comment .= a:mc . "Author        : " . s:author . "\r"
-    "     let s:comment .= "\r"
-    "     let s:comment .= a:mc . "Creation Date : " . strftime("%Y-%m-%d") . "\r"
-    "     let s:comment .= "\r"
-    "     let s:comment .= a:mc . "Last Modified : " . strftime("%d %b %Y %X") . "\r"
-    "     let s:comment .= "\r"
-    "     let s:comment .= a:lc . "\r"
-    "     exec "normal i" . s:comment
-    "     set nopaste
-    " endfunction
+    autocmd FocusLost * call  Autosave()
+    autocmd VimLeave  *   :bufdo call Autosave()
 
     function! Autosave ()
         if &modified
@@ -1418,33 +1348,6 @@ return has('macunix')
               endif
         endif
     endfunction
-
-
-
-    "autocmd  FocusGained  *.rb   :call Highlight_cursor()
-    "function! Highlight_cursor ()
-    "    set cursorline
-    "    redraw
-    "    sleep 250m
-    "    set nocursorline
-    "endfunction
-
-
-    "autocmd Bufwritepre,filewritepre *.rb exe "1," . 11 . "g/Last Modified :.*/s//Last Modified : " .strftime("%d %b %Y %X")
-    "autocmd bufwritepost,filewritepost *.rb execute "normal `a"
-
-    " salvataggio automatico quando viene perso il focus
-    " e aggiorna data di modifica nell'Header
-    " au  VimLeave   *.rb   :bufdo call Autosave()
-    " au  FocusLost  *.rb   :call Autosave()
-
-    "vedere come usare https://github.com/tacahiroy/ctrlp-funky
-    "if isdirectory(expand("~/.vim/bundle/ctrlp-funky/"))
-    "CtrlP extensions
-    "let g:ctrlp_extensions = ['funky']
-    "funky
-    "nnoremap <Leader>fu :CtrlPFunky<Cr>
-    "endif
 
 " }
 
