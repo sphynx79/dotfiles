@@ -60,7 +60,6 @@ return has('macunix')
  let g:sphynx_Active_NerdTree = 1
  let g:sphynx_Active_Noerrmsg = 1
  let g:sphynx_Active_RainbowParenthes = 1
- let g:sphynx_Active_SnipMate = 0
  let g:sphynx_Active_SnipMgr = 0
  let g:sphynx_Active_Tabular = 1
  let g:sphynx_Active_Tagbar = 1
@@ -161,9 +160,6 @@ return has('macunix')
  endif
  if !g:sphynx_Active_RainbowParenthes
      call add(g:pathogen_disabled, 'rainbow_parentheses.vim') 
- endif
- if !g:sphynx_Active_SnipMate
-     call add(g:pathogen_disabled, 'snipMate') 
  endif
  if !g:sphynx_Active_SnipMgr
      call add(g:pathogen_disabled, 'SnipMgr') 
