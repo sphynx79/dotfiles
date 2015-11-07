@@ -75,18 +75,15 @@ return has('macunix')
  let g:sphynx_Active_VimCtrlspace = 1
  let g:sphynx_Active_VimEasymotion = 1
  let g:sphynx_Active_VimEasytags = 1
- let g:sphynx_Active_VimLess = 1
  let g:sphynx_Active_VimLocalComplete = 0
  let g:sphynx_Active_VimMaximizer = 1
  let g:sphynx_Active_VimMisc = 1
  let g:sphynx_Active_VimMove = 1
  let g:sphynx_Active_VimRails = 1
  let g:sphynx_Active_VimRuby = 1
- let g:sphynx_Active_VimRubyXmpfilter = 1
  let g:sphynx_Active_VimSignature = 1
  let g:sphynx_Active_VimProcMac = 1
  let g:sphynx_Active_VimProcWin = 1
- let g:sphynx_Active_VimShell = 0
  let g:sphynx_Active_WebapiVim = 1
  let g:sphynx_Active_YouCompleteMe_mac = 1
  let g:sphynx_Active_YouCompleteMe_win = 1
@@ -204,9 +201,6 @@ return has('macunix')
  if !g:sphynx_Active_VimEasytags
      call add(g:pathogen_disabled, 'vim-easytags') 
  endif
- if !g:sphynx_Active_VimLess
-     call add(g:pathogen_disabled, 'vim-less') 
- endif
  if !g:sphynx_Active_VimMaximizer
      call add(g:pathogen_disabled, 'vim-maximizer') 
  endif
@@ -222,9 +216,6 @@ return has('macunix')
  if !g:sphynx_Active_VimRuby
      call add(g:pathogen_disabled, 'vim-ruby') 
  endif
- if !g:sphynx_Active_VimRubyXmpfilter
-     call add(g:pathogen_disabled, 'vim-ruby-xmpfilter') 
- endif
  if !g:sphynx_Active_VimSignature
      call add(g:pathogen_disabled, 'vim-signature') 
  endif
@@ -234,9 +225,6 @@ return has('macunix')
  if !g:sphynx_Active_VimProcWin
      call add(g:pathogen_disabled, 'vimproc_win') 
  endif
- if !g:sphynx_Active_VimShell
-     call add(g:pathogen_disabled, 'vimshell.vim') 
- endif 
  if !g:sphynx_Active_WebapiVim
      call add(g:pathogen_disabled, 'webapi-vim') 
  endif 
