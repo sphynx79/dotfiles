@@ -63,6 +63,7 @@ return has('macunix')
  let g:sphynx_Active_Tabular = 1
  let g:sphynx_Active_Tagbar = 1
  let g:sphynx_Active_Mark_Lines = 1
+ let g:sphynx_Active_Marke_Header = 1
  let g:sphynx_Active_TComment = 1
  let g:sphynx_Active_Ultisnips = 1
  let g:sphynx_Active_UniteMark = 1
@@ -146,6 +147,9 @@ return has('macunix')
  endif
  if !g:sphynx_Active_MatchTag
      call add(g:pathogen_disabled, 'MatchTag') 
+ endif
+ if !g:sphynx_Active_Marke_Header
+     call add(g:pathogen_disabled, 'MakeHeader') 
  endif
  if !g:sphynx_Active_NerdTree
      call add(g:pathogen_disabled, 'nerdtree') 
@@ -800,6 +804,14 @@ return has('macunix')
     endif
 " }IndentLine
 
+"  MakeHeader {
+    if g:sphynx_Active_Marke_Header
+        """""""""""""""""""""""""""""""""""""""""PARAMETRI""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+        let g:header_comment_author="Boscolo Michele"
+        """""""""""""""""""""""""""""""""""""""""SHORTCUT"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+    endif
+" }MakeHeade
+
 "  NerdTree {
     if g:sphynx_Active_NerdTree
         """""""""""""""""""""""""""""""""""""""""PARAMETRI""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -1437,4 +1449,3 @@ return has('macunix')
 " }
 
 
-let g:header_comment_author="Boscolo Michele"
