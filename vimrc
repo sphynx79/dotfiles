@@ -60,7 +60,6 @@ return has('macunix')
  let g:sphynx_Active_NerdTree = 1
  let g:sphynx_Active_Noerrmsg = 1
  let g:sphynx_Active_RainbowParenthes = 1
- let g:sphynx_Active_SnipMgr = 0
  let g:sphynx_Active_Tabular = 1
  let g:sphynx_Active_Tagbar = 1
  let g:sphynx_Active_Mark_Lines = 1
@@ -160,9 +159,6 @@ return has('macunix')
  endif
  if !g:sphynx_Active_RainbowParenthes
      call add(g:pathogen_disabled, 'rainbow_parentheses.vim') 
- endif
- if !g:sphynx_Active_SnipMgr
-     call add(g:pathogen_disabled, 'SnipMgr') 
  endif
  if !g:sphynx_Active_Tabular
      call add(g:pathogen_disabled, 'tabular') 
@@ -1189,19 +1185,6 @@ return has('macunix')
             \ }
     endif
 " }
-
-"  SnipMgr {
-    if g:sphynx_Active_SnipMgr
-        """""""""""""""""""""""""""""""""""""""""PARAMETRI""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-        if WINDOWS()
-          let g:snipmgr_snippets_dir =  $VIM."/vimfiles/bundle/snipMate/snippets"
-        elseif OSX()
-          "let g:snipmgr_snippets_dir = $HOME."/.vim/bundle/snipM"
-        endif
-        let g:snipmgr_disable_menu = 1
-        """""""""""""""""""""""""""""""""""""""""SHORTCUT"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-    endif
-" }SnipMgr
 
 "  Youcompleteme {
     if g:sphynx_Active_YouCompleteMe_win || g:sphynx_Active_YouCompleteMe_mac
