@@ -14,18 +14,43 @@
 "
 " Sections:
 "    -> General
-"    -> VIM user interface
-"    -> Colors and Fonts
-"    -> Files and backups
-"    -> Text, tab and indent related
-"    -> Text, tab and indent related   -> Visual mode related
-"    -> Text, tab and indent related   -> Moving around, tabs and buffers
-"    -> Status line
-"    -> Editing mappings
-"    -> vimgrep searching and cope displaying
-"    -> Spell checking
-"    -> Misc
-"    -> Helper functions
+"       -> Identify platform
+"       -> Sphynx options
+"       -> Stratup Pathogens
+"       -> Environment 
+"       -> UI Setting  
+"       -> Key Setting  
+"          -> Shortcut => Folding 
+"          -> Shortcut => Moving aroundg 
+"          -> Shortcut => Buffer & window
+"          -> Shortcut => Editing 
+"          -> Shortcut => Visualization 
+"          -> Shortcut => Search & Replace 
+"          -> Shortcut => Ctags 
+"          -> Shortcut => Diff mode  
+"    -> Language Support
+"       -> Ruby & Rails
+"       -> Xml
+"    -> Plugin
+"       -> Dash
+"       -> Emmet 
+"       -> GoldenRatio 
+"       -> IndentLine
+"       -> MakeHeader 
+"       -> NerdTree  
+"       -> RainbowParentheses
+"       -> Tabular 
+"       -> Tagbar
+"       -> Tcomment 
+"       -> Ultisnip
+"       -> Unite 
+"       -> Vim-airline 
+"       ->  
+"       -> 
+"       -> 
+"       -> 
+"       -> 
+
 " }
 
 "  General {
@@ -351,15 +376,22 @@
      " disabilita il messaggio iniziale
      set shortmess+=I
 
-     set foldcolumn=3                                     " set margin left foldin area
+     " setto larghezzaa fold column
+     set foldcolumn=3
 
-     set so=5                                             " Set 7 lines to the cursor - when moving vertically using j/k
+     " Set 7 lines to the cursor - when moving vertically using j/k
+     set so=5                                             
 
-     set title                                            " Set the terminal's title
+     " Set the terminal's title
+     set title
 
-     set wildmenu                                         " Turn on the WiLd menu/Enhanced command line completion
-     set wildmode=list:longest,full                       " Command <Tab> completion, list matches, then longest common part, then all.
-     set wildignore=*.o,*~,*.pyc,*.png,*.jpg,*.gif        " Ignore compiled files
+     " Turn on the WiLd menu/Enhanced command line completion
+     set wildmenu                                         
+     " Command <Tab> completion, list matches, then longest common part, then all
+     set wildmode=list:longest,full
+
+     " Ignore compiled files
+     set wildignore=*.o,*~,*.pyc,*.png,*.jpg,*.gif
      set wildignore+=log/**
      set wildignore+=vendor/cache/**
      set wildignore+=vendor/rails/**
@@ -373,46 +405,41 @@
          set showcmd                                        " Show partial commands in status line and
      endif
 
-     set showmode                                         " Display the current mode
-
-     set cmdheight=1                                      " Height of the command bar
-
-     set hidden                                           " Setta per ogni buffer l'opzione hidden di default, questo mi permette di passare in maniera più pratica tra i buffer(ved. usr_22: nascondere i buffer)
-
-     set hlsearch                                         " Highlight search terms
-
-     set incsearch                                        " Find as you type search
-
-     set magic                                            " For regular expressions turn magic on
-
+     " Display the current mode
+     set showmode                                         
+     " Height of the command bar
+     set cmdheight=1                                      
+     " Setta per ogni buffer l'opzione hidden di default, questo mi permette di passare in maniera più pratica tra i buffer(ved. usr_22: nascondere i buffer)
+     set hidden                                           
+     " Highlight search terms
+     set hlsearch
+     " Find as you type search
+     set incsearch                                        
+     " For regular expressions turn magic on
+     set magic
      set ttyfast
-
-     set lazyredraw                                       " Don't redraw while executing macros (good performance config)
-
-     "set showmatch                                        " Show matching brackets when text indicator is over them
-
-     "set mat=2                                            " How many tenths of a second to blink when matching brackets
-
-     set number                                           " Mostra il numero di righe
-
-     highlight Pmenu ctermbg=238 gui=bold                 " migliora il colore del menu autocomplete
-
-     syntax enable                                        " Enable syntax highlighting
-
-     if OSX()                                             " Set extra options when running in GUI mode
+     " Don't redraw while executing macros (good performance config)
+     set lazyredraw                                       
+     " Mostra il numero di righe
+     set number                                           
+     " migliora il colore del menu autocomplete
+     highlight Pmenu ctermbg=238 gui=bold                 
+     " Enable syntax highlighting
+     syntax enable
+     " Set extra options when running in GUI mode
+     if OSX()
          set guioptions-=T
          set guioptions+=e
          set t_Co=256
          set guitablabel=%M\ %t
      endif
 
-     set laststatus=2                                     " Always show the status line
+     if OSX()
+         let macvim_skip_colorscheme = 1    
+     endif
 
-     " Configurazione utile associata al plugin vim-maximizer
-     "set winminwidth=0                                    " setto l'altezza minima per una finestra
-     "set winminheight=0                                   " setto la larghezza minima per una finestra
-
-     set foldcolumn=1
+     " Always show the status line
+     set laststatus=2                                     
 
      let g:loaded_matchparen=1                           " Disabilito il match delle parentesi
 
@@ -437,13 +464,11 @@
  " }UI Setting
 
  "  Key Setting {
+
      if OSX()
          let macvim_skip_cmd_opt_movement = 1
      endif
 
-     if OSX()
-         let macvim_skip_colorscheme = 1    
-     endif
 
      " Receive option keys as meta
      if OSX()
@@ -462,11 +487,8 @@
          source $VIMRUNTIME/mswin.vim
      endif 
 
-     " map leader
-     " let mapleader=" "
-
      " è stato rimappato il ` per poter accedere alla posizione giusta del mio segnalibro  
-     map ? i
+     map ? ma
 
      " setto il secondo leader
      let maplocalleader = '-'
@@ -632,7 +654,7 @@
 
  " }Shortcut => Search & Replace
 
- "  Ctags {
+ "  Shortcut => Ctags {
  
     " va al tag sotto il cursore
     map <silent><leader><Left> <C-T>
@@ -646,7 +668,7 @@
 
  "}Ctags
 
- "  Diff mode {
+ "  Shortcut => Diff mode {
  
      " per spostarmi tra le differenze in modalità diff
      if &diff
@@ -1298,8 +1320,10 @@
 
 "  Folding {
 
-    set foldnestmax=2       "deepest fold is 10 levels
-    set foldlevel=99        "this is just what i use
+    " deepest fold is 10 levels
+    set foldnestmax=2       
+    " this is just what i use
+    set foldlevel=99
 
     " cosa viene visualizzato quando faccio il folding del codice
     set foldtext=MyFoldText()
