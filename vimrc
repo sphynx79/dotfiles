@@ -101,7 +101,6 @@
      let g:sphynx_Active_VimCtrlspace = 1
      let g:sphynx_Active_VimEasymotion = 1
      let g:sphynx_Active_VimEasytags = 1
-     let g:sphynx_Active_VimLocalComplete = 0
      let g:sphynx_Active_VimMaximizer = 1
      let g:sphynx_Active_VimMisc = 1
      let g:sphynx_Active_VimMove = 1
@@ -163,9 +162,6 @@
      endif
      if !g:sphynx_Active_IndentLine
          call add(g:pathogen_disabled, 'indentLine') 
-     endif
-     if !g:sphynx_Active_VimLocalComplete
-         call add(g:pathogen_disabled, 'vim-localcomplete') 
      endif
      if !g:sphynx_Active_MatchTag
          call add(g:pathogen_disabled, 'MatchTag') 
