@@ -82,7 +82,6 @@
      let g:sphynx_Active_GoldenRatio = 1
      let g:sphynx_Active_Html5 = 1
      let g:sphynx_Active_IndentLine = 1
-     let g:sphynx_Active_L9 = 0
      let g:sphynx_Active_MatchTag = 1
      let g:sphynx_Active_NerdTree = 1
      let g:sphynx_Active_Noerrmsg = 1
@@ -164,9 +163,6 @@
      endif
      if !g:sphynx_Active_IndentLine
          call add(g:pathogen_disabled, 'indentLine') 
-     endif
-     if !g:sphynx_Active_L9
-         call add(g:pathogen_disabled, 'L9') 
      endif
      if !g:sphynx_Active_VimLocalComplete
          call add(g:pathogen_disabled, 'vim-localcomplete') 
