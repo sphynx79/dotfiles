@@ -62,5 +62,6 @@ function MakeFileHeader()
    set nopaste
 endfunction
 
+
 " autocmd BufNewFile * call s:insert ()
 " autocmd BufWritePre * call s:update ()

@@ -19,6 +19,7 @@
 "       -> Stratup Pathogens
 "       -> Environment 
 "       -> UI Setting  
+"       -> Folding
 "       -> Key Setting  
 "          -> Shortcut => Folding 
 "          -> Shortcut => Moving aroundg 
@@ -41,15 +42,18 @@
 "       -> RainbowParentheses
 "       -> Tabular 
 "       -> Tagbar
-"       -> Tcomment 
+"       -> Tcomment
 "       -> Ultisnip
 "       -> Unite 
-"       -> Vim-airline 
-"       ->  
-"       -> 
-"       -> 
-"       -> 
-"       -> 
+"       -> Vim-airline
+"       -> Vim-autoformat
+"       -> Vim-ctrlspace 
+"       -> Vim-Easytag 
+"       -> Vim-maximizer 
+"       -> Vim-signature
+"       -> Youcompleteme
+"    -> Autocmd
+"    -> Helper functions
 
 " }
 
@@ -253,9 +257,12 @@
      if !g:sphynx_Active_YouCompleteMe_win
          call add(g:pathogen_disabled, 'YouCompleteMe_win') 
      endif
-     "call add(g:pathogen_disabled, 'ctrlp.vim')          " Disabilito un plugin
-     call pathogen#infect()                               " Comando utilizzato per far funzionare il plugin Pathogen (serve per gestire i plugin)
-     call pathogen#helptags()                             " Crea la documentazione per i plugin
+
+     " Comando utilizzato per far funzionare il plugin Pathogen (serve per gestire i plugin)
+     call pathogen#infect()
+     " Crea la documentazione per i plugin
+     call pathogen#helptags()
+
  " } Stratup Pathogen
 
  "  Environment {
@@ -450,6 +457,33 @@
      set nocursorline
 
  " }UI Setting
+
+ "  Folding {
+
+    " deepest fold is 10 levels
+    set foldnestmax=2       
+    " this is just what i use
+    set foldlevel=99
+
+    " cosa viene visualizzato quando faccio il folding del codice
+    set foldtext=MyFoldText()
+
+    " rimuove i caratteri ----- dopo il fold
+    setl fillchars="fold: "
+
+    " fare l'unfold automatico
+    set foldopen+=block,insert,jump,mark,percent,quickfix,search,tag,undo
+
+    " abilita il tooltip per vedere cosa c'e dentro il mio fold
+     set balloonexpr=FoldSpellBalloon()
+     set ballooneval
+     set balloondelay=400
+
+    " IMPORTANTE: 
+    " ho settato dei parametri nella sessione Autocmd per non modificarmi il
+    " folding quando inserivo gli apici o cambiavo finestra
+ 
+ " }
 
  "  Key Setting {
 
@@ -1076,7 +1110,7 @@
     endif
 " }Vim-maximizer
 
-"  vim-signature {
+"  Vim-signature {
     if g:sphynx_Active_VimSignature
         """""""""""""""""""""""""""""""""""""""""PARAMETRI""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
@@ -1137,11 +1171,9 @@
         autocmd BufRead,BufNewFile *.yml setlocal ft=yaml
         autocmd BufNewFile,BufRead *.html.erb,*.erb set filetype=eruby.html " setto in filetype in html quando uso html.erb
 
-
         " Automatic fold settings for specific files. Uncomment to use.
         " uso il plugin fastfold
         autocmd FileType ruby setlocal foldmethod=syntax
-        "autocmd FileType ruby setlocal foldmethod=manual
         autocmd FileType css  setlocal foldmethod=indent shiftwidth=2 tabstop=2
 
         " Automatically reload vimrc when it's saved
@@ -1241,44 +1273,14 @@
 
 " }Helper functions
 
-"  Folding {
-
-    " deepest fold is 10 levels
-    set foldnestmax=2       
-    " this is just what i use
-    set foldlevel=99
-
-    " cosa viene visualizzato quando faccio il folding del codice
-    set foldtext=MyFoldText()
-
-    " rimuove i caratteri ----- dopo il fold
-    setl fillchars="fold: "
-
-    " fare l'unfold automatico
-    set foldopen+=block,insert,jump,mark,percent,quickfix,search,tag,undo
-
-    " abilita il tooltip per vedere cosa c'e dentro il mio fold
-     set balloonexpr=FoldSpellBalloon()
-     set ballooneval
-     set balloondelay=400
-
-    " IMPORTANTE: 
-    " ho settato dei parametri nella sessione Autocmd per non modificarmi il
-    " folding quando inserivo gli apici o cambiavo finestra
-
-" }
-
 "  Test {
 
     " Funzione che crea 'header per i miei file
-    autocmd BufNewFile *.rb,*.rbw silent call MakeFileHeader()
-    autocmd BufNewFile *.haml silent call MakeFileHeader()
-    autocmd BufNewFile *.html.erb,*.erb silent call MakeFileHeader()
-
+    autocmd BufNewFile *.rb,*.rbw,*.haml,*.html.erb,*.erb silent call MakeFileHeader()
 
     autocmd Bufwritepre,filewritepre *.rb,*.rbw call  Autosave()
     autocmd FocusLost * call  Autosave()
-    autocmd VimLeave  *   :bufdo call Autosave()
+    autocmd VimLeave  * :bufdo call Autosave()
 
     function! Autosave ()
         if &modified
