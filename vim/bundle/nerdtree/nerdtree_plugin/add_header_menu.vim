@@ -23,7 +23,7 @@ function! NERDTreeAddHeader()
         return 
     endif
 
-    "try
+    try
         let newPath = g:NERDTreePath.Create(newNodeName)
         let parentNode = b:NERDTreeRoot.findNode(newPath.getParent())
 
@@ -38,12 +38,10 @@ function! NERDTreeAddHeader()
             call newTreeNode.open({'where': 'h'})
             if (&ft=='ruby' || &ft=='rbw' || &ft=='haml' || &ft=='eruby.html')
                 silent call MakeFileHeader()
-            else
-
             endif
         endif
-    "catch 
+    catch 
         echohl WarningMsg | echo "Node Not Created." | echohl None
-    "endtry
+    endtry
 endfunction
 

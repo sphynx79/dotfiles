@@ -1278,23 +1278,13 @@
     " Funzione che crea 'header per i miei file
     autocmd BufNewFile *.rb,*.rbw,*.haml,*.html.erb,*.erb silent call MakeFileHeader()
 
-    autocmd Bufwritepre,filewritepre *.rb,*.rbw call  Autosave()
-    autocmd FocusLost * call  Autosave()
+    autocmd Bufwritepre,filewritepre,FocusLost * silent call  Autosave()
     autocmd VimLeave  * :bufdo call Autosave()
 
     function! Autosave ()
         if &modified
-              if match(getline(5),"Boscolo Michele") >= 0
-                execute "normal ma"
-                exe "1," . 11 . "g/Last Modified :.*/s//Last Modified : " .strftime("%d %b %Y %X")
-                execute "normal `a"
-                execute "normal ma"
-                write
-                echohl WarningMsg | echo "Aggiornato Header" | echohl None
-                sleep 500m
-              else
-                write
-              endif
+             silent call UpdateHeader()
+             write
         endif
     endfunction
 

@@ -63,5 +63,20 @@ function MakeFileHeader()
 endfunction
 
 
+function UpdateHeader ()
+
+   if match(getline(5), g:header_comment_author) >= 0
+      execute "normal ma"
+      exe "1," . 11 . "g/Last Modified :.*/s//Last Modified : " .strftime("%d %b %Y %X")
+      execute "normal `a"
+      execute "normal ma"
+      echohl WarningMsg | echo "Aggiornato Header" | echohl None
+      sleep 500m
+   endif
+
+endfunction
+
+
+
 " autocmd BufNewFile * call s:insert ()
 " autocmd BufWritePre * call s:update ()
