@@ -97,7 +97,6 @@
      let g:sphynx_Active_UniteRails = 1
      let g:sphynx_Active_UniteVim = 1
      let g:sphynx_Active_VimAirline = 1
-     let g:sphynx_Active_VimAutocomplpop = 0
      let g:sphynx_Active_VimAutoformat = 1
      let g:sphynx_Active_VimCoffeScript = 1
      let g:sphynx_Active_VimCtrlspace = 1
@@ -213,9 +212,6 @@
      endif
      if !g:sphynx_Active_VimAirline
          call add(g:pathogen_disabled, 'vim-airline') 
-     endif
-     if !g:sphynx_Active_VimAutocomplpop
-         call add(g:pathogen_disabled, 'vim-autocomplpop') 
      endif
      if !g:sphynx_Active_VimAutoformat
          call add(g:pathogen_disabled, 'vim-autoformat') 
@@ -1016,71 +1012,6 @@
         """""""""""""""""""""""""""""""""""""""""SHORTCUT"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
     endif
 " }vim-airline
-
-"  Vim-autocomplpop {
-    if g:sphynx_Active_VimAutocomplpop 
-        """""""""""""""""""""""""""""""""""""""""PARAMETRI""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-        " Remove dictionary lookup from the Vim keyword completion.  It did always
-        " complete the first match for me.  If you edit files with tags you might
-        " want to add those.
-        " . => scan the current buffer ('wrapscan' is ignored)
-        " w => scan buffers from other windows
-        " b => scan other loaded buffers that are in the buffer list
-        " t => tag completion
-        " u => scan the unloaded buffers that are in the buffer list
-        " i => scan current and included files
-        " k => scan the files given with the 'dictionary'
-        let g:acp_completeOption = '.,w,b,t'
-
-        " Don't preselect the first item.  Use the same key to select and to browse
-        let g:acp_autoselectFirstCompletion = 0
-
-        " count of chars required to start keyword completion
-        let g:acp_behaviorKeywordLength = 3
-
-        " This adds the local-completion function before all other completions
-        " (snipmate, keyword, file) in the g:acp_behavior records set up by ACP.
-        let g:acp_behaviorUserDefinedFunction = 'localcomplete#localMatches'
-        "let g:acp_behaviorUserDefinedMeets = 'acp#meetsForKeyword'
-
-        let g:acp_behaviorRubyOmniMethodLength = -1
-        "Per usare snipmate devi iniziare a scrivere in maiuscolo e per inserire lo snipper devo dare Ctrl-y
-        let g:acp_behaviorSnipmateLength = 1
-
-        let g:acp_mappingDriven = 1
-        let g:acp_behaviorKeywordCommand = "\<C-n>"
-        """""""""""""""""""""""""""""""""""""""""SHORTCUT"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-        " Line  completion
-        inoremap <C-L> <C-R>=acp#pum_color_and_map_adaptions(1)<CR><C-X><C-L><C-P>
-
-        " Filename completion
-        inoremap <C-F> <C-R>=acp#pum_color_and_map_adaptions(1)<CR><C-X><C-F><C-P>
-
-        " Spelling corrections
-        "inoremap <C-S> <C-R>=acp#pum_color_and_map_adaptions(1)<CR><C-X><C-S><C-P>
-
-        " Omni completion
-        inoremap <C-O> <C-R>=acp#pum_color_and_map_adaptions(1)<CR><C-X><C-O><C-P>
-
-        " User defined completion
-        inoremap <C-U> <C-R>=acp#pum_color_and_map_adaptions(1)<CR><C-X><C-U><C-P>
-
-
-        " Close the pum with <Return>.  Otherwise, it would restore the old value after
-        " manual completion.
-        inoremap <Return> <C-R>=pumvisible()
-                    \ ? "\<lt>C-X>\<lt>Return>"
-                    \ : "\<lt>Return>"<CR>
-
-        " Specify the keys used to select entries.  These create insert mode
-        " mappings like you know them from the Vim documentation.
-        "let g:acp_nextItemMapping = ['<TAB>', '\<lt>TAB>']
-        "let g:acp_previousItemMapping = ['<S-TAB>', '\<lt>S-TAB>']
-
-        map <S-F5> :AcpDisable<CR>
-        map <F5>   :AcpEnable<CR>
-    endif
-" }AutoComplPop
 
 "  Vim-autoformat {
     if g:sphynx_Active_VimAutoformat
