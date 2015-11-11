@@ -2,11 +2,11 @@
 " vim: set sw=4 ts=4 sts=4 et tw=120 foldmarker={,} foldlevel=0 foldmethod=marker spell:
 "
 " Maintainer:
-"       Boscolo Michele
+"       
 "       miboscol@gmail.com
 "
 " Version:
-"       1.0 - 04/09/12 09:26:00
+"       2.0 - 10/11/15 09:26:00
 "
 " Blog_post:
 "       http:/.............
@@ -18,8 +18,10 @@
 "       -> Sphynx options
 "       -> Stratup Pathogens
 "       -> Environment 
+"          -> Files, backups and undo 
+"          -> Tab and indent relate
+"          -> Folding
 "       -> UI Setting  
-"       -> Folding
 "       -> Key Setting  
 "          -> Shortcut => Folding 
 "          -> Shortcut => Moving aroundg 
@@ -33,28 +35,27 @@
 "       -> Ruby & Rails
 "       -> Xml
 "    -> Plugin
+"       -> Airline
+"       -> AutoFormat
+"       -> CtrlSpace 
 "       -> Dash
+"       -> EasyTag 
 "       -> Emmet 
 "       -> GoldenRatio 
 "       -> IndentLine
 "       -> MakeHeader 
+"       -> Maximizer 
 "       -> NerdTree  
 "       -> RainbowParentheses
+"       -> Signature
 "       -> Tabular 
 "       -> Tagbar
 "       -> Tcomment
 "       -> Ultisnip
 "       -> Unite 
-"       -> Vim-airline
-"       -> Vim-autoformat
-"       -> Vim-ctrlspace 
-"       -> Vim-Easytag 
-"       -> Vim-maximizer 
-"       -> Vim-signature
 "       -> Youcompleteme
 "    -> Autocmd
 "    -> Helper functions
-
 " }
 
 "  General {
@@ -74,189 +75,77 @@
  " } Identify platform
 
  "  Sphynx options {
-     let g:sphynx_Active_Accelerated_smooth_scroll = 1
-     let g:sphynx_Active_Bufkill = 1
-     let g:sphynx_Active_Colorv = 1
-     let g:sphynx_Active_Dash = 1
-     let g:sphynx_Active_DelimitMate = 1
-     let g:sphynx_Active_Easycolour = 1
-     let g:sphynx_Active_Emmet = 1
-     let g:sphynx_Active_FastFold = 1
-     let g:sphynx_Active_Funcoo = 1
-     let g:sphynx_Active_GoldenRatio = 1
-     let g:sphynx_Active_Html5 = 1
-     let g:sphynx_Active_IndentLine = 1
-     let g:sphynx_Active_MatchTag = 1
-     let g:sphynx_Active_NerdTree = 1
-     let g:sphynx_Active_Noerrmsg = 1
-     let g:sphynx_Active_RainbowParenthes = 1
-     let g:sphynx_Active_Tabular = 1
-     let g:sphynx_Active_Tagbar = 1
-     let g:sphynx_Active_Mark_Lines = 1
-     let g:sphynx_Active_Marke_Header = 1
-     let g:sphynx_Active_TComment = 1
-     let g:sphynx_Active_Ultisnips = 1
-     let g:sphynx_Active_UniteMark = 1
-     let g:sphynx_Active_UniteRails = 1
-     let g:sphynx_Active_UniteVim = 1
-     let g:sphynx_Active_VimAirline = 1
-     let g:sphynx_Active_VimAutoformat = 1
-     let g:sphynx_Active_VimCoffeScript = 1
-     let g:sphynx_Active_VimCtrlspace = 1
-     let g:sphynx_Active_VimEasymotion = 1
-     let g:sphynx_Active_VimEasytags = 1
-     let g:sphynx_Active_VimMaximizer = 1
-     let g:sphynx_Active_VimMisc = 1
-     let g:sphynx_Active_VimMove = 1
-     let g:sphynx_Active_VimRails = 1
-     let g:sphynx_Active_VimRuby = 1
-     let g:sphynx_Active_VimSignature = 1
-     let g:sphynx_Active_VimProcMac = 1
-     let g:sphynx_Active_VimProcWin = 1
-     let g:sphynx_Active_WebapiVim = 1
-     let g:sphynx_Active_YouCompleteMe_mac = 1
-     let g:sphynx_Active_YouCompleteMe_win = 1
+
+     let g:sphynx_Active = {
+         \ 'AcceleratedSmoothScroll'  :  1 ,
+         \ 'Airline'                  :  1 ,
+         \ 'Autoformat'               :  1 ,
+         \ 'BufKill'                  :  1 ,
+         \ 'CoffeeScript'             :  1 ,
+         \ 'Colorv'                   :  1 ,
+         \ 'CtrlSpace'                :  1 ,
+         \ 'Dash'                     :  1 , 
+         \ 'DelimitMate'              :  1 ,
+         \ 'EasyColour'               :  1 ,
+         \ 'EasyMotion'               :  1 ,
+         \ 'EasyTags'                 :  1 ,
+         \ 'Emmet'                    :  1 ,
+         \ 'FastFold'                 :  1 , 
+         \ 'Funcoo'                   :  1 ,
+         \ 'GoldenRatio'              :  1 ,
+         \ 'Html5'                    :  1 ,
+         \ 'IndentLine'               :  1 ,
+         \ 'MakeHeader'               :  1 ,
+         \ 'MarkLines'                :  1 ,
+         \ 'MatchTag'                 :  1 ,
+         \ 'Maximizer'                :  1 ,
+         \ 'Misc'                     :  1 ,
+         \ 'Move'                     :  1 ,
+         \ 'Nerdtree'                 :  1 ,
+         \ 'NoErrMsg'                 :  1 ,
+         \ 'Rails'                    :  1 ,
+         \ 'RainbowParentheses'       :  1 ,
+         \ 'Ruby'                     :  1 ,
+         \ 'Signature'                :  1 ,
+         \ 'Tabular'                  :  1 ,
+         \ 'TagBar'                   :  1 ,
+         \ 'TagBarCss'                :  1 ,
+         \ 'TComment'                 :  1 ,
+         \ 'Ultisnips'                :  1 ,
+         \ 'Unite'                    :  1 ,
+         \ 'UniteMark'                :  1 ,
+         \ 'UniteRails'               :  1 ,
+         \ 'VimProcMac'               :  1 ,
+         \ 'VimProcWin'               :  1 ,
+         \ 'WebApi'                   :  1 ,
+         \ 'YouCompleteMeMac'         :  1 ,
+         \ 'YouCompleteMeWin'         :  1 ,
+         \}
+ 
      if OSX()
-         let g:sphynx_Active_VimProcWin = 0
-         let g:sphynx_Active_YouCompleteMe_win = 0
+         let g:sphynx_Active.VimProcWin = 0
+         let g:sphynx_Active.YouCompleteMeWin = 0
      elseif WINDOWS()
-         let g:sphynx_Active_VimProcMac = 0
-         let g:sphynx_Active_Dash = 0
-         let g:sphynx_Active_YouCompleteMe_mac = 0
+         let g:sphynx_Active.VimProcMac  = 0
+         let g:sphynx_Active.Dash = 0
+         let g:sphynx_Active.YouCompleteMeMac = 0
+         let g:sphynx_Active.Maximizer = 0
      elseif LINUX()
 
      endif
+
  " }sphynx options
 
  "  Stratup Pathogen {
+
+     " Disabilito i plugin non necessari
      let g:pathogen_disabled = []
 
-     if !g:sphynx_Active_Accelerated_smooth_scroll
-         call add(g:pathogen_disabled, 'accelerated-smooth-scroll') 
-     endif
-     if !g:sphynx_Active_Bufkill
-         call add(g:pathogen_disabled, 'bufkill.vim') 
-     endif
-     if !g:sphynx_Active_Colorv 
-         call add(g:pathogen_disabled, 'colorv.vim') 
-     endif
-     if !g:sphynx_Active_Dash
-         call add(g:pathogen_disabled, 'dash.vim') 
-     endif
-     if !g:sphynx_Active_DelimitMate
-         call add(g:pathogen_disabled, 'delimitMate.vim') 
-     endif
-     if !g:sphynx_Active_Easycolour
-         call add(g:pathogen_disabled, 'easycolour') 
-     endif
-     if !g:sphynx_Active_Emmet 
-         call add(g:pathogen_disabled, 'emmet-vim') 
-     endif
-     if !g:sphynx_Active_FastFold
-         call add(g:pathogen_disabled, 'FastFold') 
-     endif
-     if !g:sphynx_Active_Funcoo
-         call add(g:pathogen_disabled, 'funcoo.vim') 
-     endif
-     if !g:sphynx_Active_GoldenRatio
-         call add(g:pathogen_disabled, 'golden-ratio')
-     endif
-     if !g:sphynx_Active_Html5
-         call add(g:pathogen_disabled, 'html5.vim') 
-     endif
-     if !g:sphynx_Active_IndentLine
-         call add(g:pathogen_disabled, 'indentLine') 
-     endif
-     if !g:sphynx_Active_MatchTag
-         call add(g:pathogen_disabled, 'MatchTag') 
-     endif
-     if !g:sphynx_Active_Marke_Header
-         call add(g:pathogen_disabled, 'MakeHeader') 
-     endif
-     if !g:sphynx_Active_NerdTree
-         call add(g:pathogen_disabled, 'nerdtree') 
-     endif
-     if !g:sphynx_Active_Noerrmsg
-         call add(g:pathogen_disabled, 'noerrmsg') 
-     endif
-     if !g:sphynx_Active_RainbowParenthes
-         call add(g:pathogen_disabled, 'rainbow_parentheses.vim') 
-     endif
-     if !g:sphynx_Active_Tabular
-         call add(g:pathogen_disabled, 'tabular') 
-     endif
-     if !g:sphynx_Active_Tagbar
-         call add(g:pathogen_disabled, 'tagbar') 
-     endif
-     if !g:sphynx_Active_TComment
-         call add(g:pathogen_disabled, 'tComment') 
-     endif
-     if !g:sphynx_Active_Mark_Lines
-         call add(g:pathogen_disabled, 'MarkLines') 
-     endif
-     if !g:sphynx_Active_Ultisnips
-         call add(g:pathogen_disabled, 'ultisnips') 
-     endif
-     if !g:sphynx_Active_UniteMark
-         call add(g:pathogen_disabled, 'unite-mark') 
-     endif
-     if !g:sphynx_Active_UniteRails
-         call add(g:pathogen_disabled, 'unite-rails') 
-     endif
-     if !g:sphynx_Active_UniteVim
-         call add(g:pathogen_disabled, 'unite.vim') 
-     endif
-     if !g:sphynx_Active_VimAirline
-         call add(g:pathogen_disabled, 'vim-airline') 
-     endif
-     if !g:sphynx_Active_VimAutoformat
-         call add(g:pathogen_disabled, 'vim-autoformat') 
-     endif
-     if !g:sphynx_Active_VimCoffeScript 
-         call add(g:pathogen_disabled, 'vim-coffee-script') 
-     endif 
-     if !g:sphynx_Active_VimCtrlspace
-         call add(g:pathogen_disabled, 'vim-ctrlspace') 
-     endif
-     if !g:sphynx_Active_VimEasymotion
-         call add(g:pathogen_disabled, 'vim-easymotion') 
-     endif
-     if !g:sphynx_Active_VimEasytags
-         call add(g:pathogen_disabled, 'vim-easytags') 
-     endif
-     if !g:sphynx_Active_VimMaximizer
-         call add(g:pathogen_disabled, 'vim-maximizer') 
-     endif
-     if !g:sphynx_Active_VimMisc
-         call add(g:pathogen_disabled, 'vim-misc') 
-     endif
-     if !g:sphynx_Active_VimMove
-         call add(g:pathogen_disabled, 'vim-move') 
-     endif
-     if !g:sphynx_Active_VimRails
-         call add(g:pathogen_disabled, 'vim-rails') 
-     endif
-     if !g:sphynx_Active_VimRuby
-         call add(g:pathogen_disabled, 'vim-ruby') 
-     endif
-     if !g:sphynx_Active_VimSignature
-         call add(g:pathogen_disabled, 'vim-signature') 
-     endif
-     if !g:sphynx_Active_VimProcMac
-         call add(g:pathogen_disabled, 'vimproc_mac') 
-     endif
-     if !g:sphynx_Active_VimProcWin
-         call add(g:pathogen_disabled, 'vimproc_win') 
-     endif
-     if !g:sphynx_Active_WebapiVim
-         call add(g:pathogen_disabled, 'webapi-vim') 
-     endif 
-     if !g:sphynx_Active_YouCompleteMe_mac
-         call add(g:pathogen_disabled, 'YouCompleteMe_mac') 
-     endif
-     if !g:sphynx_Active_YouCompleteMe_win
-         call add(g:pathogen_disabled, 'YouCompleteMe_win') 
-     endif
+     for [key, val] in items(g:sphynx_Active)
+        if  !(val == 1)
+            call add(g:pathogen_disabled, key)
+        end
+     endfor
 
      " Comando utilizzato per far funzionare il plugin Pathogen (serve per gestire i plugin)
      call pathogen#infect()
@@ -267,49 +156,42 @@
 
  "  Environment {
 
-     set guioptions-=T                                     " Hide toolbar.
-
-     set guioptions-=m                                     " Hide menubar.
-
-     set guioptions-=L                                    " hide the left-hand scrollbar for splits/new windows
-
-     "set guioptions+=M                                    " disable syntax menu
-
-     set nocompatible                                     " Deve stare prima di qualsiasi altro impostazione, perchè fa cambiare il senso dei settaggio successivi
-
-     set history=700                                      " Sets how many lines of history VIM has to remember
-
-     set autowrite                                        " Salva automaticamente il file quando esco
-
-     set browsedir=last                                   " riapre la navigazione delle directory ricordandosi l'ultima
-
-     filetype indent on                                   " Turn on file type detection
-     filetype plugin on                                   " Enable filetype plugins  
-
-     set backspace=eol,start,indent                       " Configure backspace so it acts as it should act
-
-     set whichwrap+=b,s,h,l,<,>,[,]                       " Backspace and cursor keys wrap too
-
-     set ignorecase                                       " Ignore case when searching
-
-     set smartcase                                        " When searching try to be smart about cases
-
-     set noerrorbells                                     " No annoying sound on errors
+     " Deve essere settata prima di qualsiasi altro impostazione, perchè fa cambiare il senso dei settaggio successivi
+     set nocompatible
+     " Sets how many lines of history VIM has to remember
+     set history=700
+     " riapre la navigazione delle directory ricordandosi l'ultima
+     set browsedir=last
+     " Turn on file type detection
+     filetype indent on
+     " Enable filetype plugins
+     filetype plugin on 
+     " Configure backspace so it acts as it should act
+     set backspace=eol,start,indent
+     " Backspace and cursor keys wrap too
+     set whichwrap+=b,s,h,l,<,>,[,]
+     " Ignore case when searching
+     set ignorecase
+     " When searching try to be smart about cases
+     set smartcase                                        
+     " No annoying sound on errors
+     set noerrorbells
      set novisualbell
      set vb t_vb= t_vb=
+     " timeoutlen: timeout insert key
      set tm=500
-
-     scriptencoding utf-8                                 " Set utf8 as standard encoding and en_US as the standard language
+     " Set utf8 as standard encoding and en_US as the standard language
+     scriptencoding utf-8
      set encoding=utf-8
-
-     set spell spelllang=it,en                            " Set English and Italian language
-
+     " Set English and Italian language
+     set spell spelllang=it,en
+     " delete preview from insert mode completion 
      set completeopt-=preview
-
-     set switchbuf=usetab                                 " Now, when using :sb, :sbnext, :sbprev instead of :b, :bnext, :bprev to switch buffers, Vim will check if buffer is open in tab/window and switch to that tab/window.
-
+     " Now, when using :sb, :sbnext, :sbprev instead of :b, :bnext, :bprev to switch buffers, Vim will check if buffer is open in tab/window and switch to that tab/window
+     set switchbuf=usetab
+     " when file change outside vim, vim reload automatically it
      set autoread
-
+     " disable splell checking
      set nospell
 
      " apre posiziona il cursore dove lo avevo lasciato l'ultima volta
@@ -329,8 +211,8 @@
      " k => scan the files given with the 'dictionary'
      set complete=.,w,b,u,t
 
+     " Use both Unix and DOS file formats, but favor the Unix one for new files.
      if WINDOWS()
-         " Prefer unix even though we're on Windows.
          set fileformats=unix,dos
      endif
 
@@ -339,124 +221,48 @@
          "let $HOME = 'C:\APPL\vim74'
      endif
 
-
- "  Files, backups and undo {
- set nobackup                                         " Turn backup off, since most stuff is in SVN, git et.c anyway...
- set nowb
- set noswapfile
-
- set undodir=$VIMRUNTIME/undo                         " Persistent undo
- set undofile
- " }
-
- "  Tab and indent relate {
- set expandtab                                        " Use spaces instead of tabs
- set smarttab                                         " Be smart when using tabs ;)
-
- set shiftwidth=3                                     " 1 tab == 3 spaces
- set tabstop=3
-
- set lbr                                              " Line break on 500 characters
- set tw=0
-
- set ai                                               " Indent at the same level of the previous line
- set si                                               " Smart indent
- set nowrap                                           " Wrap lines
- " }
-
- " }
-
- "  UI Setting {
-
-     " disabilita il messaggio iniziale
-     set shortmess+=I
-
-     " setto larghezzaa fold column
-     set foldcolumn=3
-
-     " Set 7 lines to the cursor - when moving vertically using j/k
-     set so=5                                             
-
-     " Set the terminal's title
-     set title
-
-     " Turn on the WiLd menu/Enhanced command line completion
-     set wildmenu                                         
-     " Command <Tab> completion, list matches, then longest common part, then all
-     set wildmode=list:longest,full
-
-     " Ignore compiled files
-     set wildignore=*.o,*~,*.pyc,*.png,*.jpg,*.gif
-     set wildignore+=log/**
-     set wildignore+=vendor/cache/**
-     set wildignore+=vendor/rails/**
-     set wildignore+=tmp/**
-     set wildignore+=log/**
-
-
-     if has('cmdline_info')
-         set ruler                                          " Always show current position
-         set rulerformat=%30(%=\:b%n%y%m%r%w\ %l,%c%V\ %P%) " A ruler on steroids
-         set showcmd                                        " Show partial commands in status line and
-     endif
-
-     " Display the current mode
-     set showmode                                         
-     " Height of the command bar
-     set cmdheight=1                                      
-     " Setta per ogni buffer l'opzione hidden di default, questo mi permette di passare in maniera più pratica tra i buffer(ved. usr_22: nascondere i buffer)
-     set hidden                                           
-     " Highlight search terms
-     set hlsearch
-     " Find as you type search
-     set incsearch                                        
-     " For regular expressions turn magic on
-     set magic
-     set ttyfast
-     " Don't redraw while executing macros (good performance config)
-     set lazyredraw                                       
-     " Mostra il numero di righe
-     set number                                           
-     " migliora il colore del menu autocomplete
-     highlight Pmenu ctermbg=238 gui=bold                 
-     " Enable syntax highlighting
-     syntax enable
-     " Set extra options when running in GUI mode
-     if OSX()
-         set guioptions-=T
-         set guioptions+=e
-         set t_Co=256
-         set guitablabel=%M\ %t
-     endif
-
-     if OSX()
-         let macvim_skip_colorscheme = 1    
-     endif
-
-     " Always show the status line
-     set laststatus=2                                     
-
-     let g:loaded_matchparen=1                           " Disabilito il match delle parentesi
-
-     "miglioro il rendereing dei font
-     if WINDOWS()
-         set renderoptions=type:directx,
-                     \gamma:1.8,contrast:0.5,geom:1,
-                     \renmode:5,taamode:1,level:0.5
-     endif
-
-     "hi vertsplit guifg=NONE guibg=NONE
-     set guicursor+=a:blinkon0
-
-     " carattere usato per la linea che separa una finestra verticale 
-     set fillchars=vert:\│
-
      " migliora le performance di vim
      syntax sync maxlines=200
      syntax sync minlines=10
      set nocursorline
+     " more characters will be sent tothe screen for redrawing, instead of using insert/delete line commands
+     set ttyfast
+     " Don't redraw while executing macros (good performance config)
+     set lazyredraw   
 
- " }UI Setting
+ "  Files, backups and undo {
+
+     " Turn backup off, since most stuff is in SVN, git et.c anyway...
+     set nobackup
+     set nowb
+     set noswapfile
+     " Persistent undo
+     set undodir=$VIMRUNTIME/undo                         
+     set undofile
+
+ " }Files, backups and undo
+
+ "  Tab and indent relate {
+
+     " Use spaces instead of tabs
+     set expandtab
+     " Be smart when using tabs ;)
+     set smarttab
+     " 1 tab == 3 spaces
+     set shiftwidth=3
+     set tabstop=3
+     " Line break on 500 characters
+     set lbr
+     " maximum width of text that is being inserted
+     set tw=0
+     " Indent at the same level of the previous line
+     set ai
+     " Smart indent
+     set si
+     " no wrap lines
+     set nowrap
+
+ " }Tab and indent relate
 
  "  Folding {
 
@@ -479,11 +285,97 @@
      set ballooneval
      set balloondelay=400
 
-    " IMPORTANTE: 
-    " ho settato dei parametri nella sessione Autocmd per non modificarmi il
-    " folding quando inserivo gli apici o cambiavo finestra
+ " }Folding
+
+ " }Environment
+
+ "  UI Setting {
  
- " }
+     " hide toolbar
+     set guioptions-=T
+     " hide menubar
+     set guioptions-=m
+     " hide the left-hand scrollbar for splits/new windows
+     set guioptions-=L
+     " disables the initial message
+     set shortmess+=I
+     " set width fold column
+     set foldcolumn=3
+     " set 5 lines to the cursor - when moving vertically using j/k
+     set so=5                                             
+     " set the terminal's title
+     set title
+     " turn on the WiLd menu/Enhanced command line completion
+     set wildmenu                                         
+     " command <Tab> completion, list matches, then longest common part, then all
+     set wildmode=list:longest,full
+
+     " ignore compiled files
+     set wildignore=*.o,*~,*.pyc,*.png,*.jpg,*.gif
+     set wildignore+=log/**
+     set wildignore+=vendor/cache/**
+     set wildignore+=vendor/rails/**
+     set wildignore+=tmp/**
+     set wildignore+=log/**
+
+
+     if has('cmdline_info')
+        " Show the line and column number of the cursor position
+         set ruler
+         " A ruler on steroids
+         set rulerformat=%30(%=\:b%n%y%m%r%w\ %l,%c%V\ %P%)
+         " Show partial commands in status line and
+         set showcmd
+     endif
+
+     " display the current mode
+     set showmode                                         
+     " height of the command bar
+     set cmdheight=1                                      
+     " Setta per ogni buffer l'opzione hidden di default, questo mi permette di passare in maniera più pratica tra i buffer(ved. usr_22: nascondere i buffer)
+     set hidden                                           
+     " highlight search terms
+     set hlsearch
+     " find as you type search
+     set incsearch                                        
+     " for regular expressions turn magic on
+     set magic                                    
+     " show line number
+     set number                                           
+     " Enable syntax highlighting
+     syntax enable
+
+     " Set extra options when running in GUI mode
+     if OSX()
+         set guioptions-=T
+         set guioptions+=e
+         set t_Co=256
+         set guitablabel=%M\ %t
+     endif
+
+     if OSX()
+         let macvim_skip_colorscheme = 1    
+     endif
+
+     " Always show the status line
+     set laststatus=2                                     
+     " disables the match brackets
+     let g:loaded_matchparen=1
+
+     " improve rendereing font
+     if WINDOWS()
+         set renderoptions=type:directx,
+                     \gamma:1.8,contrast:0.5,geom:1,
+                     \renmode:5,taamode:1,level:0.5
+     endif
+
+     " set cursor behavior
+     set guicursor+=a:blinkon0
+
+     " font used for the line that separates a vertical window 
+     set fillchars=vert:\│
+
+ " }UI Setting
 
  "  Key Setting {
 
@@ -509,8 +401,8 @@
          source $VIMRUNTIME/mswin.vim
      endif 
 
-     " è stato rimappato il ` per poter accedere alla posizione giusta del mio segnalibro  
-     map ? ma
+     " remap ` for to go right position mark 
+     map ? `
 
      " setto il secondo leader
      let maplocalleader = '-'
@@ -527,10 +419,10 @@
      " switch CWD to the directory of the open buffer
      map <leader>cd :lcd %:p:h<cr>:pwd<cr>
 
-     " apro esplorara risorse per aprire il mio file
+     " apro esplora risorse per aprire il mio file
      map <Leader>o :browse e<cr>
 
-     " apre salva con nome
+     " open saveas
      map <Leader>s :browse saveas<cr>
 
      " mi apre subito il mio vimrc
@@ -543,7 +435,7 @@
 
  "  Shortcut => Folding {
 
-     " setto i tasti per il folding
+     " set key for folding
      nmap z<Left>  zc
      nmap z<Right> zo
      nmap z<Up>    :set foldlevel=1<CR>
@@ -556,24 +448,20 @@
      map j gj
      map k gk
 
-     " si posiziona a fine riga
+     " go to end line
      map 9 $
-     " si posiziona a meta riga
+     " go to middle line
      map 8 :call cursor(0, virtcol('$')/2)<CR>
-     " si posiziona all'inizio della riga
+     " go go start line
      map 0 ^
 
-     " Per fare lo scroll della pagina si appogia anche al plugin accelerated-smooth-scroll
+     " Per fare lo scroll della pagina si appogia anche al plugin AcceleratedSmoothScroll
      " zz mi centra la pagina sulla riga corrente
      " C-e mi sposto verso giu di una riga
      nmap <leader><leader><Up> <C-b>
      nmap <leader><leader><Down> <C-f>
      nmap <leader><Up> <C-u>
      nmap <leader><Down> <C-d>
-     " scorro la pagina di una riga verso giu senza spostare il cursore
-     nmap <A-Down> <C-e>
-     " scorro la pagina di una riga verso su senza spostare il cursore
-     nmap <A-UP> <C-y>
 
      " Remap VIM `. per spostarmi ultima riga modificata
      map <silent><leader>le `.
@@ -688,7 +576,7 @@
     " to jump to the definition
     map <silent><leader><Right> :tag /<c-r>=expand('<cword>')<cr><cr>
 
- "}Ctags
+ "}Shortcut => Ctags
 
  "  Shortcut => Diff mode {
  
@@ -767,8 +655,76 @@
 
 "  Plugin {
 
+"  AirLine {
+    if g:sphynx_Active.Airline
+        """""""""""""""""""""""""""""""""""""""""PARAMETRI""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+        " abilito i font speciali quelli con la path
+        let g:airline_powerline_fonts = 1
+        " seleziono il tema
+        let g:airline_theme     = 'flatlandia'
+        let g:Powerline_symbols = 'unicode'
+        if !exists('g:airline_powerline_fonts')
+        " Use the default set of separators with a few customizations
+            let g:airline_left_sep='›'  " Slightly fancier than '>'
+            let g:airline_right_sep='‹' " Slightly fancier than '<'
+        endif
+
+        "let g:airline#extensions#tabline#enabled = 1
+        let g:airline#extensions#tabline#left_sep = ' '
+        let g:airline#extensions#tabline#left_alt_sep = '|'
+        let g:airline#extensions#tabline#show_buffers = 1
+        let g:airline#extensions#tabline#buffer_nr_show = 1
+        " visualizza il numero del buffers nella tabline
+        let g:airline#extensions#tabline#buffer_nr_format = '%s: '
+        " quando avvio vim airline aspetta che vengano caricate tutte le estensini
+        " presenti nel mio runtimepath, questo rallenta l'avvio, cosi lo disabilito
+        let g:airline#extensions#disable_rtp_load = 1
+        " cambio il modo in cui viene visualizzato il nome del buffer
+        let g:airline#extensions#tabline#formatter = 'unique_tail'
+        let g:airline#extensions#whitespace#enabled = 0
+        let g:airline#extensions#tagbar#enabled = 0
+
+        "IMPORTANTE
+        " Nella sezione Autocmd ho modificato alcuni parametri per migliorare le
+        " performance di questo plugin
+        """""""""""""""""""""""""""""""""""""""""SHORTCUT"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+    endif
+" }AirLine
+
+"  AutoFormat {
+    if g:sphynx_Active.Autoformat
+        """""""""""""""""""""""""""""""""""""""""PARAMETRI""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+        """""""""""""""""""""""""""""""""""""""""SHORTCUT"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+        noremap <F12> :Autoformat<CR><CR>
+    endif
+" }AutoFormat
+
+"  CtrlSpace {
+    if g:sphynx_Active.CtrlSpace
+        """""""""""""""""""""""""""""""""""""""""PARAMETRI""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+        let g:ctrlspace_use_ruby_bindings = 1
+        let g:ctrlspace_use_mouse_and_arrows = 1
+        let g:airline_exclude_preview = 1
+
+        let g:CtrlSpaceGlobCommand = 'ag -l --nocolor -g ""'
+        let g:ctrlspace_show_key_info=1
+        let g:ctrlspace_load_last_workspace_on_start=1
+        let g:ctrlspace_save_workspace_on_exit=1
+        "per i colori vedere il mio file zeus.txt del plugin easycolour
+        
+        """""""""""""""""""""""""""""""""""""""""SHORTCUT"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+        nnoremap <silent> <A-Left>  :CtrlSpaceGoUp<CR>
+        nnoremap <silent> <A-Right> :CtrlSpaceGoDown<CR>
+        inoremap <silent> <A-Left>  :CtrlSpaceGoUp<CR>
+        inoremap <silent> <A-Right> :CtrlSpaceGoDown<CR>
+        vnoremap <silent> <A-Left>  :CtrlSpaceGoUp<CR>
+        vnoremap <silent> <A-Right> :CtrlSpaceGoDown<CR>
+    endif
+" }CtrelSpace
+
 "  Dash {
-    if g:sphynx_Active_Dash
+    if g:sphynx_Active.Dash
         """""""""""""""""""""""""""""""""""""""""PARAMETRI""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
         " definisco su quali docset andare a cercare prima
         " importante mettere in maiuscolo il nome dei docset
@@ -782,15 +738,43 @@
     endif
 " }Dash
 
+"  Easytag {
+    if g:sphynx_Active.EasyTags
+        """""""""""""""""""""""""""""""""""""""""PARAMETRI""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+        "abilita di default la generazione dei tag in modo ricorsivo
+        "cioè fa lo scan tutti i file a partire dalla directory in cui mi trovo
+        let g:easytags_autorecurse = 1
+        "disabilito che quando smetto di scrivere parte l'update
+        let g:easytags_on_cursorhold = 0
+        let g:easytags_file = './tags'
+        " Prevent easytags from auto updating and highlighting since it causes
+        " glithces in terminal interfaces
+        let g:easytags_auto_update=0
+        let g:easytags_auto_highlight=0
+
+        " Create and update tags file relative to project root
+        let g:easytags_dynamic_files = 2
+        let g:easytags_resolve_links=1
+
+        " Use ripper-tags for ruby files (if available)
+        " Install: gem install ripper-tags
+        if executable('ripper-tags')
+          let g:easytags_languages = {'ruby': {'cmd': 'ripper-tags'}}
+        endif
+        """""""""""""""""""""""""""""""""""""""""SHORTCUT"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+    endif
+" }Easytag
+
 "  Emmet {
-    if g:sphynx_Active_Emmet
+    if g:sphynx_Active.Emmet
         """""""""""""""""""""""""""""""""""""""""PARAMETRI""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
         """""""""""""""""""""""""""""""""""""""""SHORTCUT"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
     endif
 " }Emmet
 
 "  GoldenRatio {
-    if g:sphynx_Active_GoldenRatio
+    if g:sphynx_Active.GoldenRatio
         """""""""""""""""""""""""""""""""""""""""PARAMETRI""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
         let g:golden_ratio_autocommand = 0
         """""""""""""""""""""""""""""""""""""""""SHORTCUT"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -799,7 +783,7 @@
 " }Emmet
 
 "  IndentLine {
-    if g:sphynx_Active_IndentLine 
+    if g:sphynx_Active.IndentLine 
         """""""""""""""""""""""""""""""""""""""""PARAMETRI""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
         let g:indentLine_enabled = 0
         let g:indentLine_color_gui = '#0B5E6F'
@@ -811,15 +795,25 @@
 " }IndentLine
 
 "  MakeHeader {
-    if g:sphynx_Active_Marke_Header
+    if g:sphynx_Active.MakeHeader
         """""""""""""""""""""""""""""""""""""""""PARAMETRI""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
         let g:header_comment_author="Boscolo Michele"
         """""""""""""""""""""""""""""""""""""""""SHORTCUT"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
     endif
 " }IndentLine
 
+"  Maximizer {
+    if g:sphynx_Active.Maximizer
+        """""""""""""""""""""""""""""""""""""""""PARAMETRI""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+        let g:maximizer_set_default_mapping = 0               " disabilito i tasto di default
+        """""""""""""""""""""""""""""""""""""""""SHORTCUT"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+        nnoremap <silent><localleader>m :MaximizerToggle<CR>
+        vnoremap <silent><localleader>m :MaximizerToggle<CR>gv
+    endif
+" }Maximizer
+
 "  NerdTree {
-    if g:sphynx_Active_NerdTree
+    if g:sphynx_Active.Nerdtree
         """""""""""""""""""""""""""""""""""""""""PARAMETRI""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
         let NERDTreeQuitOnOpen = 0
         let NERDTreeMouseMode = 2 
@@ -834,7 +828,7 @@
 " }NerdTree
 
 "  RainbowParentheses {
-    if g:sphynx_Active_RainbowParenthes
+    if g:sphynx_Active.RainbowParentheses
         """""""""""""""""""""""""""""""""""""""""PARAMETRI""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
             " IMPORTANTE
             " ho settato dei parametri nella sessione Autocmd per attivazione plugin e configurazione
@@ -842,8 +836,20 @@
     endif
 " }RainbowParentheses
 
+"  Signature {
+    if g:sphynx_Active.Signature
+        """""""""""""""""""""""""""""""""""""""""PARAMETRI""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+        """""""""""""""""""""""""""""""""""""""""SHORTCUT"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+        let g:SignatureMap = {
+            \ 'GotoNextLineByPos'  :  "m<Right>",
+            \ 'GotoPrevLineByPos'  :  "m<Left>"
+            \ }
+    endif
+" }Signature
+
 "  Tabular {
-    if g:sphynx_Active_Tabular
+    if g:sphynx_Active.Tabular
         """""""""""""""""""""""""""""""""""""""""PARAMETRI""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
         nmap <Leader>a= :Tabularize /=<CR>
         vmap <Leader>a= :Tabularize /=<CR>
@@ -854,7 +860,7 @@
 " }Tabular
 
 "  Tagbar {
-    if g:sphynx_Active_Tagbar
+    if g:sphynx_Active.TagBar
         """""""""""""""""""""""""""""""""""""""""PARAMETRI""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
         let g:tagbar_autoclose = 1
         let g:tagbar_usearrows = 1
@@ -865,7 +871,7 @@
 " } Tagbar
 
 "  Tcomment {
-    if g:sphynx_Active_TComment
+    if g:sphynx_Active.TComment
         """""""""""""""""""""""""""""""""""""""""PARAMETRI""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
         let g:tcommentMaps = 0
         """""""""""""""""""""""""""""""""""""""""SHORTCUT"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -875,7 +881,7 @@
 " }Tcomment
 
 "  Ultisnip {
-    if g:sphynx_Active_Ultisnips
+    if g:sphynx_Active.Ultisnips
         """""""""""""""""""""""""""""""""""""""""PARAMETRI""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
         " Le seguenti funzioni mi permettono una migliore integrazione con Youcompleteme
         function! g:UltiSnips_Reverse()
@@ -924,7 +930,7 @@
 " }Ultisnip
 
 "  Unite {
-    if g:sphynx_Active_UniteVim
+    if g:sphynx_Active.Unite
         """""""""""""""""""""""""""""""""""""""""PARAMETRI""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
         "Ag command is disabled by default. Because, it is slower than default find command.
         " https://github.com/Shougo/vimproc.vim/issues/150
@@ -1003,127 +1009,8 @@
     endif
 "  }
 
-"  Vim-airline {
-    if g:sphynx_Active_VimAirline
-        """""""""""""""""""""""""""""""""""""""""PARAMETRI""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-        " abilito i font speciali quelli con la path
-        let g:airline_powerline_fonts = 1
-        " seleziono il tema
-        let g:airline_theme     = 'flatlandia'
-        let g:Powerline_symbols = 'unicode'
-        if !exists('g:airline_powerline_fonts')
-        " Use the default set of separators with a few customizations
-            let g:airline_left_sep='›'  " Slightly fancier than '>'
-            let g:airline_right_sep='‹' " Slightly fancier than '<'
-        endif
-
-        "let g:airline#extensions#tabline#enabled = 1
-        let g:airline#extensions#tabline#left_sep = ' '
-        let g:airline#extensions#tabline#left_alt_sep = '|'
-        let g:airline#extensions#tabline#show_buffers = 1
-        let g:airline#extensions#tabline#buffer_nr_show = 1
-        " visualizza il numero del buffers nella tabline
-        let g:airline#extensions#tabline#buffer_nr_format = '%s: '
-        " quando avvio vim airline aspetta che vengano caricate tutte le estensini
-        " presenti nel mio runtimepath, questo rallenta l'avvio, cosi lo disabilito
-        let g:airline#extensions#disable_rtp_load = 1
-        " cambio il modo in cui viene visualizzato il nome del buffer
-        let g:airline#extensions#tabline#formatter = 'unique_tail'
-        let g:airline#extensions#whitespace#enabled = 0
-        let g:airline#extensions#tagbar#enabled = 0
-
-        "IMPORTANTE
-        " Nella sezione Autocmd ho modificato alcuni parametri per migliorare le
-        " performance di questo plugin
-        """""""""""""""""""""""""""""""""""""""""SHORTCUT"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-    endif
-" }vim-airline
-
-"  Vim-autoformat {
-    if g:sphynx_Active_VimAutoformat
-        """""""""""""""""""""""""""""""""""""""""PARAMETRI""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-        """""""""""""""""""""""""""""""""""""""""SHORTCUT"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-        noremap <F12> :Autoformat<CR><CR>
-    endif
-" }Vim-autoformat
-
-"  Vim-ctrlspace {
-    if g:sphynx_Active_VimAutoformat
-        """""""""""""""""""""""""""""""""""""""""PARAMETRI""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-        let g:ctrlspace_use_ruby_bindings = 1
-        let g:ctrlspace_use_mouse_and_arrows = 1
-        let g:airline_exclude_preview = 1
-
-        let g:CtrlSpaceGlobCommand = 'ag -l --nocolor -g ""'
-        let g:ctrlspace_show_key_info=1
-        let g:ctrlspace_load_last_workspace_on_start=1
-        let g:ctrlspace_save_workspace_on_exit=1
-        "per i colori vedere il mio file zeus.txt del plugin easycolour
-        
-        """""""""""""""""""""""""""""""""""""""""SHORTCUT"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-        nnoremap <silent> <A-Left>  :CtrlSpaceGoUp<CR>
-        nnoremap <silent> <A-Right> :CtrlSpaceGoDown<CR>
-        inoremap <silent> <A-Left>  :CtrlSpaceGoUp<CR>
-        inoremap <silent> <A-Right> :CtrlSpaceGoDown<CR>
-        vnoremap <silent> <A-Left>  :CtrlSpaceGoUp<CR>
-        vnoremap <silent> <A-Right> :CtrlSpaceGoDown<CR>
-
-    endif
-" }Vim-ctrelspace
-
-"  Vim-Easytag {
-    if g:sphynx_Active_VimEasytags
-        """""""""""""""""""""""""""""""""""""""""PARAMETRI""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-        "abilita di default la generazione dei tag in modo ricorsivo
-        "cioè fa lo scan tutti i file a partire dalla directory in cui mi trovo
-        let g:easytags_autorecurse = 1
-        "disabilito che quando smetto di scrivere parte l'update
-        let g:easytags_on_cursorhold = 0
-        let g:easytags_file = './tags'
-        " Prevent easytags from auto updating and highlighting since it causes
-        " glithces in terminal interfaces
-        let g:easytags_auto_update=0
-        let g:easytags_auto_highlight=0
-
-        " Create and update tags file relative to project root
-        let g:easytags_dynamic_files = 2
-        let g:easytags_resolve_links=1
-
-        " Use ripper-tags for ruby files (if available)
-        " Install: gem install ripper-tags
-        if executable('ripper-tags')
-          let g:easytags_languages = {'ruby': {'cmd': 'ripper-tags'}}
-        endif
-        """""""""""""""""""""""""""""""""""""""""SHORTCUT"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-    endif
-" }Vim-Easytag
-
-"  Vim-maximizer {
-    if g:sphynx_Active_VimMaximizer
-        """""""""""""""""""""""""""""""""""""""""PARAMETRI""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-        let g:maximizer_set_default_mapping = 0               " disabilito i tasto di default
-        """""""""""""""""""""""""""""""""""""""""SHORTCUT"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-        nnoremap <silent><localleader>m :MaximizerToggle<CR>
-        vnoremap <silent><localleader>m :MaximizerToggle<CR>gv
-    endif
-" }Vim-maximizer
-
-"  Vim-signature {
-    if g:sphynx_Active_VimSignature
-        """""""""""""""""""""""""""""""""""""""""PARAMETRI""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-        """""""""""""""""""""""""""""""""""""""""SHORTCUT"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-        let g:SignatureMap = {
-            \ 'GotoNextLineByPos'  :  "m<Right>",
-            \ 'GotoPrevLineByPos'  :  "m<Left>"
-            \ }
-    endif
-" }
-
 "  Youcompleteme {
-    if g:sphynx_Active_YouCompleteMe_win || g:sphynx_Active_YouCompleteMe_mac
+    if g:sphynx_Active.YouCompleteMeWin || g:sphynx_Active.YouCompleteMeMac
         let g:acp_enableAtStartup = 0                     " mi assicuro di disabilitare AutoComplPop
         let g:ycm_use_ultisnips_completer = 1             " enable ultisnip integration
         let g:ycm_collect_identifiers_from_tags_files = 1 " enable completion from tags
@@ -1177,7 +1064,7 @@
         autocmd FileType css  setlocal foldmethod=indent shiftwidth=2 tabstop=2
 
         " Automatically reload vimrc when it's saved
-        au BufWritePost .vimrc source ~/.vimrc|set foldlevel=0|AirlineRefresh
+        au BufWritePost .vimrc source ~/.vimrc| set foldlevel=0 |AirlineRefresh
         au FileType vim set fdm=marker
         au SourceCmd .vimrc set foldlevel=0|AirlineRefresh
 
@@ -1197,10 +1084,18 @@
         endif
  
         " ULTISNIP ==> Viene utilizzato per migliorare l'integrazione con youcompleteme
-        if g:sphynx_Active_Ultisnips
+        if g:sphynx_Active.Ultisnips
           au BufEnter * exec "inoremap <silent> " . g:UltiSnipsExpandTrigger . " <C-R>=g:UltiSnips_Complete()<cr>"
           au BufEnter * exec "inoremap <silent> " . g:UltiSnipsJumpBackwardTrigger . " <C-R>=g:UltiSnips_Reverse()<cr>"
         endif
+
+        " Funzione che crea 'header per i miei file
+        autocmd BufNewFile *.rb,*.rbw,*.haml,*.html.erb,*.erb silent call MakeFileHeader()
+
+        " salvataggio automatico dei file
+        autocmd Bufwritepre,filewritepre,FocusLost * silent call  Autosave()
+        autocmd VimLeave  * :bufdo call Autosave()
+
     augroup END
 
 " }Autocmd
@@ -1271,16 +1166,7 @@
     endfunction
     command! -range=% MyToHtml :call MyToHtml(<line1>,<line2>)
 
-" }Helper functions
-
-"  Test {
-
-    " Funzione che crea 'header per i miei file
-    autocmd BufNewFile *.rb,*.rbw,*.haml,*.html.erb,*.erb silent call MakeFileHeader()
-
-    autocmd Bufwritepre,filewritepre,FocusLost * silent call  Autosave()
-    autocmd VimLeave  * :bufdo call Autosave()
-
+    " Controlla se il file è stato modificato aggiorna l'header se presente, salva il file
     function! Autosave ()
         if &modified
              silent call UpdateHeader()
@@ -1288,6 +1174,7 @@
         endif
     endfunction
 
-" }
+
+" }Helper functions
 
 
