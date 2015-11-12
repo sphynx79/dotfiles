@@ -373,7 +373,8 @@
      set guicursor+=a:blinkon0
 
      " font used for the line that separates a vertical window 
-     set fillchars=vert:\│
+     "set fillchars=vert:\│ 
+     set fillchars=
 
  " }UI Setting
 

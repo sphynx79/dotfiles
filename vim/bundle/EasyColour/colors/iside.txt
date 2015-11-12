@@ -18,6 +18,7 @@ Dark:
 	NonText:#258BC5
 	Visual:#7F899D,#CAE1FF
 	Cursor:#FFFFF5,#4A708B
+	VertSplit:BG=#323334
 
                                 
 
