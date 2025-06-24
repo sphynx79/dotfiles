@@ -1,0 +1,7 @@
+{{ if eq .chezmoi.os "windows" -}}
+# Windows: copia in ~/vimfiles
+["vimfiles"]
+type = "file"
+url = "{{ .chezmoi.sourceDir }}/dot_config/vim"
+recursive = true
+{{- end }}
