@@ -1,0 +1,9 @@
+{{ if eq .chezmoi.os "windows" -}}
+@echo off
+if exist "%USERPROFILE%\vimfiles" (
+    echo Removing existing vimfiles directory...
+    rmdir /s /q "%USERPROFILE%\vimfiles"
+)
+echo Creating junction from vimfiles to .config\vim...
+mklink /J "%USERPROFILE%\vimfiles" "%USERPROFILE%\.local\share\chezmoi\dot_config\vim"
+{{- end }}
