@@ -22,3 +22,6 @@ vimfiles/files/undo/**
 !vimfiles/files/undo/keep
 vimfiles/files/view/**
 !vimfiles/files/view/keep
+{{ if eq .chezmoi.os "windows" -}}
+.config/vim
+{{- end }}
