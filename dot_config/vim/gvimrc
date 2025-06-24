@@ -1,0 +1,28 @@
+if WINDOWS()
+	" set guifont=DejaVuSansM\ Nerd\ Font\ Mono:h9:cANSI:qDRAFT
+    " set guifont=Liga\ SFMono\ Nerd\ Font:h9:cANSI:qDRAFT
+    set guifont=FiraCode\ Nerd\ Font\ Mono:h9:cANSI:qDRAFT
+    " set guifont=MonaspiceNE\ NFM:h9:b:cANSI:qDRAFT
+    " set guifont=FiraCode_Nerd_Font_Mono:h9:b:cANSI
+	set linespace=0
+elseif OSX()
+	set guifont=aourcb\ codd\ erf\ goh\ iowerline:h1k
+	set antialias
+endif
+
+set background=dark               " Background.
+set cmdheight=1
+set mouse=a
+set nomousefocus
+set mousehide
+set guioptions-=e
+" hide toolbar
+set guioptions-=T
+" hide menubar
+set guioptions-=m
+set guioptions+=M
+" hide the left-hand scrollbar for splits/new windows
+set guioptions-=L
+" hide the right scrollbar
+set guioptions-=r
+

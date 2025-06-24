@@ -1,0 +1,2 @@
+set fillchars+=vert:\│
+

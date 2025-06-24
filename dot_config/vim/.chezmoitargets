@@ -1,0 +1,12 @@
+# ~/.local/share/chezmoi/dot_config/vim/.chezmoitargets
+
+{{/*
+  Questo template determina il percorso di destinazione per la cartella Vim.
+  - Su Windows, la destinazione è C:\Users\nomeutente\vimfiles
+  - Su tutti gli altri sistemi (Linux, macOS, etc.), la destinazione è ~/.config/vim
+*/}}
+{{ if eq .chezmoi.os "windows" -}}
+"{{ .chezmoi.homeDir }}/vimfiles"
+{{ else -}}
+"{{ .chezmoi.homeDir }}/.config/vim"
+{{- end }}
