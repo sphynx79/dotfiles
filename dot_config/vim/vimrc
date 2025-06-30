@@ -111,31 +111,6 @@
     endif
 " }}} Load base vim
 
-" Load base vim {{{
-    let loaded_base_vim = 0
-    if loaded_base_vim
-        " Turn on file type detection
-        filetype indent on
-        " Enable filetype plugins
-        filetype plugin on
-        " Enable syntax highlighting
-        syntax enable
-        set nocompatible
-        set mouse=a
-        set clipboard=unnamed,unnamedplus
-        let mapleader = ' '
-        if WINDOWS()
-            call utility#windows#setup()
-        endif
-        call plug#begin()
-            Plug 'arcticicestudio/nord-vim'
-        call plug#end()
-        set background=dark
-        colorscheme nord
-        finish
-    endif
-" }}} Load base vim
-
 " Set before all{{{
     " Impedisce a Vim di caricare i menu predefiniti
     let did_install_default_menus=1
