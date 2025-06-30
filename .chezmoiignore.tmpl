@@ -1,0 +1,17 @@
+.config/vim/plugged/**
+!.config/vim/plugged/.keep
+.config/vim/files/info/**
+!.config/vim/files/info/.keep
+.config/vim/files/log/**
+!.config/vim/files/log/.keep
+.config/vim/files/session/**
+!.config/vim/files/session/.keep
+.config/vim/files/undo/**
+!.config/vim/files/undo/.keep
+.config/vim/files/view/**
+!.config/vim/files/view/.keep
+support_files/
+support_files/**
+{{ if eq .chezmoi.os "windows" -}}
+.config/vim/**
+{{- end }}

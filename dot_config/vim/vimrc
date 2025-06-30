@@ -1,0 +1,3273 @@
+" Modeline and Notes {{{
+" vim: set sw=4 ts=4 sts=4 et tw=120 foldmarker={{{,}}} foldmethod=marker nospell:
+
+    " Header {{{
+    " Maintainer:
+    "       miboscol@gmail.com
+    " Version:
+    "       2.0 - 10/11/15 09:26:00
+    " Blog_post:
+    "       http:/.............
+    " Sections:
+    "    -> General
+    "       -> Identify platform
+    "       -> Stratup Vim-Plug
+    "       -> Environment
+    "          -> Files, backups and undo
+    "          -> Tab and indent relate
+    "          -> Folding
+    "       -> UI Setting
+    "       -> Key Setting
+    "          -> Shortcut => Folding
+    "          -> Shortcut => Moving aroundg
+    "          -> Shortcut => Buffer & window
+    "          -> Shortcut => Editing
+    "          -> Shortcut => Visualization
+    "          -> Shortcut => Search & Replace
+    "          -> Shortcut => Ctags
+    "          -> Shortcut => Diff mode
+    "    -> Language Support
+    "       -> Ruby & Rails
+    "       -> Xml
+    "    -> Plugin
+    "       -> Airline
+    "       -> AutoFormat
+    "       -> CtrlSpace
+    "       -> Dash
+    "       -> EasyTag
+    "       -> GoldenView
+    "       -> IndentLine
+    "       -> MakeHeader
+    "       -> Maximizer
+    "       -> NerdTree
+    "       -> Signature
+    "       -> Tabular
+    "       -> Tagbar
+    "       -> Tcomment
+    "       -> Ultisnip
+    "    -> Autocmd
+    "    -> Helper functions
+    " }}} Header
+
+" }}} Modeline and Notes
+
+" Setting {{{
+    " Enable/Disable custom statuLine in folder ..\vimfiles\plugin
+    let g:disable_my_fast_statusline = 1
+" }}} Default Setting
+
+" Identify platform {{{
+    silent function! OSX()
+        return has('macunix')
+    endfunction
+    silent function! LINUX()
+        return has('unix') && !has('macunix') && !has('win32unix')
+    endfunction
+    silent function! WINDOWS()
+        return  (has('win16') || has('win32') || has('win64'))
+    endfunction
+
+    " Determina la directory della configurazione di Vim
+    if OSX()
+        let g:vim_config_dir = expand('~/.vim')
+    elseif LINUX()
+    if !empty($XDG_CONFIG_HOME)
+        let g:vim_config_dir = expand($XDG_CONFIG_HOME . '/vim')
+    else
+        let g:vim_config_dir = expand('~/.config/vim')
+    endif
+    elseif WINDOWS()
+        let g:vim_config_dir = expand($USERPROFILE . '\\vimfiles')
+    else
+        let g:vim_config_dir = fnamemodify($MYVIMRC, ':h')  " fallback
+    endif
+
+    let g:is_gui_running = has("gui_running")
+    let g:is_vim8 = v:version >= 800 ? 1 : 0
+" }}} Identify platform
+
+" Load base vim {{{
+    let loaded_base_vim = 0
+    if loaded_base_vim
+        " Turn on file type detection
+        filetype indent on
+        " Enable filetype plugins
+        filetype plugin on
+        " Enable syntax highlighting
+        syntax enable
+        set nocompatible
+        set mouse=a
+        set clipboard=unnamed,unnamedplus
+        let mapleader = ' '
+        if WINDOWS()
+            call utility#windows#setup()
+        endif
+        call plug#begin()
+            Plug 'arcticicestudio/nord-vim'
+        call plug#end()
+        set background=dark
+        colorscheme nord
+        finish
+    endif
+" }}} Load base vim
+
+" Load base vim {{{
+    let loaded_base_vim = 0
+    if loaded_base_vim
+        " Turn on file type detection
+        filetype indent on
+        " Enable filetype plugins
+        filetype plugin on
+        " Enable syntax highlighting
+        syntax enable
+        set nocompatible
+        set mouse=a
+        set clipboard=unnamed,unnamedplus
+        let mapleader = ' '
+        if WINDOWS()
+            call utility#windows#setup()
+        endif
+        call plug#begin()
+            Plug 'arcticicestudio/nord-vim'
+        call plug#end()
+        set background=dark
+        colorscheme nord
+        finish
+    endif
+" }}} Load base vim
+
+" Set before all{{{
+    " Impedisce a Vim di caricare i menu predefiniti
+    let did_install_default_menus=1
+    " Impedisce a Vim di caricare il menu 'Syntax' predefinito
+    let did_install_syntax_menu=1
+    " Disabilito il vimrc che in vim 8 veniva caricato di default
+    let skip_defaults_vim=1
+    " Disabilita compatibilità con Vi, abilitando le funzionalità e i comportamenti di Vim
+    " Settata prima di qualsiasi altro impostazione, cambiare il senso dei settaggio successivi
+    set nocompatible
+    " Imposta la codifica dei caratteri del file vimrc
+    scriptencoding utf-8
+    " Encoding interno di Vim su UTF-8
+    set encoding=utf-8
+    " Abilita l'uso del mouse in tutte le modalità (Normale, Visuale, Inserimento, Comando)
+    set mouse=a
+    " Copiano il testo anche nella clipboard di sistema
+    " Incollano il contenuto dalla clipboard di sistema
+    set clipboard=unnamed,unnamedplus
+    " Abilita il rilevamento del tipo di file, il caricamento dei plugin specifici e le regole di indentazione
+    filetype plugin indent on
+    syntax on
+    " Controlla se la versione di Vim/Neovim in uso e il terminale supportano i true colors (colori a 24-bit)
+    if has('termguicolors')
+        set termguicolors
+    else
+        set t_Co=256
+    endif
+    if LINUX()
+        runtime! archlinux.vim
+        if !empty($WAYLAND_DISPLAY) && executable('wl-copy') && executable('wl-paste')
+            autocmd TextYankPost * if (v:event.operator == 'y' || v:event.operator == 'd') |
+                \ silent! execute 'call system("wl-copy", @")' | endif
+            nnoremap p :let @"=substitute(system("wl-paste --no-newline"), '<C-v><C-m>', '', 'g')<cr>p
+        endif
+   endif
+
+    " setto il tasto leader
+    let mapleader = ' '
+    " setto il secondo leader
+    let maplocalleader = ','
+" }}} set before all
+
+" Helper functions {{{
+
+    " Stampa debug message
+    function! s:Warn(message) abort " {{{
+        echohl WarningMsg
+        echomsg a:message
+        echohl None
+    endfunction " }}}
+
+    " Stampa un dizionario in forma leggibile
+    " la chiamo con :call PrintDictReadable(dict)
+    function! PrintDictReadable(dict) abort " {{{
+        " Verifica se il parametro passato è effettivamente un dizionario
+        if type(a:dict) != type({})
+            echoerr "L'argomento passato non è un dizionario"
+            return
+        endif
+
+        " Ottieni tutte le chiavi del dizionario, ordinate
+        for key in sort(keys(a:dict))
+            " Stampa la chiave e il corrispondente valore
+            echo key . ': ' . string(a:dict[key])
+        endfor
+    endfunction " }}}
+
+    function! s:IsPlugged(plugin) abort " {{{
+        return has_key(g:plugs, a:plugin)
+    endfunction " }}}
+
+    function! ReloadVimrc() abort " {{{
+        " 1. Cattura lo stato corrente della finestra
+        let l:view = winsaveview()
+
+        " 2. Ricarica il vimrc in silenzio
+        silent! source $MYVIMRC
+
+        " 3. Aggiorna plugin (solo se esistono)
+        if exists(':AirlineRefresh')
+            silent! AirlineRefresh
+        endif
+
+        if exists('*webdevicons#refresh')
+            silent! call webdevicons#refresh()
+        endif
+
+        " 4. Ripristina lo stato salvato
+        call winrestview(l:view)
+
+        echom "Vimrc salvato!"
+    endfunction  " }}}
+    
+" }}} Helper functions
+
+" Stratup Vim-Plug {{{
+    call plug#begin()
+        " Normal Load {{{
+            Plug 'arcticicestudio/nord-vim'
+            Plug 'vim-airline/vim-airline'
+            Plug 'jdhao/better-escape.vim'
+            Plug 'gelguy/wilder.nvim'
+            Plug 'roxma/nvim-yarp'
+            Plug 'roxma/vim-hug-neovim-rpc'
+            Plug 'lambdalisue/vim-glyph-palette'
+            Plug 'inkarkat/vim-mark',
+            Plug 'inkarkat/vim-ingo-library',
+            Plug 'justinmk/vim-sneak',
+            " Plug 'itchyny/lightline.vim',
+            " Plug 'mengelbrecht/lightline-bufferline',
+            " Plug 'dhruvasagar/vim-prosession'
+            " Plug 'puremourning/vimspector'
+        " }}} Normal Load
+
+        " Lazy Load {{{
+            Plug 'scrooloose/nerdtree',                     {'on': 'NERDTreeToggle'}
+            Plug 'tiagofumo/vim-nerdtree-syntax-highlight', {'on': 'NERDTreeToggle'}
+            Plug 'liuchengxu/vista.vim',                    {'on': 'Vista!!'}
+            Plug 'rrethy/vim-hexokinase',                   {'for': ['scss', 'css', 'html', 'javascript', 'vim', 'lua']}
+            Plug 'vim-ruby/vim-ruby',                       {'for': 'ruby'}
+            Plug 'p0deje/vim-ruby-interpolation',           {'for': 'ruby'}
+            Plug 'preservim/vim-markdown',                  {'for': 'markdown'}
+            Plug 'prettier/vim-prettier',                   {'do': 'yarn install','for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'yaml', 'html']}
+            Plug 'csscomb/vim-csscomb',                     {'for': ['scss', 'css']}
+            Plug 'othree/html5.vim',                        {'for': 'html'}
+            Plug 'Valloric/MatchTagAlways',                 {'for': 'html'}
+            Plug 'othree/yajs.vim',                         {'for': 'javascript'}
+            Plug 'othree/es.next.syntax.vim',               {'for': 'javascript'}
+            Plug '4513ECHO/vim-snipewin',                   {'on': ['<Plug>(snipewin)'] }
+            Plug '4513ECHO/vim-snipewin',                   {'on': ['<Plug>(snipewin)'] }
+            Plug 'prabirshrestha/vim-lsp',                  {'on': []} 
+            " Plug 'prabirshrestha/asyncomplete.vim'
+            " Plug 'prabirshrestha/asyncomplete-lsp.vim'
+            " Plug 'mattn/vim-lsp-settings'
+            " Plug 'SirVer/ultisnips'
+            " Plug 'honza/vim-snippets'
+        " }}} Lazy Load
+
+        " Delay Load {{{
+            Plug 'ryanoasis/vim-devicons',                  {'on': []}
+            Plug 'ahmadie/workspace.vim',                   {'on': []}
+            Plug 'haya14busa/incsearch.vim',                {'on': []}
+            Plug 'easymotion/vim-easymotion',               {'on': []}
+            Plug 'haya14busa/incsearch-easymotion.vim',     {'on': []}
+            Plug 'Yggdroot/indentLine',                     {'on': []}
+            Plug 'junegunn/fzf.vim',                        {'on': []}
+            Plug 'junegunn/fzf',                            {'on': []}
+            Plug 'godlygeek/tabular',                       {'on': []}
+            Plug 'kshenoy/vim-signature',                   {'on': []}
+            Plug 'tpope/vim-commentary',                    {'on': []}
+            Plug 'phongnh/ZoomWin',                         {'on': []}
+            Plug 'wesQ3/vim-windowswap',                    {'on': []}
+            Plug 'terryma/vim-smooth-scroll',               {'on': []}
+            Plug 'romainl/vim-qf',                          {'on': []}
+            Plug 'Konfekt/FastFold',                        {'on': []}
+            Plug 'sbdchd/neoformat',                        {'on': []}
+            Plug 'luochen1990/rainbow',                     {'on': []}
+            Plug 'sickill/vim-pasta',                       {'on': []}
+            Plug 'mhinz/vim-sayonara',                      {'on': []}
+            Plug 'cohama/lexima.vim',                       {'on': []}
+            Plug 'camspiers/animate.vim',                   {'on': []}
+            Plug 'camspiers/lens.vim',                      {'on': []}
+            Plug 'andymass/vim-matchup',                    {'on': []}
+            Plug 'chrisbra/NrrwRgn',                        {'on': []}
+            " Plug 'tpope/vim-endwise',
+            " @TODO: Vedere se lasciarlo
+            " if g:is_gui_running
+            "     Plug 'TaDaa/vimade',                        {'on': []}
+            " endif
+        " }}} Delay Load
+    call plug#end()
+
+    " Initialize delay plugin {{{
+        " Delay load: vim-airline
+        " call timer_start(150, 'utility#defer#airline')
+        " Delay load: workspace
+        call timer_start(350, 'utility#defer#workspace')
+        " Delay load: incsearch.vim | vim-easymotion | incsearch-easymotion.vim
+        call timer_start(400, 'utility#defer#motion')
+        " Delay load: fzf | fzf.vim
+        call timer_start(450, 'utility#defer#fzf')
+        " Delay load: tabular | vim-signature | vim-commentary | ZoomWin | vim-windowswap | vim-smooth-scroll | vim-devicon
+        call timer_start(500, 'utility#defer#utility1')
+        " Delay load: vim-qf | indentLine | FastFold | neoformat | rainbow | vim-sayonara | MarkLines | vimade | lexima.vim | vim-pasta
+        call timer_start(550, 'utility#defer#utility2')
+        " Delay load: animate.vim | lens.vim |vim-pasta | vim-matchup |  NrrwRgn | vim-endwise 
+        call timer_start(600, 'utility#defer#utility3')
+        " Load only for gui
+        " if g:is_gui_running
+        "     "  Delay load: vimade
+        "     call timer_start(750, 'utility#defer#vimade')
+        " endif
+    " }}} Initialize delay plugin
+
+" }}} Stratup Vim-Plug
+
+" Plugin {{{
+
+    " AirLine {{{
+        " Config {{{
+            " abilito i font speciali quelli con la patch
+            let g:airline_powerline_fonts = 1
+            let g:Powerline_symbols = 'unicode'
+            " seleziono il tema
+            " let g:airline_theme='oceanicnext'
+            " dovrebbe migliorare le performance
+            let g:airline_highlighting_cache = 1
+            " quando avvio vim airline aspetta che vengano caricate tutte le estensioni
+            " presenti nel mio runtimepath, questo rallenta l'avvio, cosi lo disabilito
+            let g:airline#extensions#disable_rtp_load = 1
+            let g:airline_extensions = []
+            let g:airline_extensions = ['tabline', 'coc']
+            " in section B of the status line display the CWD
+            let g:airline_section_b = '%{getcwd()}'
+            " remove separators for empty sections
+            let g:airline_skip_empty_sections = 1
+            " au User AirlineAfterInit  :call airline#add_statusline_func('AirlineWebDevIcons') | AirlineRefresh
+
+            " :AirlineExtensions per vedere le estensioni caricate
+            " let g:airline#extensions#ale#enabled = 1
+            " let g:airline#extensions#windowswap#enabled = 1
+            " let g:airline#extensions#keymap#enabled = 1
+            " let g:airline#extensions#tagbar#enabled = 0
+            " let g:airline#extensions#whitespace#enabled = 0
+            " let g:airline#extensions#xkblayout#enabled = 0
+            " let g:airline#extensions#po#enabled = 0
+
+            " ALE extension
+            " let airline#extensions#ale#error_symbol = 'E:'
+            " let airline#extensions#ale#warning_symbol = 'W:'
+            " let airline#extensions#ale#show_line_numbers = 1
+            " let airline#extensions#ale#open_lnum_symbol = '(L'
+            " let airline#extensions#ale#close_lnum_symbol = ')'
+
+            " QuickFix extension
+            " let g:airline#extensions#quickfix#quickfix_text = 'Quickfix'
+            " let g:airline#extensions#quickfix#location_text = 'Location'
+
+            " Windowswap extension
+            " let g:airline#extensions#windowswap#indicator_text = 'WS'
+
+            " Tabline extension
+            " let g:airline#extensions#tabline#left_sep = ' '
+            " let g:airline#extensions#tabline#left_alt_sep = '|'
+            " let g:airline#extensions#tabline#show_buffers = 1
+            let g:airline#extensions#tabline#buffer_nr_show = 1
+            " visualizza il numero del buffers nella tabline
+            " let g:airline#extensions#tabline#buffer_nr_format = '%s: '
+            " cambio il modo in cui viene visualizzato il nome del buffer
+            let g:airline#extensions#tabline#formatter = 'unique_tail'
+
+            " Risolve un problema di ritardo quando si lascia modalità inserimento
+            " if !g:is_gui_running
+            "     set ttimeoutlen=11
+            "     au InsertEnter * set timeoutlen=0
+            "     au InsertLeave * set timeoutlen=500
+            " endif
+        " }}} Config
+    " }}}AirLine
+
+    " Better-escape {{{
+        " Config {{{
+            let g:better_escape_interval = 700
+            " use jj to escape insert mode.
+            let g:better_escape_shortcut = 'ii'
+        " }}}" Config
+    " }}} Better-escape
+
+    " Commentary {{{
+        " Config {{{
+            nnoremap <silent><localleader>. :Commentary<CR>
+            vnoremap <silent><localleader>. :Commentary<CR>
+        " }}} Config
+    " }}} Commentary
+
+    " Devicons {{{
+        " Config {{{
+            let g:webdevicons_enable_unite = 0
+            let g:webdevicons_enable_vimfiler = 0
+            let g:webdevicons_enable_denite = 0
+            let g:webdevicons_enable_startify = 0
+            let g:webdevicons_enable_ctrlp = 0
+            let g:DevIconsEnableFolderExtensionPatternMatching = 1
+            let g:WebDevIconsUnicodeDecorateFolderNodes = 1
+            if !g:is_gui_running
+                let g:WebDevIconsNerdTreeAfterGlyphPadding = ' '
+            else
+                let g:WebDevIconsNerdTreeAfterGlyphPadding = ''
+            endif
+            " Force extra padding in NERDTree so that the filetype icons line up vertically
+            " risolve problema che mi tagliava le icone
+            "set ambiwidth=double
+        " }}} Config
+    " }}} Devicons
+
+    " EasyMotion {{{
+        " Config {{{
+            let g:EasyMotion_do_mapping = 0
+            let g:EasyMotion_keys = 'tyuiophj'
+            let g:EasyMotion_smartcase = 1
+            let g:EasyMotion_enter_jump_first = 1
+            let g:EasyMotion_off_screen_search = 0
+        " }}}  Config
+
+        " Map {{{
+            " IMPORTANTE: per tornare dove ero prima del salto premere ''(due apici)
+            "
+            " Mi sposto cercando la parola in qualsiasi direzione
+            silent! nunmap <Leader>s
+            nnoremap <unique> <Leader>s <Plug>(easymotion-sn)
+
+            " Mi sposto in qualsiasi direzione in tutti i buffer
+            silent! nunmap <Leader>a
+            nnoremap <unique> <Leader>a <Plug>(easymotion-overwin-w)
+
+            " Mi sposto in qualsisi punto della linea
+            " input: 2 char
+            " ne posso premere anche uno solo e premere invio
+            silent! nunmap <Leader>l
+            nnoremap <unique> <Leader>l <Plug>(easymotion-sl2)
+
+            " Mi sposto verso il basso
+            " input: 2 char
+            " ne posso premere anche uno solo e premere invio
+            silent! nunmap <Leader>j
+            nnoremap <unique> <Leader>j <Plug>(easymotion-f2)
+            " Mi sposto verso alto
+            " input: 2 char
+            " ne posso premere anche uno solo e premere invio
+            silent! nunmap <Leader>k
+            nnoremap <unique> <Leader>k <Plug>(easymotion-F2)
+
+            " ripete ultimo movimento
+            silent! nunmap <Leader>.
+            nnoremap <unique> <Leader>. <Plug>(easymotion-repeat)
+        " }}} Map
+    " }}} EasyMotion
+
+    " FastFold {{{
+        " Config {{{
+            let g:fastfold_force = 1
+            " Mantieni solo l'aggiornamento al salvataggio
+             let g:fastfold_savehook = 1
+            " Disabilita tutti gli altri trigger
+            let g:fastfold_fdmhook = 0
+
+            let g:fastfold_fold_movement_commands = []
+            let g:fastfold_fold_movement_commands = []
+            let g:fastfold_skip_filetypes = [ 'taglist', 'vista', 'nerdtree' ]
+        " }}}  Config
+
+    " }}} FastFold 
+
+    " Fzf {{{
+        " Function {{{
+            function! Fzf_files_with_dev_icons(command) " {{{
+                " mi apre fzf con affianco al nome del file l'icona, e mi mostra la preview
+                " del file nelle mie variabili d'ambiente ho impostato 
+                " FZF_DEFAULT_OPTS=--bind page-down:preview-down,page-up:preview-up
+                " in questo modo posso usare page-up e page-down per scorrere l'anteprima
+                " per ottimizzarlo ho usato un plugin https://github.com/coreyja/devicon-lookup
+                let l:fzf_files_options = ' -m --preview "bat --color always --style numbers {2..}" '
+
+                function! s:edit_devicon_prepended_file(item)
+                    if empty(a:item)
+                        return 1
+                    endif
+
+                    let l:file_path = a:item[1][4:-1]
+                    execute 'silent e' l:file_path
+                endfunction
+                let opts = fzf#wrap({})
+                let opts.source = a:command.' | devicon-lookup'
+                let s:Sink = opts['sink*']
+                let opts['sink*'] = function('s:edit_devicon_prepended_file')
+                let opts.options .= l:fzf_files_options
+                call fzf#run(opts)
+            endfunction " }}}
+
+            function! Build_quickfix_list(lines) " {{{
+                call setqflist(map(copy(a:lines), '{ "filename": v:val }'))
+                copen
+                cc
+            endfunction " }}}
+        " }}} Function
+
+        " Config {{{
+            " ######### IMPORTANTE ###########
+            " Qui ho modificato i colori
+            " E con il tasto CTRL+P mi mostra e nasconde la preview
+
+
+            let $FZF_DEFAULT_OPTS="--ansi --color 
+                                 \ fg:#616161,fg+:#EBCB8B,hl:#81A1C1,hl+:#81A1C1,border:#4B4C53 
+                                 \ --bind \"ctrl-p:toggle-preview,page-down:preview-down,page-up:preview-up\""
+            
+            let $BAT_THEME="base16-256"
+
+            " Initialize configuration dictionary
+            let g:fzf_vim = {}
+            let g:fzf_vim.preview_window = ['hidden,right,50%,<70(up,40%)', 'ctrl-p']
+            " let g:fzf_vim.preview_bash = 'C:\Appl\bin\bash.exe'
+
+            " [Buffers] Jump to the existing window if possible
+            let g:fzf_vim.buffers_jump = 1
+
+            " [[B]Commits] Customize the options used by 'git log':
+             let g:fzf_vim.commits_log_options = '--graph --color=always 
+                                                \ --format="%C(auto)%h%d %s %C(black)%C(bold)%cr"'
+
+            " [Tags] Command to generate tags file
+            let g:fzf_vim.tags_command = 'ctags -R'
+
+            " [Commands] --expect expression for directly executing the command
+             let g:fzf_vim.commands_expect = 'alt-enter,ctrl-x'
+
+            " posso selezionare più file con il tab
+            let g:fzf_action = {
+                \ 'ctrl-t': 'tab split',
+                \ 'ctrl-e': 'edit',
+                \ 'ctrl-s': 'split',
+                \ 'ctrl-v': 'vsplit',
+                \ 'ctrl-r': 'read',
+                \ 'ctrl-q': function('Build_quickfix_list'),
+                \ }
+
+
+            let g:fzf_layout = { 'down': '40%' }
+
+            let g:fzf_vim.command_prefix = 'Fzf'
+        " }}} Config
+
+        " Autocmd {{{
+            augroup vimrc
+            autocmd!
+                autocmd FileType fzf silent! tunmap <buffer> <Esc>
+            augroup END
+        " }}} Autocmd
+
+        " Command {{{
+            command! -bang -nargs=* Find
+                \ call fzf#vim#grep(
+                \ 'rg --column
+                \ --line-number -C 3 --no-heading --fixed-strings --ignore-case --hidden --follow --glob "!doc/*" --glob "!.rblcl/*" --glob "!.yardoc/*" --glob "!.git/*" --glob "!node_modules/*" --glob "!tags" --glob "!dis/*" '.shellescape(<q-args>), 1,
+                \  <bang>0)
+
+            " ######### IMPORTANTE ###########
+            " Con il tasto CTRL+P mi mostra e nasconde la preview
+            " Se avvio con :RG       => lo apre in model view con anteprima nascosta
+            " Se avvio con :RG!      => lo apre in schermo splittato in orrizontale anteprima visibile
+            " Se avvio con :RG! *.rb => posso passargli il glob e in questo caso mostra solo i file .rb
+            function! RgRunner(...)
+                let command = 'rg --column --line-number --no-heading --color=always --smart-case -C 3 --glob "!.git/*" --fixed-strings --hidden '
+                if a:0 >= 1
+                    let command = command . '-g ' . a:1 . ' '
+                endif
+                return command
+            endfunction
+
+
+            " <bang>0 - controlla se il comando è stato chiamato con !
+            " Se CON ! : usa 'up:60%' (preview sopra, sempre visibile)
+            " Se SENZA ! : usa 'right:50%:hidden', 'ctrl-p' (preview a destra, nascosto, attivabile con Ctrl+P)
+            " command! -bang -nargs=* Rg
+            "         \ call fzf#vim#grep(
+            "             \ RgRunner(<f-args>).shellescape(""), 1,
+            "             \   <bang>0 ? fzf#vim#with_preview({'options': '--delimiter : --nth 4.. -e --highlight-line'}, 'up:60%')
+            "             \           : fzf#vim#with_preview({'options': '--delimiter : --nth 4.. -e --highlight-line'}, 'right:50%:hidden', 'ctrl-p'),
+            "             \   <bang>0)
+
+            command! -nargs=* Rg
+                    \ call fzf#vim#grep(
+                    \ RgRunner(<f-args>).shellescape(""), 1,
+                    \ fzf#vim#with_preview({'options': '--delimiter : --nth 4.. -e --highlight-line'}, 'right:50%:hidden', 'ctrl-p'))
+            
+
+            command! -bang -nargs=* Ugrep
+                \ call fzf#vim#grep(
+                \   'ugrep -RInk --smart-case -u -k  --only-matching --context=1 --ignore-files '.shellescape(<q-args>), 1,fzf#vim#with_preview({'options': '--delimiter : --nth 4..'}),
+                \   <bang>0)
+
+
+            command! -bang -nargs=* Buffers
+                \ call fzf#vim#buffers(
+                \   <q-args>,
+                \   { 'options': ['--layout=reverse', '--no-preview', '--info=inline'], 'down': '~10%' },
+                \   <bang>0)
+
+            command! -bang -nargs=* BuffersPreview
+                \ call fzf#vim#buffers(<q-args>,
+                \ {'options': ['--layout=reverse', '--info=inline', '--preview', 'bat --color always --style numbers {4..}'], 'down': '~25%'},
+                \ <bang>0)
+        " }}} Command
+
+        " Map {{{
+            " nelle mie Helper functions (vedere sopra) ho creato la funzione 
+            " Fzf_files_with_dev_icons()
+            " mi apre fzf con affianco al nome del file l'icona, e mi mostra 
+            " la preview del file nelle mie variabili d'ambinte
+            " ho impostato FZF_DEFAULT_OPTS=--bind page-down:preview-down,page-up:preview-up
+            " in questo modo posso usare page-up e page-down per scorrere l'anteprima
+
+             " lista file, con Ctrl+P mostra la preview
+            nnoremap <silent> <Leader>f :FzfFiles<cr>
+            " lista file con la preview
+            " nnoremap <Leader>pp :Files<cr>
+            nnoremap <silent> <leader>ff :call Fzf_files_with_dev_icons($FZF_DEFAULT_COMMAND)<CR>
+            " lista file con  preview + devicon con git ls
+            " nnoremap <silent> <leader>fg  :call Fzf_files_with_dev_icons("git ls-files \| uniq")<CR>
+            nnoremap <silent> <Leader>fb :Buffers<cr>
+            nnoremap <silent> <Leader>fbb :BuffersPreview<cr>
+            nnoremap <silent> <Leader>ft :FzfTags<cr>
+            nnoremap <silent> <Leader>ftb :FzfBTags<cr>
+            nnoremap <silent> <Leader>fs :FzfSnippets<cr>
+            nnoremap <silent> <Leader>fl :FzfLines<cr>
+            nnoremap <silent> <Leader>flb :FzfBLines<cr>
+            nnoremap <silent> <Leader>fag :FzfAg<cr>
+            nnoremap <silent> <Leader>fu :Ugrep<cr>
+            nnoremap <silent> <Leader>fg :Rg<cr>
+            nnoremap <silent> <Leader>fd :Find<cr>
+        " }}} Map
+    " }}} Fzf
+
+    " Hexokinase {{{
+        " Config {{{
+            let g:Hexokinase_ftEnabled = ['scss', 'css', 'html', 'javascript', 'vim', 'lua']
+            let g:Hexokinase_highlighters = [ 'backgroundfull' ]
+            let g:Hexokinase_optInPatterns = 'full_hex,rgb,rgba,hsl,hsla'
+        " }}} Config
+    " }}} Hexokinase
+
+    " IndentLine {{{
+        " Config {{{
+            let g:indentLine_enabled = 1
+            let g:indentLine_color_gui = '#353D4B'
+            let g:indentLine_char = '│'
+            let g:indentLine_faster = 1
+        " }}} Config
+
+        " Map {{{
+            nmap <Leader>ti :IndentLinesToggle<cr>
+        " }}} Map
+    " }}}IndentLine
+
+    " Incsearch {{{
+        if s:IsPlugged('incsearch-easymotion.vim')
+
+            " Nota {{{
+                "
+                " Con lo spazio mi apre easymotion e mi sposto in modo piu veloce
+                "
+            " }}} Nota
+
+            " Config {{{
+                " ripulisce il registro delle ricerche dopo aver cercato
+                let g:incsearch#auto_nohlsearch = 1
+            " }}} Config
+
+            " Autocmd {{{
+                augroup incsearch-easymotion
+                autocmd!
+                autocmd User IncSearchEnter autocmd! incsearch-easymotion-impl
+                augroup END
+
+                augroup incsearch-easymotion-impl
+                autocmd!
+                augroup END
+            " }}} Autocmd
+
+            " Function {{{
+                function! IncsearchEasyMotion() abort  " {{{
+                    autocmd incsearch-easymotion-impl User IncSearchExecute :silent! call EasyMotion#Search(0, 2, 0)
+                    return "\<CR>"
+                endfunction   " }}}
+            " }}} Function
+
+            " Map {{{
+                let g:incsearch_cli_key_mappings = {
+                \   "\<Space>": {
+                \       'key': 'IncsearchEasyMotion()',
+                \       'noremap': 1,
+                \       'expr': 1
+                \   }
+                \ }
+
+                map /  <Plug>(incsearch-forward)
+                map ?  <Plug>(incsearch-backward)
+                map g/ <Plug>(incsearch-stay)
+            " }}} Map
+
+        endif
+    " }}} Incsearch
+
+    " LightLine {{{
+        if s:IsPlugged('lightline.vim')
+            " Config {{{
+                let g:lightline = {
+                    \ 'colorscheme': 'nord',
+                    \ 'active': {
+                    \   'left': [ [ 'mode', 'paste' ], [ 'readonly', 'filename', 'modified' ] ]
+                    \ },
+                    \ 'tabline': {
+                    \   'left': [ ['buffers'] ],
+                    \   'right': [ ['close'] ]
+                    \ },
+                    \ 'component_expand': {
+                    \   'buffers': 'lightline#bufferline#buffers'
+                    \ },
+                    \ 'component_type': {
+                    \   'buffers': 'tabsel'
+                    \ }
+                    \ }
+            " }}} Config
+        endif
+    " }}} LightLine
+
+    " Lens {{{
+        " Config {{{
+            let g:lens#disabled = 1
+            let g:lens#height_resize_max = 60
+            let g:lens#height_resize_min = 20
+            let g:lens#width_resize_max = 120
+            let g:lens#width_resize_min = 14
+            let g:lens#disabled_filetypes = ['nerdtree', 'fzf', 'vista', 'quickfix']
+        " }}} Config
+
+        " Map {{{
+            nnoremap <silent>wm :call lens#toggle()<CR>
+            " let g:lens#height_resize_max = 20
+        " }}} Map
+    " }}} Lens
+
+    " Lexima {{{
+        " Config {{{
+            let g:lexima_accept_pum_with_enter = 1
+            let g:lexima_enable_endwise_rules = 1
+        " }}} Config
+    " }}} Lexima
+
+    " Lsp {{{
+        function! s:configure_lsp() abort " {{{
+            
+            " Config {{{
+                let g:lsp_use_lua =  has('lua') && has('patch-8.2.0775')
+                let g:lsp_use_native_client = 1
+                let g:lsp_semantic_enabled = 0
+                let g:lsp_format_sync_timeout = 1000
+                let g:lsp_auto_enable = 0
+                let g:lsp_diagnostics_float_cursor = 1
+                let g:lsp_diagnostics_highlights_insert_mode_enabled = 0
+                let g:lsp_diagnostics_signs_insert_mode_enabled = 0
+                let g:lsp_fold_enabled = 0
+                let g:lsp_hover_conceal = 0
+                let g:lsp_hover_ui = 'float'
+                let g:lsp_async_completion = 1
+
+                let g:lsp_diagnostics_signs_error = {'text': '✗'}
+                let g:lsp_diagnostics_signs_warning = {'text': '⚠'}
+                let g:lsp_diagnostics_signs_information = {'text': 'ℹ'}
+                let g:lsp_diagnostics_signs_hint = {'text': '➤'}
+
+                " Server Setting  {{{
+                    if executable('solargraph') " {{{
+                        augroup lsp_solargraph
+                            autocmd!
+                            autocmd User lsp_setup call lsp#register_server({
+                                            \ 'name': 'solargraph',
+                                            \ 'cmd': {server_info->["bundle.bat", "exec", "solargraph", "stdio"]},
+                                            \ 'whitelist': ['ruby', 'eruby'],
+                                            \ 'initialization_options': {
+                                            \   'diagnostics': v:true,
+                                            \   'formatting': v:false,
+                                            \   'autoformat': v:false,
+                                            \   'completion': v:true,
+                                            \   'hover': v:true,
+                                            \   'symbols': v:true,
+                                            \   'definitions': v:true,
+                                            \   'rename': v:false,
+                                            \   'references': v:true,
+                                            \   'documentHighlight': v:false,
+                                            \   'documentSymbol': v:true,
+                                            \   'workspaceSymbol': v:true,
+                                            \   'codeAction': v:false,
+                                            \   'codeLens': v:false,
+                                            \   'folding': v:false,
+                                            \   'logLevel': 'warn'
+                                            \ },
+                                        \ })
+                        augroup END
+                    endif " }}}
+                " }}} Server Setting
+
+                " Highlights {{{
+                    highlight LspErrorText guifg=#f44747 ctermfg=203
+                    highlight LspWarningText guifg=#ff8800 ctermfg=208
+                    highlight LspInformationText guifg=#15aabf ctermfg=38
+                    highlight LspHintText guifg=#4fc1ff ctermfg=75
+
+                    highlight LspErrorHighlight gui=undercurl guisp=#f44747
+                    highlight LspWarningHighlight gui=undercurl guisp=#ff8800
+                    highlight LspInformationHighlight gui=undercurl guisp=#15aabf
+                    highlight LspHintHighlight gui=undercurl guisp=#4fc1ff
+                " }}} Highlights
+
+                " Command {{{
+                    " Start LSP
+                    command! LspEnable :call lsp#enable()
+
+                    " Start LSP
+                    command! LspDisable :call lsp#disable()
+
+                    " Mostra capabilities del server
+                    command! LspSolargraphCapabilities :echo lsp#get_server_capabilities('solargraph')
+                " }}} Comamnd
+
+                " Debug {{{
+                    let g:lsp_log_verbose = 1
+                    let g:lsp_log_file = g:vim_config_dir . '/files/log/vim-lsp.log'
+                    let g:asyncomplete_log_file = g:vim_config_dir . '/files/log/asyncomplete.log'
+
+                    " Funzione per verificare lo stato di LSP
+                    function! LspDebugInfo() abort
+                        echo "LSP Servers:"
+                        echo lsp#get_allowed_servers()
+                        echo "\nCurrent buffer LSP status:"
+                        echo lsp#get_buffer_diagnostics_counts()
+                    endfunction
+
+                    command! LspDebug call LspDebugInfo()
+
+                " }}} Debug
+            "}}} Config
+
+            " Functin {{{
+                function! s:lsp_tab_complete() abort " {{{
+                  if pumvisible()
+                    return "\<C-n>"
+                  else
+                    let col = col('.') - 1
+                    if col == 0 || getline('.')[col - 1] =~# '\s'
+                      return "\<Tab>"
+                    else
+                      return "\<C-x>\<C-o>"
+                    endif
+                  endif
+                endfunction " }}}
+
+                function! s:on_lsp_buffer_enabled() abort " {{{
+                    setlocal omnifunc=lsp#complete
+                    setlocal signcolumn=yes
+                    setlocal tagfunc=lsp#tagfunc
+
+                    " Mappature locali per il buffer
+                    nmap <buffer> <leader>lgd <plug>(lsp-definition)
+                    nmap <buffer> <leader>lgs <plug>(lsp-document-symbol-search)
+                    nmap <buffer> <leader>lgS <plug>(lsp-workspace-symbol-search)
+                    nmap <buffer> <leader>lgr <plug>(lsp-references)
+                    nmap <buffer> <leader>lgi <plug>(lsp-implementation)
+                    nmap <buffer> <leader>lgt <plug>(lsp-type-definition)
+                    nmap <buffer> <leader>ldk <plug>(lsp-previous-diagnostic)
+                    nmap <buffer> <leader>ldj <plug>(lsp-next-diagnostic)
+                    nmap <buffer> <leader>lk <plug>(lsp-hover-float)
+
+                    " Diagnostica
+                    nmap <buffer> <leader>ld <plug>(lsp-document-diagnostics)
+                    nmap <buffer> <leader>lf :LspDocumentDiagnostics --buffers=*<CR>
+
+                    " Preview definition
+                    nmap <buffer> <leader>lpd <plug>(lsp-peek-definition)
+
+                    " Status
+                    nmap <buffer> <leader>ls :LspStatus<CR>
+                endfunction " }}}
+            " }}} Function
+
+            " Map {{{
+                " Mappature globali per i diagnostici (errori/warning)
+                " cd => lsp diagnostics: apre la lista degli errori nella location-list
+                nnoremap <silent> <leader>cd :LspDocumentDiagnostics<CR>:lopen<CR>
+                " Spostati tra gli errori nella location-list
+                nnoremap <silent> [l :lprevious<CR>
+                nnoremap <silent> ]l :lnext<CR>
+
+                " Tab: attiva completamento o naviga
+                inoremap <silent><expr> <Tab> <SID>lsp_tab_complete()
+                " Shift-Tab: naviga indietro nel menu
+                inoremap <silent><expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+
+                let g:UltiSnipsExpandTrigger="<c-e>" 
+                let g:UltiSnipsJumpForwardTrigger="<c-j>"
+                let g:UltiSnipsJumpBackwardTrigger="<c-k>"
+
+
+
+                " " Enter: accetta selezione o inserisci newline
+                " inoremap <expr> <CR> pumvisible() ? asyncomplete#close_popup() : "\<CR>"
+
+                " " Esc: chiudi popup
+                " inoremap <expr> <Esc> pumvisible() ? asyncomplete#cancel_popup() : "\<Esc>"
+
+                " " Ctrl-Space: forza apertura menu (alternativa)
+                " imap <C-Space> <Plug>(asyncomplete_force_refresh)
+
+                " " Ctrl-N/P per navigare senza attivare il completamento
+                " inoremap <expr> <C-n> pumvisible() ? "\<C-n>" : "\<C-n>"
+                " inoremap <expr> <C-p> pumvisible() ? "\<C-p>" : "\<C-p>"
+
+                " " Ctrl-E per chiudere il popup
+                " inoremap <expr> <C-e> pumvisible() ? asyncomplete#cancel_popup() : "\<End>"
+
+            " }}} Map
+
+            " Autocmd {{{
+                augroup lsp_install
+                    autocmd!
+                    autocmd User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
+                augroup END
+            " }}} Autocmd
+        endfunction " }}}
+
+        function! s:load_and_start_lsp() abort  " {{{
+            " Carica i plugin
+            call plug#load('vim-lsp')
+            
+            " Configura LSP (metti qui tutta la tua configurazione)
+            call s:configure_lsp()
+            
+            " Abilita LSP
+            call lsp#enable()
+            
+            echo "LSP started!"
+        endfunction " }}}
+
+        command! LspStart call s:load_and_start_lsp()
+    " }}} Lsp
+
+    " Matchup {{{
+        " Config {{{
+            let g:matchup_matchparen_deferred = 1
+            let g:matchup_matchparen_deferred_show_delay = 450
+            let g:matchup_delim_noskips = 2
+            let g:matchup_matchparen_pumvisible = 1
+            let g:matchup_motion_cursor_end = 0
+            let g:matchup_matchparen_nomode = 'i'
+            let g:matchup_matchparen_timeout = 250
+            let g:matchup_matchparen_insert_timeout = 40
+            hi MatchParen ctermbg=blue guibg=#5c6370 cterm=italic gui=italic
+        " }}} Config
+    " }}} Matchup
+
+    " Maximizer {{{
+        " Config {{{
+        " }}} Config
+
+        " Map {{{
+            nmap <silent> wM     <Plug>ZoomWin
+            " nnoremap <silent>wM :MaximizerToggle<CR>
+        " }}} Map
+    " }}} Maximizer
+
+    " Markdown {{{
+        " Config {{{
+            let g:vim_markdown_math = 1
+            let g:vim_markdown_frontmatter = 1
+            let g:vim_markdown_conceal = 1
+            let g:vim_markdown_conceal_level = 2
+            let g:vim_markdown_folding_style_pythonic = 1
+        " }}} Config
+    " }}} Markdown
+
+    " Marks {{{
+
+        " Note {{{
+            " Ottimo plugin per evidenziale il codice
+            " Ho settato colori personallizati per varie categorie
+            " Ho settato con un autocmd che mi evidengia gia DEFAULT|TODO|OK|FIX|PERF|BUG
+            "
+            " <leader>bb   evidenzio il testo sotto il cursore, o selezione
+            " N<leader>b   posso passargli un numero per evidenziarlo con una categoria specifica 
+            " 
+            " Per vedere la lista delle caterogie, e i mark associati
+            " :Marks oppure <Leader>bl
+            "
+            " ----- COMANDI UTILI -----
+            " :Mark {pattern}     - Marca un pattern specifico
+            " :Mark               - Disabilita tutti i mark (temporaneamente)
+            " :MarkClear          - Cancella tutti i mark (permanente)
+            " :Marks              - Mostra tutti i mark attivi
+            " :MarkSave           - Salva i mark correnti
+            " :MarkLoad           - Carica i mark salvati       
+        " }}} Note
+
+        " Config {{{
+          " Disabilita le mappature di default per poterle ridefinire
+            let g:mw_no_mappings = 1
+            let g:mwAutoLoadMarks = 1
+            let g:mwDefaultHighlightingPalette = 'maximum'
+            let g:mwDefaultHighlightingNum = 9
+            silent! MarkName! " Pulisce nomi esistenti
+            silent! 1MarkName TODO
+            silent! 2MarkName FIX
+            silent! 3MarkName OK
+            silent! 4MarkName BUG
+        " }}} Config
+            
+        " Function {{{
+            function! ConfigureMarkNames()
+              " Pulisce eventuali nomi preesistenti
+              silent! MarkName!
+
+              " Assegna i nomi ai gruppi
+              silent! 1MarkName DEFAULT
+              silent! 2MarkName TODO
+              silent! 3MarkName OK
+              silent! 4MarkName FIX 
+              silent! 5MarkName PERF
+              silent! 6MarkName BUG
+
+              " Evidenzia gia di default queste categorie 
+              silent! 2Mark /TODO:/
+              silent! 3Mark /OK:/
+              silent! 4Mark /FIX:/
+              silent! 5Mark /PERF:/
+              silent! 6Mark /BUG:/
+              
+              " Colori personalizzati per evidenziare le categorie
+              " DEFAULT
+              highlight  MarkWord1 ctermfg=0 ctermbg=11 guifg=Black guibg=#8CCBEA
+              " TODO
+               highlight MarkWord2 ctermfg=0 ctermbg=14 guifg=Black guibg=#FFDB72
+              " OK
+               highlight MarkWord3 ctermfg=0 ctermbg=10 guifg=Black guibg=#A4E57E
+              " FIX
+              highlight MarkWord4 ctermfg=0 ctermbg=13 guifg=Black guibg=#FFB3FF
+              " PERFORMANCE
+              highlight MarkWord5 ctermfg=0 ctermbg=9 guifg=Black guibg=#9999FF
+              " BUG
+               highlight MarkWord6 ctermfg=0 ctermbg=12 guifg=Black guibg=#FF7272
+
+            endfunction
+        " }}} Function
+
+          " Autocmd {{{
+              augroup MarkPluginConfig autocmd!
+                  " Caricare i nomi persozalizzatiei gruppi
+                  " Lo devo fare dopo che vim si e avviato
+                  " altrimenti non funziona
+                  autocmd VimEnter * :call ConfigureMarkNames()
+              augroup END
+          " }}} Autocmd
+
+        " Map {{{
+            " Marca/smarca la parola sotto il cursore o la selezione visuale
+            " Uso <Leader>bb perche cosi se non gli passo nessun gruppo usa quello 
+            " di default che e 1, altrimenti 1<Leader>b  2<Leader>b ecc...
+            " [b]:{Mark}
+            nmap <unique> <Leader>bb :exe '1Mark /\V'..escape(substitute('<c-r><c-w>', "'", "''", 'g'), '/\')..'/'<cr>
+            xmap <unique> <silent> <Leader>bb <Esc>gv1<Leader>b
+
+            " Posso passargli il numero della categoria
+            " Per esempio:
+            " 1<Leader>b gli assegnala categoria 1
+            " 2<Leader>b gli assegnala categoria 2
+            silent! nunmap <Leader>b
+            nmap <unique> <Leader>b <Plug>MarkSet
+            silent! xunmap <Leader>b
+            xmap <unique> <Leader>b <Plug>MarkSet
+
+            " Pulisce il mark sotto il cursore
+            " Se non mi trovo sopra nessun mark pulisce tutto
+            " [b]:{Mark} [d]:{delete}
+            silent! nunmap <Leader>bd
+            nmap <unique> <Leader>bd <Plug>MarkClear
+            " Pulisce tutti i mark
+            " [b]:{Mark} [d]:{delete} [a]:{all}
+            silent! nunmap <Leader>bda
+            nmap <unique> <Leader>bda <Plug>MarkAllClear
+
+            " Cerca mark corrente
+            " [b]:{Mark} [j]:{↓}
+            silent! nunmap <Leader>bj
+            nmap <unique> <Leader>bj <Plug>MarkSearchCurrentNext
+            " [b]:{Mark} [k]:{↑}
+            silent! nunmap <Leader>bk
+            nmap <unique> <Leader>bk <Plug>MarkSearchCurrentPrev
+
+            " Cerca qualsiasi mark (non solo quello corrente)
+            " [b]:{Mark} [j]:{↓} [a]:{all}
+            silent! nunmap <Leader>bja
+            nmap <unique> <Leader>bja <Plug>MarkSearchAnyNext
+            " [b]:{Mark} [k]:{↑} [a]:{all}
+            silent! nunmap <Leader>bka
+            nmap <unique> <Leader>bka <Plug>MarkSearchAnyPrev
+
+            " Toggle on/off di tutti i mark (utile per nasconderli temporaneamente)
+            " [b]:{Mark} [t]:{toggle}
+            silent! nunmap <Leader>bt
+            nmap <unique> <Leader>bt <Plug>MarkToggle
+
+            " Mostar tutti i mark settati e la rispettiva categoria 
+            " [b]:{Mark} [l]:{list}
+            silent! nunmap <Leader>bl
+            nmap <unique> <Leader>bl :Marks<CR>
+
+            " ----- MAPPATURE PER CERCARE GRUPPI SPECIFICI -----
+            " Cerca il prossimo mark del gruppo 1-9 con <Leader>b1, <Leader>b2, ecc.
+            " Cerca il precedente con <Leader>B1, <Leader>B2, ecc.
+            nmap <Leader>b1 <Plug>MarkSearchGroup1Next
+            nmap <Leader>B1 <Plug>MarkSearchGroup1Prev
+            nmap <Leader>b2 <Plug>MarkSearchGroup2Next
+            nmap <Leader>B2 <Plug>MarkSearchGroup2Prev
+            nmap <Leader>b3 <Plug>MarkSearchGroup3Next
+            nmap <Leader>B3 <Plug>MarkSearchGroup3Prev
+            nmap <Leader>b4 <Plug>MarkSearchGroup4Next
+            nmap <Leader>B4 <Plug>MarkSearchGroup4Prev
+            nmap <Leader>b5 <Plug>MarkSearchGroup5Next
+            nmap <Leader>B5 <Plug>MarkSearchGroup5Prev
+            nmap <Leader>b6 <Plug>MarkSearchGroup6Next
+            nmap <Leader>B6 <Plug>MarkSearchGroup6Prev
+            nmap <Leader>b7 <Plug>MarkSearchGroup7Next
+            nmap <Leader>B7 <Plug>MarkSearchGroup7Prev
+            nmap <Leader>b8 <Plug>MarkSearchGroup8Next
+            nmap <Leader>B8 <Plug>MarkSearchGroup8Prev
+            nmap <Leader>b9 <Plug>MarkSearchGroup9Next
+            nmap <Leader>B9 <Plug>MarkSearchGroup9Prev
+        " }}} Map  
+    " }}} Marks
+
+    " NrrwRgn {{{
+        " Nota {{{
+            " Questo plugin mi permette di selezionare del codice
+            " e aprirlo in un nuovo buffer e modificarlo in cambiamenti si rifleteranno 
+            " anche nel buffer di origine
+            " Inoltre posso serezionare piu parti di codice da modificare
+            " Operativita:
+            " Modifica singola:
+            "   :NR         apro la selezione in modo split
+            "   :NR!        apro la selezione nella finestra correntC!!:
+            "   :WR!        chiudo il buffer di modifica e torno al buffer orginale
+            " Modifica multipla:
+            " Mi permette di selezionare piu parti di codice da modificare
+            "   :NRP        metto la selezione nella lista di codice da modificare
+            "   :NRP!       pulisto la lista del codice da moficicare
+            "   :NRM        apro la selezione multipla in modo split
+            "   :NRM!       apro la selezione multipla nella finestra corrente
+        " }}} Nota
+
+        " Config {{{
+            let g:nrrw_rgn_vert = 1
+            let g:nrrw_rgn_wdth = 100
+            let g:nrrw_rgn_hl = 'Search'
+            let g:nrrw_topbot_leftright = 'botright'
+            " let g:nrrw_rgn_update_orig_win = 1
+            let g:nrrw_rgn_nomap_nr = 1
+            let g:nrrw_rgn_nomap_Nr = 1
+        " " }}} Config 
+
+        " Map {{{
+            " Invio la selezione al buffer temporaneo [split]
+            " [n]:{Narrow} [M]:{Split}
+            silent! xunmap <Leader>ns
+            xnoremap <unique> <Leader>ns <Plug>NrrwrgnDo
+
+            " Invio la selezione al buffer temporaneo [current window]
+            " [n]:{Narrow} [w]:{window}
+            silent! xunmap <Leader>nw
+            xnoremap <unique> <Leader>nw :<c-u>call nrrwrgn#NrrwRgn(visualmode(), '!')<cr>
+
+            " Salvo e chiudo le modifiche
+            " [n]:{Narrow} [w]:{window}
+            silent! nunmap <Leader>nc
+            nnoremap <unique> <Leader>nc :w<CR>:WR!<CR>
+           
+            " Aggiunto codice in modalita multi per modficarlo
+            " [n]:{Narrow}  [a]:{Add} 
+            silent! vunmap <Leader>na
+            vnoremap <unique> <Leader>na :<C-U>'<,'>NRP<CR>
+
+            " Apro la modalita multi per modficare il codice [split]
+            " [n]:{Narrow}  [m]:{Multi} 
+            silent! nunmap <Leader>nm
+            nnoremap <unique> <Leader>nm :NRM<CR>
+
+            " Apro la modalita multi per modficare il codice [current window]
+            " [n]:{Narrow} [M]:{Multi} [c]:{Current}  
+            silent! nunmap <Leader>nmc
+            nnoremap <unique> <Leader>nmc :NRM!<CR>
+
+        " }}} Map  
+    " }}} NrrwRgn
+
+    " NeoFormat {{{
+        " Config {{{
+            let g:neoformat_verbose = 1
+            let g:neoformat_lua_luaformat = {
+                        \ 'exe': 'lua-format',
+                        \ 'args': ['-i', '--no-keep-simple-function-one-line', '--no-break-after-operator', '--column-limit=150', '--break-after-table-lb'],
+                        \ 'stdin': 1,
+                        \ }
+
+            let g:neoformat_enabled_lua = ['luaformat']
+        " }}} Config
+
+        " Map {{{
+            noremap <F8> :silent Neoformat<CR>
+            vnoremap <silent><F8> :Neoformat<CR>gv
+            " In modalità async non mi funzionava in Vim ma in Neovim si, quindi mettere controllo se sono in Vim o Neovim e usare quello giusto
+            " autocmd FileType javascript,typescript,css,less,scss,json,graphql,markdown,vue,json  map <buffer> <F9> :PrettierAsync<CR>
+            "if g:is_nvim
+                autocmd FileType javascript,typescript,css,less,scss,json,graphql,markdown,vue,json  map <buffer> <F8> :PrettierAsync<CR>
+            "else
+            "    autocmd FileType javascript,typescript,css,less,scss,json,graphql,markdown,vue,json  map <buffer> <F8> :Prettier<CR>
+            "endif
+        " }}} Map
+    " }}} NeoFormat
+
+    " NerdTree {{{
+        " Config {{{
+            let NERDTreeQuitOnOpen = 0
+            let NERDTreeShowHidden=1
+            let NERDTreeMinimalUI=1
+            let NERDTreeMouseMode = 1
+            let NERDTreeWinSize=32
+            let NERDTreeChDirMode=0
+
+            let NERDTreeIgnore=['\.pyc', '\~$', '\.swo$', '\.swp$', '\.git', '\.hg', '\.svn',
+                                \ '\.bzr', '\.lock', 'altro', 'excel_file',
+                                \ 'tags', '\.ico$', '\.exe$', '\.crt$', '\.key$',
+                                \ 'node_modules$[[dir]]', 'node_modules_custom$[[dir]]']
+            " highlight! link NERDTreeFlags NERDTreeDir
+            " hi Directory guifg=#5E81AC ctermfg=blue
+            let g:DevIconsEnableFoldersOpenClose = 1
+            let g:NERDTreeDirArrowExpandable = "\u00a0"
+            let g:NERDTreeDirArrowCollapsible = "\u00a0"
+            " elimina la sessione ? Press... in alto
+        " }}}" Config
+
+        " Autocmd {{{
+            " Hide the current working directory in NERDTree
+            augroup nerdtreehidecwd
+            autocmd!
+            autocmd FileType nerdtree call glyph_palette#apply()
+            augroup end
+
+            " Exit Vim if NERDTree is the only window remaining in the only tab.
+            autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
+        " }}} Autocmd
+
+        " Map {{{
+            " Toggle NERDTree nella directory del file corrente
+            " NERDTree (often requires a redraw)
+            silent! nunmap <F4>
+            nnoremap <unique> <silent> <F4> :NERDTreeToggle %:p:h<CR>:redraw!<CR>
+
+            silent! vunmap <F4>
+            vnoremap <unique> <silent> <F4> <esc>:NERDTreeToggle %:p:h<CR>
+
+            silent! iunmap <F4>
+            inoremap <unique> <silent> <F4> <C-O>:NERDTreeToggle %:p:h<CR>
+
+            " Apri NERDTree nella directory del file corrente
+            silent! nunmap <Leader>nt
+            nnoremap <unique> <silent> <Leader>nt :NERDTree %:p:h<CR>
+
+            " Metti il focus sulla finestra di NERDTree
+            silent! nunmap <F2>
+            nnoremap <unique> <silent> <F2> :NERDTreeFocus<CR>
+        " }}} Map
+    " }}} NerdTree
+
+    " Nerdtree-syntax-highlight {{{
+        " Config {{{
+            let g:NERDTreeLimitedSyntax = 1
+            let g:WebDevIconsDisableDefaultFolderSymbolColorFromNERDTreeDir = 1
+            let g:WebDevIconsDisableDefaultFileSymbolColorFromNERDTreeFile = 1
+
+            let g:NERDTreeDisablePatternMatchHighlight = 1
+
+            let g:NERDTreeSyntaxDisableDefaultExtensions = 1
+            let g:NERDTreeSyntaxDisableDefaultExactMatches = 1
+            let g:NERDTreeSyntaxDisableDefaultPatternMatches = 1
+
+
+            let g:NERDTreeFileExtensionHighlightFullName = 1
+            let g:NERDTreeExactMatchHighlightFullName = 1
+            let g:NERDTreePatternMatchHighlightFullName = 1
+
+            " let g:NERDTreeHighlightFoldersFullName = 1
+
+            " let g:NERDTreeExactMatchHighlightFullName = 1
+            " let g:NERDTreePatternMatchHighlightFullName = 1
+
+
+            " let g:NERDTreeFileExtensionHighlightFullName = 1
+            " let g:NERDTreeExactMatchHighlightFullName = 1
+            " let g:NERDTreePatternMatchHighlightFullName = 1
+
+
+            " let g:NERDTreeHighlightFolders = 1 " enables folder icon highlighting using exact match
+            " let g:NERDTreeHighlightFoldersFullName = 1 " highlights the folder name
+
+            " let g:NERDTreeFileExtensionHighlightFullName = 1
+            " let g:NERDTreeLimitedSyntax = 1
+            " let g:NERDTreeExactMatchHighlightFullName = 1
+            " let g:NERDTreePatternMatchHighlightFullName = 1
+            " let g:NERDTreeHighlightFolders = 1 " enables folder icon highlighting using exact match
+            " let g:NERDTreeHighlightFoldersFullName = 1
+            " let g:NERDTreeHighlightFolders = 1 " enables folder icon highlighting using exact match
+            " let g:NERDTreeHighlightFoldersFullName = 1 " highlights the folder name
+
+            " let g:WebDevIconsDefaultFileSymbolColor = "75829c"
+
+            let g:NERDTreeExtensionHighlightColor = {}
+            let g:NERDTreeExtensionHighlightColor['xlsm'] = "A3BE8C"
+            let g:NERDTreeExtensionHighlightColor['xls']  = "A3BE8C"
+            let g:NERDTreeExtensionHighlightColor['xlsx'] = "A3BE8C"
+            let g:NERDTreeExtensionHighlightColor['css'] = "5E81AC"
+            let g:NERDTreeExtensionHighlightColor['md'] = "EBCB8B"
+            let g:NERDTreeExtensionHighlightColor['db'] = "81A1C1"
+            let g:NERDTreeExtensionHighlightColor['png'] = "88C0D0"
+            let g:NERDTreeExtensionHighlightColor['rb'] = "BF616A"
+            let g:NERDTreeExtensionHighlightColor['yml'] = "B48EAD"
+
+
+            let g:NERDTreeExactMatchHighlightColor = {}
+            let g:NERDTreeExactMatchHighlightColor['.gitignore'] = "D08770"
+            let g:NERDTreeExactMatchHighlightColor['Gemfile'] = "BF616A"
+
+            " Crea una nuova palette se non esiste
+            let g:glyph_palette#palette = copy(g:glyph_palette#defaults#palette)
+            " Aggiungi un nuovo gruppo di highlight con il simbolo 
+            let g:glyph_palette#palette['GlyphPalette5'] = ['']
+
+
+            " let g:WebDevIconsDefaultFolderSymbolColor = "81A1C1"
+            " let g:WebDevIconsDefaultFileSymbolColor = "A3BE8C"
+        " }}} Config
+    " }}} Nerdtree-syntax-highlight
+
+    " Pasta {{{
+        " Config {{{
+            let g:pasta_disabled_filetypes = ['nerdtree','qt','tagbar', 'vista']
+            " let g:pasta_paste_before_mapping = '<leader>P'
+            " let g:pasta_paste_after_mapping = '<leader>p'
+
+        " }}}" Config
+    " }}} Pasta
+
+    " Prettier {{{
+        " Config {{{
+            let g:prettier#config#print_width = 100
+            let g:prettier#config#tab_width = 4
+        " }}} Config
+    " }}} Prettier
+
+    " Qf {{{
+        " Config {{{
+            let g:qf_mapping_ack_style = 1
+            let g:qf_window_bottom = 1
+            let g:qf_statusline = {}
+            let g:qf_statusline.before = '%<\ '
+            let g:qf_statusline.after = '\ %f%=%l\/%-6L\ \ \ \ \ '
+        " }}} Config
+
+        " Map {{{
+            nmap <F5> <Plug>QfCtoggle
+            nmap <F6> <Plug>(qf_loc_toggle)
+        " }}} Map
+    " }}} Qf
+
+    " Ruby {{{
+        " Config {{{
+            " enable syntax-based folding when editing Ruby filetypes
+            let ruby_fold = 1
+            " ruby operators can be highlighted
+            let ruby_operators = 1
+            " improve rubyDocumentation match patterns
+            let ruby_no_comment_fold = 1
+            let g:ruby_indent_block_style = 'do'
+            " aggiungo il supporto ai tag anche per le gemme del progetto
+            set tags+=gems.tags
+            " i comandi seguenti sono utilizzati per rendere vim piu veloce
+            let ruby_minlines = 400
+            let ruby_space_errors = 0
+            let ruby_no_trail_space_error = 0
+        " }}} Config
+    " }}} Ruby
+
+    " Rainbow {{{
+        " Config {{{
+            let g:rainbow_active = 1
+            let g:rainbow_conf = {
+                \	'guifgs': ['royalblue3', 'darkorange3', 'seagreen3', 'firebrick'],
+                \	'ctermfgs': ['lightblue', 'lightyellow', 'lightcyan', 'lightmagenta'],
+                \   'operators': '_,_',
+                \   'parentheses': ['start=/(/ end=/)/ fold', 'start=/\[/ end=/\]/ fold', 'start=/{/ end=/}/ fold'],
+                \   'separately': {'nerdtree': 0}
+                \}
+        " }}} Config
+
+        "  Map {{{
+            nmap <Leader>tr :RainbowToggle<cr>
+        " }}} Map
+    " }}} Rainbow
+
+    " Sayonara {{{
+        " Map {{{
+            nmap bc :Sayonara!<CR>
+            nmap bC :Sayonara<CR>
+        " }}} Map
+    " }}} Sayonara
+
+    " Signature {{{
+        if s:IsPlugged('vim-signature')
+          " Config {{{
+              let g:SignatureMap = {
+                  \ 'Leader'             :  "<leader>m",
+                  \ 'PlaceNextMark'      :  "<leader>mn",
+                  \ 'ToggleMarkAtLine'   :  "",
+                  \ 'PurgeMarksAtLine'   :  "<leader>md",
+                  \ 'DeleteMark'         :  "",
+                  \ 'PurgeMarks'         :  "<leader>mdb",
+                  \ 'PurgeMarkers'       :  "<leader>mda",
+                  \ 'GotoNextLineAlpha'  :  "",
+                  \ 'GotoPrevLineAlpha'  :  "",
+                  \ 'GotoNextSpotAlpha'  :  "",
+                  \ 'GotoPrevSpotAlpha'  :  "",
+                  \ 'GotoNextLineByPos'  :  "",
+                  \ 'GotoPrevLineByPos'  :  "",
+                  \ 'GotoNextSpotByPos'  :  "<leader>mj",
+                  \ 'GotoPrevSpotByPos'  :  "<leader>mk",
+                  \ 'GotoNextMarker'     :  "",
+                  \ 'GotoPrevMarker'     :  "",
+                  \ 'GotoNextMarkerAny'  :  "",
+                  \ 'GotoPrevMarkerAny'  :  "",
+                  \ 'ListBufferMarks'    :  "<leader>ml",
+                  \ 'ListBufferMarkers'  :  ""
+                  \ }
+          " }}} Config
+        endif
+    " }}} Signature
+
+    " Smooth-scroll {{{
+        " Map {{{
+            noremap <silent> <leader><Up> :call smooth_scroll#up(2, 10, 1)<CR>
+            noremap <silent> <leader><Down> :call smooth_scroll#down(2, 10, 1)<CR>
+            noremap <silent> <leader><up><Up> :call smooth_scroll#up(&scroll/2, 40, 2)<CR>
+            noremap <silent> <leader><Down><Down> :call smooth_scroll#down(&scroll/2, 40, 2)<CR>
+            noremap <silent> <leader><Up><Up><Up> :call smooth_scroll#up(&scroll, 40, 2)<CR>
+            noremap <silent> <leader><Down><Down><Down> :call smooth_scroll#down(&scroll, 40, 2)<CR>
+        " }}} Map
+    " }}} Smooth-scroll
+
+    " Sneak {{{
+        if s:IsPlugged('vim-sneak')
+            " Config {{{
+                let g:sneak#label = 1
+                let g:sneak#use_ic_scs = 1
+                let g:sneak#absolute_dir = 1
+            " }}} Config
+            
+            " Map {{{
+                " IMPORTANTE: per tornare dove ero prima del salto premere ''(due apici)
+                " Ritorno dove ero ultima occorenza trovata
+                map f <Plug>Sneak_s
+                map F <Plug>Sneak_S
+                map <A-;> <Plug>Sneak_,
+            " }}}
+        endif
+    " }}} Sneak 
+
+    " Snipewin {{{
+        "  Map {{{
+            silent! nunmap ww
+            nnoremap <unique> ww <Plug>(snipewin)
+        "  }}} Map
+    " }}} Snipewin 
+
+    " Tabular {{{
+        " Map {{{
+            nmap <Leader>a= :Tabularize /=<CR>
+            vmap <Leader>a= :Tabularize /=<CR>
+            nmap <Leader>a: :Tabularize /:\zs<CR>
+            vmap <Leader>a: :Tabularize /:\zs<CR>
+        " }}} Map
+    " }}} Tabular
+
+    " Vimade {{{
+        if s:IsPlugged('vimade')
+            " Config {{{
+                let g:vimade = {}
+                let g:vimade.lazy = 1
+                let g:vimade.fadelevel = 0.7
+                let g:vimade.enablesigns = 1
+                let g:vimade.enabletreesitter = 0
+                let g:vimade.normalid = 140
+                let g:vimade.usecursorhold=1
+                let g:vimade.ncmode = 'buffers'
+            " }}} Config
+
+            " Autocmd {{{
+                " au! FileType nerdtree VimadeBufDisable
+                " au! FileType vista VimadeBufDisable
+                " au! FileType neoterm VimadeBufDisable
+                " au! FileType dapui_scopes VimadeBufDisable
+                " au! FileType dapui_breakpoints VimadeBufDisable
+                " au! BufWinEnter quickfix VimadeBufDisable
+                au WinEnter * ++once call vimade#Load()
+            " }}} Autocmd
+        endif
+    " }}} Vimade
+
+    " Vim-Prosession {{{
+        " Config {{{
+            let g:prosession_dir = g:vim_config_dir . '/files/session'
+        " }}} Config
+    " }}} Vim-Prosession
+
+    " Vim-Obsession {{{
+        " Config {{{
+            let g:obsession_no_bufenter = 1
+        " }}} Config
+    " }}} Vim-Obsession
+
+    " Vista {{{
+        " Config {{{
+            let g:vista_fzf_preview = ['right:50%']
+            let g:vista#renderer#enable_icon = 1
+            let g:vista_default_executive = 'ctags'
+            let g:vista_icon_indent = ["╰─▸ ", "├─▸ "]
+
+            let g:vista_executive_for = {
+                \ 'ruby': 'vim_lsp',
+                \ 'javascrip': 'vim_lsp',
+                \ }
+
+            let g:vista_ctags_cmd = {
+                \ 'ruby': 'ctags --output-format=json --languages=ruby',
+                \ }
+                " 'ruby': 'ripper-tags -R --fields=+l --exclude=test --exclude=config --exclude=.rblcl --exclude=.git --exclude=doc --exclude=.yardoc',
+            let g:vista#renderer#icons = {
+                \   "function": "⨍",
+                \   "method": "⨍",
+                \   "variable": "\uf71b",
+                \  }
+            let g:vista_echo_cursor_strategy='floating_win'
+            let g:vista#renderer#default#vlnum_offset = 1
+        " }}} Config
+
+        " Autocmd {{{
+            autocmd FileType vista,vista_kind nnoremap <buffer> <silent> f :<c-u>call vista#finder#fzf#Run()<CR>
+        " }}} Autocmd
+
+        "  Map {{{
+            nmap <F3> :Vista!!<CR>
+        " }}} Map
+    " }}} Vista
+
+    " Wilder {{{
+        if s:IsPlugged('wilder.nvim')
+            " Note {{{
+            " Questo plugin lo posso usarlo in due modalita:
+            "  - vim classico: Ha meno funzionalita, ma piu veloce e leggereo
+            "  - python: piu funzionalita ma piu pesante e meno scattante e dipende da python
+            " Lui decide in modalita autonoma quele attivare in base alle seguenti casistiche
+            " Plugin 'roxma/nvim-yarp' Attivo: Usa Python
+            " Plugin 'roxma/nvim-yarp' Disabilitato: Usa Vim
+            "
+            " Questo lo fa in base a un autocmd che ho creato io
+            " vedi configurazione sotto parte Autocmd di questo plugin
+            "
+            " Utilizzo:
+            " Quando vado in command line se non ho nessun carattere
+            " con le frecce su e giu
+            " Con <Tab> attivo il autocompletamento
+            " Con le frecce su e giu seleziono il candidato
+            " Frecia sininistra annullo
+            " Frecia destra accetto
+            "
+            " N.B:
+            " Questo plugin funzionea anche per la ricerca ma lo ho disabilitato
+            " 'modes': [':'], in questo modo funziona solo in commandi mode
+            " 'modes': [':', '?', '/'],in questo modo funziona anche con la ricerca
+            "
+            " Lo ho disabilitato perche mi dava problemi con il plugin:
+            " incsearch-easymotion.vim
+            " In quanto in questo plugin ho mappato ? e / con funzioni personalizzate
+            " e quindi non fa partire la ricerca di wilder
+            "
+
+            " }}} Note
+
+            " Config {{{
+                call wilder#setup({
+                    \ 'modes': [':'],
+                    \ 'next_key': '<Up>',
+                    \ 'previous_key': '<Down>',
+                    \ 'reject_key': ['<Left>', "\<Left>"],
+                    \ 'accept_key': ['<Right>', "\<Right>"],
+                    \ 'enable_cmdline_enter': 0,
+                    \ })
+
+                    cnoremap <expr> <Tab> <SID>in_context(0) ? <SID>start_wilder() : '<Tab>'
+                    " Reverse the directions if it suits your preference
+                    cnoremap <expr> <Up> <SID>in_context(1) ? wilder#next() : '<Up>'
+                    cnoremap <expr> <Down> <SID>in_context(1) ? wilder#previous() : '<Down>'
+
+                call wilder#set_option({
+                    \ 'before_cursor': v:true,
+                    \ 'num_workers': 2,
+                    \ })
+
+                call wilder#set_option('renderer', wilder#popupmenu_renderer(wilder#popupmenu_border_theme({
+                    \   'highlighter': wilder#basic_highlighter(),
+                    \   'border': 'single',
+                    \   'reverse': v:true,
+                    \   'apply_incsearch_fix': 0,
+                    \   'max_height': '35%',
+                    \   'min_height': 0,
+                    \   'prompt_position': 'top',
+                    \   'highlights': {
+                    \     'border': 'Normal',
+                    \     'default': 'Normal',
+                    \     'accent': wilder#make_hl(
+                    \       'PopupmenuAccent', 'Normal', [{}, {}, {'foreground': '#f4468f'}]),
+                    \   },
+                    \   'left': [' ', wilder#popupmenu_devicons()],
+                    \   'right': [' ', wilder#popupmenu_scrollbar()],
+                    \ })))
+            " }}} Config
+
+            " Function {{{
+                function! s:wilder_init() abort " {{{
+
+                    call wilder#set_option('use_python_remote_plugin', 0)
+
+                    call wilder#set_option('pipeline', [
+                        \   wilder#debounce(50),
+                        \   wilder#branch(
+                        \     [
+                        \       wilder#check({_, x -> empty(x)}),
+                        \       wilder#history(),
+                        \     ],
+                        \     wilder#cmdline_pipeline({
+                        \       'language': 'vim',
+                        \       'fuzzy': 1,
+                        \       'fuzzy_filter': wilder#vim_fuzzy_filter(),
+                        \       'hide_in_substitute': 1,
+                        \     }),
+                        \     wilder#search_pipeline({
+                        \       'debounce': 10,
+                        \     }),
+                        \   ),
+                        \ ])
+                endfunction " }}}
+
+                function! s:wilder_python_init() abort " {{{
+                    call wilder#set_option('pipeline', [
+                        \    wilder#debounce(50),
+                        \    wilder#branch(
+                        \     [
+                        \       wilder#check({_, x -> empty(x)}),
+                        \       wilder#history(),
+                        \     ],
+                        \     wilder#python_file_finder_pipeline({
+                        \      'file_command': {_, arg ->
+                        \         arg[0] ==# '.' ? ['rg', '--files', '--hidden'] : ['rg', '--files']},
+                        \      'dir_command':  {_, arg ->
+                        \         arg[0] ==# '.' ? ['fd', '-tf', '-H'] : ['fd', '-tf']},
+                        \      'filters': ['fuzzy_filter', 'difflib_sorter'],
+                        \      'cache_timestamp': {-> 1},
+                        \     }),
+                        \     wilder#cmdline_pipeline({
+                        \       'language': 'python',
+                        \       'fuzzy': 1,
+                        \       'fuzzy_filter': wilder#python_fuzzy_filter(),
+                        \       'sorter': wilder#python_difflib_sorter(),
+                        \       'hide_in_substitute': 1,
+                        \     }),
+                        \   ),
+                        \ ])
+
+
+                endfunction " }}}
+
+                function! s:start_wilder() abort " {{{
+                    let s:wilder_started = 1
+                    return wilder#next()
+                endfunction " }}}
+
+                function! s:in_context(check_started) abort " {{{
+                    if a:check_started && !s:wilder_started
+                        return 0
+                    endif
+
+                    return wilder#in_context()
+                endfunction " }}}
+            " }}} Function
+
+            " Autocmd {{{
+                let s:wilder_started = 0
+                autocmd CmdlineLeave * let s:wilder_started = 0 | call wilder#main#stop()
+                if s:IsPlugged('nvim-yarp')
+                    au CmdlineEnter * ++once call s:wilder_python_init()
+                else
+                    au CmdlineEnter * ++once call s:wilder_init()
+                endif
+            " }}} Autocmd
+
+        endif
+    " }}} Wilder
+
+    " WindowSwap {{{
+        " Config {{{
+            let g:windowswap_map_keys = 0 "prevent default bindings
+        " }}} Config
+
+        "  Map {{{
+            nnoremap <silent> <leader>yw :call WindowSwap#MarkWindowSwap()<CR>
+            nnoremap <silent> <leader>pw :call WindowSwap#DoWindowSwap()<CR>
+            nnoremap <silent> <leader>ww :call WindowSwap#EasyWindowSwap()<CR>
+        " }}} Map
+    " }}} WindowSwap
+
+    " Workspace {{{
+        " Config {{{
+            let g:workspace#vim#airline#enable = 1
+            let g:airline#extensions#tabline#show_tab_count = 0
+            let g:airline#extensions#tabline#show_tabs = 0
+        " }}} Config
+
+        "  Map {{{
+            " Mi sposto tra i tab
+            nnoremap <silent> <A-Down>  :tabprevious<CR>
+            nnoremap <silent> <A-Up>    :tabnext<CR>
+            inoremap <silent> <A-Down>  :tabprevious<CR>
+            inoremap <silent> <A-Up>    :tabnext<CR>
+            vnoremap <silent> <A-Down>  :tabprevious<CR>
+            vnoremap <silent> <A-Up>    :tabnext<CR>
+            " faccio lo switch tra due tab
+            nnoremap <silent>tt :call WS_Backforth()<CR>
+            nnoremap <silent>tc :tabclose<CR>
+            nnoremap <silent>tn :tabnew<CR>
+
+            " create a new tab with N title or move to an exiting N tab.
+            nnoremap <silent> <leader><leader>1 :WS 1<CR>
+            nnoremap <silent> <leader><leader>2 :WS 2<CR>
+            nnoremap <silent> <leader><leader>3 :WS 3<CR>
+            " move current buffer to tab N
+            nnoremap <silent> <leader><leader><leader>1 :WSbmv 1<CR>
+            nnoremap <silent> <leader><leader><leader>2 :WSbmv 2<CR>
+            nnoremap <silent> <leader><leader><leader>3 :WSbmv 3<CR>
+        " }}} Map
+    " }}} Workspace
+
+" }}} Plugin
+
+" Terminal Setting {{{
+    if !g:is_gui_running
+        set termencoding=utf-8
+        set background=dark
+        set t_Co=256
+        set t_ut=
+        let &t_AB="\e[48;5;%dm"
+        let &t_AF="\e[38;5;%dm"
+        if !empty($CONEMUHOOKS)
+            " Keyboard remappings for utf8 and conemu
+            let &t_kb="\xcex"
+            let &t_ku="\xceH"
+            let &t_kd="\xceP"
+            let &t_kl="\xceK"
+            let &t_kr="\xceM"
+            let &t_kD="\xceS"
+            set <Up>=[A
+            set <Down>=[B
+            set <Right>=[C
+            set <Left>=[D
+        endif
+   endif
+" }}} Terminal Setting
+
+" General {{{
+
+    " Windows Config {{{
+        if WINDOWS()
+            " Load windows support
+            call utility#windows#setup()
+        endif
+    " }}} Windows Config
+
+    " Global {{{
+        " Sets how many lines of history VIM has to remember
+        set history=1000
+        " Display incomplete commands
+        set showcmd
+        " Riapre la navigazione delle directory ricordandosi l'ultima
+        set browsedir=last
+        " Turn on file type detection
+        filetype indent on
+        " Enable filetype plugins
+        filetype plugin on
+        " Configure backspace so it acts as it should act
+        set backspace=indent,eol,start
+        " Backspace and cursor keys wrap too
+        set whichwrap+=b,s,h,l,<,>,[,]
+        " Ignore case when searching
+        set ignorecase
+        " When searching try to be smart about cases
+        set smartcase
+        " No annoying sound on errors
+        set noerrorbells
+        set novisualbell
+        set vb t_vb= t_vb=
+        " timeoutlen: timeout insert key
+        set tm=500
+        " Set English and Italian language
+        set spell spelllang=it,en
+        " Cerca la documentazione in italiano se presente altrimenti in inglese
+        set helplang=it,en
+        " Now, when using :sb, :sbnext, :sbprev instead of :b, :bnext, :bprev to switch buffers, Vim will check if
+        " buffer is open in tab/window and switch to that tab/window
+        set switchbuf=usetab
+        " when file change outside vim, vim reload automatically it
+        set autoread
+        " disable splell checking
+        set nospell
+        " di default era .,w,b,u,t,i io ci ho tolto la "i" cosi l'autocompletamento dovrebbe essere più veloce
+        " perchè con l'opzione i fa lo scan di tutti i file inclusi
+        " . => scan the current buffer ('wrapscan' is ignored)
+        " w => scan buffers from other windows
+        " b => scan other loaded buffers that are in the buffer list
+        " t => tag completion
+        " u => scan the unloaded buffers that are in the buffer list
+        " i => scan current and included files
+        " k => scan the files given with the 'dictionary'
+        set complete=.,w,b,u
+        " Quando una linea va a capo (wrap) indentato allo stesso livello della linea originale
+        set breakindent
+        " Indent according to previous line.
+        set autoindent
+        " migliora lo scorrimento verticale
+        set sidescroll=1
+        " non fa vedere la tilde alla fine del file
+        let &fcs='eob: '
+        " Abilita autowrite
+        set autowrite
+        set autowriteall
+        " Always report changed lines.
+        set report      =0
+        " continue searching at top when hitting bottom
+        set wrapscan
+        " Highlight matching parens
+        set matchpairs=(:),[:],{:},<:>
+        " substitude tabs with » and trailing spaces with ·
+        "set list listchars=tab:>·,trail:·,eol:$
+        set list listchars=tab:>·,trail:·,extends:>,precedes:<,eol:\
+        " use the modelines commands
+        set modeline
+        " use 3 lines for modelines
+        set modelines=3
+        set pumheight=7
+        " Show non-printable characters
+        set list
+        if has('multi_byte') && &encoding ==# 'utf-8'
+            let &listchars = 'tab:▸ ,extends:❯,precedes:❮,nbsp:±'
+        else
+            let &listchars = 'tab:> ,extends:>,precedes:<,nbsp:.'
+        endif
+
+        " The fish shell is not very compatible to other shells and unexpectedly
+        " breaks things that use 'shell'.
+        if &shell =~# 'fish$'
+            set shell=/bin/bash
+        endif
+
+        " Use both Unix and DOS file formats, but favor the Unix one for new files.
+        if WINDOWS()
+            set fileformats=unix,dos
+        endif
+
+        " list of file names to search for tags
+        " set tags=./tags,tags
+        set tags+=./tags,./TAGS,tags,TAGS,../tags,../../tags,../../../tags,../../../../tags
+
+        " Disable default plugin {{{
+            " disabilito plugin caricati di default
+            let g:loaded_2html_plugin      = 1 "$VIMRUNTIME/plugin/tohtml.vim
+            let g:loaded_getscript         = 1 "$VIMRUNTIME/autoload/getscript.vim
+            let g:loaded_getscriptPlugin   = 1 "$VIMRUNTIME/plugin/getscriptPlugin.vim
+            let g:loaded_gzip              = 1 "$VIMRUNTIME/plugin/gzip.vim
+            let g:loaded_logipat           = 1 "$VIMRUNTIME/plugin/logiPat.vim
+            let g:loaded_man               = 1 "$VIMRUNTIME/plugin/man.vim
+            let g:loaded_matchparen        = 1 "$VIMRUNTIME/plugin/matchparen.vim
+            let g:loaded_matchit           = 1 "$VIMRUNTIME/plugin/matchit.vim
+            let g:loaded_netrw             = 1 "$VIMRUNTIME/autoload/netrw.vim
+            let g:loaded_netrwFileHandlers = 1 "$VIMRUNTIME/autoload/netrwFileHandlers.vim
+            let g:loaded_netrwPlugin       = 1 "$VIMRUNTIME/plugin/netrwPlugin.vim
+            let g:loaded_netrwSettings     = 1 "$VIMRUNTIME/autoload/netrwSettings.vim
+            let g:loaded_rrhelper          = 1 "$VIMRUNTIME/plugin/rrhelper.vim
+            let g:loaded_shada_plugin      = 1 "$VIMRUNTIME/plugin/spellfile.vim
+            let g:loaded_spellfile_plugin  = 1 "$VIMRUNTIME/plugin/spellfile.vim
+            let g:loaded_sql_completion    = 1 "$VIMRUNTIME/autoload/sqlcomplete.vim
+            let g:loaded_syntax_completion = 1 "$VIMRUNTIME/autoload/syntaxcomplete.vim
+            let g:loaded_tar               = 1 "$VIMRUNTIME/autoload/tar.vim
+            let g:loaded_tarPlugin         = 1 "$VIMRUNTIME/plugin/tarPlugin.vim
+            let g:loaded_tutor_mode_plugin = 1 "$VIMRUNTIME/plugin/tutor.vim
+            let g:loaded_vimball           = 1 "$VIMRUNTIME/autoload/vimball.vim
+            let g:loaded_vimballPlugin     = 1 "$VIMRUNTIME/plugin/vimballPlugin.vim
+            let g:loaded_zip               = 1 "$VIMRUNTIME/autoload/zip.vim
+            let g:loaded_zipPlugin         = 1 "$VIMRUNTIME/plugin/zipPlugin.vim
+            let g:vimsyn_embed             = 1 "$VIMRUNTIME/syntax/vim.vim
+            let g:loaded_2html_plugin      = 1 "$VIMRUNTIME/plugin/tohtml.vim
+            let g:loaded_less              = 1
+            let g:loaded_syntax_completion = 1
+        " }}} Disable default plugin
+    " }}} Global
+
+    " Increase Perfomance {{{
+        " Quante righe indietreo max per determinare la sinatassi se con minlines non riesce
+        syntax sync maxlines=10000
+        " Quante righe indietreo max per determinare la sinatassi
+        syntax sync minlines=100
+        set nocursorcolumn
+        " more characters will be sent tothe screen for redrawing, instead of using insert/delete line commands
+        set ttyfast
+        " Don't redraw while executing macros (good performance config)
+        set lazyredraw
+        " Only highlight the first 300 columns.
+        set synmaxcol=370
+    " }}} Increase Perfomance
+
+    " Files, backups and undo {{{
+        " Turn backup off
+        set nobackup
+        set nowb
+        set noswapfile
+        set undofile
+        set undolevels=100
+        set updatecount =100
+        set sessionoptions-=options
+
+        " Imposta viminfo fileC:\Users\en27553\.dotfiles\vimfiles
+        let &viminfo = "!,'50,<500,s10,n" . g:vim_config_dir . "/files/info/viminfo"
+
+        " Crea le directory se non esistono
+        if !isdirectory(g:vim_config_dir . '/files/undo/')
+            if has('unix')
+                call mkdir(g:vim_config_dir . '/files/undo/', 'p', 0700)
+            else
+                call mkdir(g:vim_config_dir . '/files/undo/', 'p')
+            endif
+        endif
+
+        if !isdirectory(g:vim_config_dir . '/files/view/')
+            if has('unix')
+                call mkdir(g:vim_config_dir . '/files/view/', 'p', 0700)
+            else
+                call mkdir(g:vim_config_dir . '/files/view/', 'p')
+            endif
+        endif
+
+        if !isdirectory(g:vim_config_dir . '/files/session/')
+            if has('unix')
+                call mkdir(g:vim_config_dir . '/files/session/', 'p', 0700)
+            else
+                call mkdir(g:vim_config_dir . '/files/session/', 'p')
+            endif
+        endif
+
+        execute 'set undodir=' . g:vim_config_dir . '/files/undo'
+        execute 'set viewdir=' . g:vim_config_dir . '/files/view'
+
+    " }}} Files, backups and undo
+
+    " Tab and indent {{{
+        " Use spaces instead of tabs
+        set expandtab
+        " Be smart when using tabs ;)
+        set smarttab
+        " Smart indent
+        set smartindent
+        " 1 tab == 2 spaces
+        set shiftwidth=2
+        set tabstop=2
+        set softtabstop=2
+        " Indents to next multiple of 'shiftwidth'.
+        set shiftround
+        " Line break on 500 characters
+        set lbr
+        " Quando fa il wrpa di righe lunghe evita di spezzare le parole a metà riga
+        set tw=0
+        " Indent at the same level of the previous line
+        set autoindent
+        " Quando linee piu grande della finestra non le manda a capo
+        set nowrap
+    " }}} Tab and indent
+
+    " Folding {{{
+        " deepest fold is 10 levels
+        set foldnestmax=10
+        " this is just what i use
+        " set foldlevel=99
+
+        " cosa viene visualizzato quando faccio il folding del codice
+        set foldtext=utility#fold#Custom()
+
+        " rimuove i caratteri ----- dopo il fold
+        setl fillchars="fold: "
+        " setta una riga verticale in vertical split
+        set fillchars+=vert:│
+
+        " fare l'unfold automatico
+        set foldopen+=block,insert,jump,mark,percent,quickfix,search,tag,undo
+
+        " setto il default foldlevel quando apro un file
+        " set foldlevel=1
+
+        " abilita il tooltip per vedere cosa c'e dentro il mio fold
+        set balloonexpr=utility#foldballoon#Preview()
+        set ballooneval
+        set balloondelay=1500
+    " }}} Folding
+
+    " Autocmd {{{
+        augroup vim_nvimEx
+            autocmd!
+
+            autocmd FileType json syntax match Comment +\/\/.\+$+ | setlocal conceallevel=0
+
+            " Enable omni completion
+            autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
+            autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
+
+            " Set fileype
+            autocmd BufRead,BufNewFile {Gemfile,Rakefile,config.ru} setlocal ft=ruby
+            autocmd BufRead,BufNewFile *.yml setlocal ft=yaml
+            autocmd BufNewFile,BufRead *.html.erb set filetype=eruby.html
+            autocmd BufNewFile,BufRead *.js.erb set filetype=javascript.eruby
+
+            " Setting tab and fold type per filetype
+            autocmd FileType css  setlocal shiftwidth=2 tabstop=2
+            autocmd FileType scss setlocal foldmethod=indent shiftwidth=2 tabstop=2
+            autocmd FileType javascript setlocal ts=4 sts=4 sw=4
+
+            " Salva quando:
+            " - si cambia buffer
+            " - si perde il focus
+            " - si esce dalla modalità insert
+            autocmd FocusLost,BufLeave,InsertLeave * silent! wall
+
+            " Automatically reload vimrc when it's saved
+            autocmd BufWritePost vimrc ++nested call ReloadVimrc()
+
+            " Funzione che crea 'header per i miei file
+            " autocmd BufNewFile *.rb,*.rbw,*.haml,*.html.erb,*.erb silent call MakeFileHeader()
+
+            " salva la view
+            " uso il plugin tpope/vim-obsession
+            set viewoptions=cursor,folds,slash,unix
+
+            autocmd bufwinleave *
+                    \   if &ft!=""
+                    \   && &ft!="vim"
+                    \   && (filereadable(expand('%')) == 1)
+                    \ | mkview
+                    \ | endif
+
+            autocmd bufwinenter *
+                    \   if &ft!=""
+                    \   && (filereadable(expand('%')) == 1)
+                    \ | silent! loadview
+                    \ | endif
+
+            " When editing a file, always jump to the last known cursor position.
+            " Don't do it when the position is invalid, when inside an event handler
+            " (happens when dropping a file on gvim) and for a commit message (it's
+            " likely a different one than last time).
+            autocmd BufReadPost * autocmd FileType <buffer> ++once
+                \ if line("'\"") >= 1 && line("'\"") <= line("$") && &ft !~# 'commit'
+                \ |   exe "normal! g`\""
+                \ | endif
+
+            au FileType xml exe ":silent 1,$!xml fo - 2>/dev/null"
+        augroup END
+
+    "  }}} Autocmd
+
+    " Color {{{
+        let g:nord_bold = v:false
+        let g:nord_italic_comments = v:true
+        set background=dark
+        function! FixColorScheme() abort " {{{
+             highlight Directory guifg=#8B9BBB guibg=NONE |
+             highlight NERDTreeCWD guifg=#8B9BBB guibg=NONE |
+             highlight GlyphPaletteDirectory guifg=#8B9BBB guibg=NONE |
+             highlight vimLineComment guifg=#576279 guibg=NONE |
+             highlight Folded guifg=#66738e guibg=#3B4252 |
+             highlight SnipeWinLabel guifg=#ECEFF4 guibg=NONE |
+             highlight Terminal guifg=NONE guibg=#2E3440 |
+             highlight MarkedLine ctermfg=12 guifg=NONE ctermbg=5 guibg=#49688E |
+             highlight Comment guifg=#66738e  guibg=NONE |
+             highlight VimLineComment guifg=#66738e  guibg=NONE |
+        endfunction " }}}
+
+        augroup ThemeSpecificColors
+        autocmd!
+        autocmd ColorScheme * call FixColorScheme()
+        augroup END
+
+        colorscheme nord
+        call FixColorScheme()
+    " }}} Color
+
+    " UI Setting {{{
+        " disables the initial message
+        set shortmess+=I
+        " don't give |ins-completion-menu| messages.
+        set shortmess+=c
+        " hide tab
+        set guioptions-=e
+        " hide toolbar
+        set guioptions-=T
+        " hide menubar
+        set guioptions-=m
+        set guioptions+=M
+        " hide the left-hand scrollbar for splits/new windows
+        set guioptions-=L
+        " hide the right scrollbar
+        set guioptions-=r
+        " quando eseguo un comando esterno, lo vedo dentro vim e non apre una nuova console
+        " set guioptions+=!
+        " set width fold column
+        set foldcolumn=0
+        " set the terminal's title
+        set title
+        " display the current mode
+        set showmode
+        " height of the command bar
+        set cmdheight=1
+        " Always show the status line
+        set laststatus=2
+        " set cursor behavior
+        set guicursor+=a:blinkon0
+        
+        " Cambio il cursore del terminale
+        if !g:is_gui_running
+            " sequenze xterm per la forma del cursore
+            let s:bar   = "\e[6 q"   " barra verticale   (ver25)
+            let s:under = "\e[4 q"   " underscore        (hor20)
+            let s:block = "\e[2 q"   " blocco pieno
+
+            " Insert / Replace / Normal
+            let &t_SI = s:bar
+            let &t_SR = s:under
+            let &t_EI = s:block
+        endif
+        " set 5 lines to the cursor - when moving vertically using j/k
+        set so=5
+        " Setta per ogni buffer l'opzione hidden di default, questo mi permette di passare in maniera più pratica tra i buffer(ved. usr_22: nascondere i buffer)
+        set hidden
+        " highlight search terms
+        set hlsearch
+        " find as you type search
+        if has('reltime')
+			set incsearch
+		endif
+        " for regular expressions turn magic on
+        set magic
+        " show line number
+        set number
+        " abilito il Wildmenu per migliorare autocompletamento riga comandi
+        set wildmenu
+        set wildoptions=pum
+        " command <Tab> completion, list matches, then longest common part, then all
+        " set wildmode=longest:full,full
+        set wildmode=list:longest,full
+        " file da ignorare nel wildmenu
+        set wildignore=*.o,*~,*.pyc,*.png,*.jpg,*.gif,*.xlsm,*.xls,*.xlsx,*.zip,*.so,*.exe,*.ico,*.lock,*.tags,*tags
+        set wildignore+=log/**
+        set wildignore+=*\\log\\*
+        set wildignore+=*/log/*
+        set wildignore+=vendor/cache/**
+        set wildignore+=vendor/rails/**
+        set wildignore+=*\\tmp\\*
+        set wildignore+=*/tmp/*
+        set wildignore+=*/.git/*
+        set wildignore+=.git
+        set wildignore+=.git/*
+        set wildignore+=*\\.git\\*
+        set wildignore+=*/node_modules/**
+        set wildignore+=*/node_modules_custom/**
+        " apre le finestre in modo naturale
+        set splitbelow
+        set splitright
+        " Show as much as possible of the last line.
+        set display     =lastline
+        " Find the current line quickly.
+        set cursorline
+        set showtabline=2
+        " improve rendereing font
+        if has("gui_running")
+            if WINDOWS()
+                if g:is_vim8
+                    set renderoptions=type:directx,
+                        \gamma:1.8,contrast:0.5,geom:1,
+                        \renmode:5,taamode:1,level:1
+                endif
+            endif
+        endif
+    " }}} UI Setting
+
+    " Key Setting {{{
+
+        " Global {{{
+            if OSX()
+              let macvim_skip_cmd_opt_movement = 1
+              set macmeta
+              nmap <D-j> <M-j>
+              nmap <D-k> <M-k>
+              vmap <D-j> <M-j>
+              vmap <D-k> <M-k>
+            endif
+
+            " Disabilita i tasti freccia nella modalità normale
+            nnoremap <Up>    <nop>
+            nnoremap <Down>  <nop>
+            nnoremap <Left>  <nop>
+            nnoremap <Right> <nop>
+
+            " Disabilita i tasti freccia nella modalità inserimento
+            inoremap <Up>    <nop>
+            inoremap <Down>  <nop>
+            inoremap <Left>  <nop>
+            inoremap <Right> <nop>
+
+            " Disabilita i tasti freccia nella modalità visuale
+            vnoremap <Up>    <nop>
+            vnoremap <Down>  <nop>
+            vnoremap <Left>  <nop>
+            vnoremap <Right> <nop>
+
+
+            " remap ` for to go right position mark
+            map ' `
+
+            " mi permette di selezionare in modalità colonna con il mouse
+            " Alt + Click Sinistro e seleziono
+            " vedere http://vim.wikia.com/wiki/Easy_block_selection_with_mouse
+            noremap <M-LeftMouse> <4-LeftMouse>
+            inoremap <M-LeftMouse> <4-LeftMouse>
+            onoremap <M-LeftMouse> <C-C><4-LeftMouse>
+            noremap <M-LeftDrag> <LeftDrag>
+            inoremap <M-LeftDrag> <LeftDrag>
+            onoremap <M-LeftDrag> <C-C><LeftDrag>
+
+            " switch CWD to the directory of the open buffer
+            map <leader>cd :lcd %:p:h<cr>:pwd<cr>
+
+            " open saveas
+            " map <Leader>s :browse saveas<cr>
+
+            " mi apre subito il mio vimrc
+            silent! unmap <leader>v
+            map <unique> <silent> <leader>v :execute ':e ' . g:vim_config_dir . '/vimrc'<CR>
+
+            " pressing ,ss will toggle and untoggle spell checking
+            " map <leader>sc :setlocal spell!<cr>
+
+            " I don't even know how to use Ex mode.
+            nnoremap Q <nop>
+        " }}}Global
+
+        " Folding {{{
+            " close current fold 
+            silent! unmap z<Left>
+            silent! unmap zh
+            nmap <unique><silent> z<Left> zc
+            nmap <unique><silent> zh zc
+            
+            " close current fold ricorsivo 
+            silent! unmap zH
+            nmap <unique><silent> zH zC
+
+            " open current fold 
+            silent! unmap z<Right>
+            silent! unmap zl
+            nmap <unique><silent> z<Right> zo
+            nmap <unique><silent> zl zo
+            
+            " open current fold ricorsivo 
+            silent! unmap zL
+            nmap <unique><silent> zL zO
+
+            " Sposto al fold successivo 
+            silent! nunmap zj
+            silent! xunmap zj
+            nnoremap <silent><expr><unique> zj ':<c-u>FastFoldUpdate<CR>'.v:count.'zj'
+            xnoremap <silent><expr><unique> zj ':<c-u>FastFoldUpdate<CR>gv'.v:count.'zj'
+
+            " Sposto al fold precedente 
+            silent! nunmap zk
+            silent! xunmap zk
+            nnoremap <silent><expr><unique> zk ':<c-u>FastFoldUpdate<CR>'.v:count.'zk'
+            xnoremap <silent><expr><unique> zk ':<c-u>FastFoldUpdate<CR>gv'.v:count.'zk'
+
+            " Sposto inizio fold
+            silent! nunmap z[
+            silent! xunmap z[
+            nnoremap <silent><expr><unique> z[ ':<c-u>FastFoldUpdate<CR>'.v:count.'[z'
+            xnoremap <silent><expr><unique> z[ ':<c-u>FastFoldUpdate<CR>gv'.v:count.'[z'
+
+            " Sposto fine fold
+             silent! nunmap z]
+             silent! xunmap z]
+             nnoremap <silent><expr><unique> z] ':<c-u>FastFoldUpdate<CR>'.v:count.']z'
+             xnoremap <silent><expr><unique> z] ':<c-u>FastFoldUpdate<CR>gv'.v:count.']z'
+
+            " fa il folding di tutto
+            silent! unmap zz<Up>
+            silent! unmap zzk
+            nmap <silent><unique> zz<Up> zM
+            nmap <silent><unique> zzk zM
+            " espande tutti i folding
+            silent! unmap zz<Down>
+            silent! unmap zzj
+            nmap <silent><unique> zz<Down> zR
+            nmap <silent><unique> zzj zR
+
+            " fold N. level
+            for i in range(1, 8)
+                execute 'silent! nunmap z' . i
+                execute 'nnoremap <silent><unique> z' . i . ' :set foldlevel=' . (i-1) . '<CR>'
+            endfor
+
+            " fare il folding dell'html
+            silent! unmap zh<Left>
+            nmap <silent><unique> zh<Left>  zfat
+
+            " Nelle mia autoload/utility/togglefold ho creato la funzione utility#togglefold#Auto()
+            " con questo comando abilito disabilito il folding automatico, in pratica
+            " quando mi sposto nel codice ma fa unfold solo del codice in cui mi trovo
+            " e mi collassa tutto l'altro codice
+            silent! unmap zt
+            nmap <unique> zt :call utility#togglefold#Auto()<CR>
+        " }}}Folding
+
+        " Moving around {{{
+            " Treat long lines as break lines (useful when moving around in them)
+            noremap j gj
+            noremap k gk
+
+            " go to end line
+            noremap 9 $
+            " go to middle line
+            noremap 8 :call cursor(0, virtcol('$')/2)<CR>
+            " go go start line
+            noremap 0 ^
+            
+            " Scroll Up/Down 
+            silent! nunmap <A-k>
+            silent! nunmap <A-j>
+            silent! nunmap <A-Up>
+            silent! nunmap <A-Down>
+            nnoremap <unique> <silent> <A-j> <C-e>
+            nnoremap <unique> <silent> <A-k> <C-y>
+            nnoremap <unique> <silent> <A-Down> <C-e>
+            nnoremap <unique> <silent> <A-Up> <C-y>
+
+            silent! xunmap <A-k>
+            silent! xunmap <A-j>
+            silent! xunmap <A-Up>
+            silent! xunmap <A-Down>
+            xnoremap <unique> <silent> <A-j> <C-e>
+            xnoremap <unique> <silent> <A-k> <C-y>
+            xnoremap <unique> <silent> <A-Down> <C-e>
+            xnoremap <unique> <silent> <A-Up> <C-y>
+
+            silent! iunmap <A-k>
+            silent! iunmap <A-j>
+            silent! iunmap <A-Up>
+            silent! iunmap <A-Down>
+            inoremap <unique> <silent> <A-j> <C-O><C-E>
+            inoremap <unique> <silent> <A-k> <C-O><C-Y>
+            inoremap <unique> <silent> <A-Down> <C-O><C-E>
+            inoremap <unique> <silent> <A-Up> <C-O><C-Y>
+
+            " Remap VIM `. per spostarmi ultima riga modificata
+            map <silent><leader>e `.
+
+            " Mi sposto in insert mode
+            silent! iunmap <C-h>
+            silent! iunmap <C-j>
+            silent! iunmap <C-k>
+            silent! iunmap <C-l>
+            inoremap <unique> <C-h> <Left>
+            inoremap <unique> <C-j> <Down>
+            inoremap <unique> <C-k> <Up>
+            inoremap <unique> <C-l> <Right>
+        " }}}Moving around
+
+        " Buffer & window & tab {{{
+            " per spostarmi tra i buffer
+            silent! nunmap <A-Left>
+            silent! nunmap <A-Right>
+            nnoremap <unique> <silent> <A-Left>  :bprevious<CR>
+            nnoremap <unique> <silent> <A-Right> :bnext<CR>
+
+            " Spostarmi tra le finestre con i tasti direzionali
+            nmap <silent> wc        <C-W>c
+            nmap <silent> w<Up>     <C-W>k
+            nmap <silent> w<Down>   <C-W>j
+            nmap <silent> w<Left>   <C-W>h
+            nmap <silent> w<Right>  <C-W>l
+
+            " Spostarmi tra le finestre con i tast hjkli
+            silent! unmap <C-j>
+            silent! unmap <C-k>
+            silent! unmap <C-h>
+            silent! unmap <C-l>
+            map <unique> <C-j> <C-W>j
+            map <unique> <C-k> <C-W>k
+            map <unique> <C-h> <C-W>h
+            map <unique> <C-l> <C-W>l
+
+            " Easy movement between windows insert mode
+            " imap <C-j> <Esc><C-W>ji
+            " imap <C-k> <Esc><C-W>ki
+            " imap <C-h> <Esc><C-W>hi
+            " imap <C-l> <Esc><C-W>li
+
+            " shortcut per ridimensionare le finestre
+            nnoremap  wr<left>  :vertical resize -10<cr>
+            nnoremap  wr<right> :vertical resize +10<cr>
+            nnoremap  wr<down>  :resize -10<cr>
+            nnoremap  wr<up>    :resize +10<cr>
+            nnoremap  wr0       <C-W>=
+            nnoremap  wrh       <C-w>\|
+            nnoremap  wrv       <C-w>_
+
+            " creare nuove finestre ed è pensato rispetto la finestra o rispetto il buffer
+            " vedere https://technotales.wordpress.com/2010/04/29/vim-splits-a-guide-to-doing-exactly-what-you-want/
+            " rispetto la window
+            nmap wn<left>        :topleft  vnew<CR>
+            nmap wn<right>       :botright vnew<CR>
+            nmap wn<up>          :topleft  new<CR>
+            nmap wn<down>        :botright new<CR>
+            " rispetto il buffer
+            nmap bn<left>        :leftabove  vnew<CR>
+            nmap bn<right>       :rightbelow vnew<CR>
+            nmap bn<up>          :leftabove  new<CR>
+            nmap bn<down>        :rightbelow new<CR>
+
+            " Close all the buffers
+            map bx :bufdo bd<cr>
+
+            nnoremap tn :tabnew<CR>
+            " nmap <leader>1 1gt
+            " nmap <leader>2 2gt
+            " nmap <leader>3 3gt
+            " nmap <leader>4 4gt
+            " nmap <leader>5 5gt
+            " nmap <leader>6 6gt
+            " nmap <leader>7 7gt
+            " nmap <leader>8 8gt
+            " nmap <leader>9 9gt
+        " }}}Buffer & window & tab
+
+        " Editing {{{
+            " Usate per eliminare una parola anche tipo @variabile o se mi trova al centro della parola
+            inoremap <C-d> <C-O>B<C-O>dE
+            noremap <leader>dw BdEi
+
+            " Mette le parentesi sul testo selezionato
+            vnoremap ( <Esc>`>a)<Esc>`<i(<Esc>
+            " Mette le parentesi quadre sul testo selezionato
+            vnoremap [ <Esc>`>a]<Esc>`<i[<Esc>
+            " Mette gli apici sul testo selezionato
+            vnoremap <leader>2 <Esc>`>a"<Esc>`<i"<Esc>
+
+
+            " Elimina il testo invece di copiarlo nella clipboard
+            " Usare <leader>d per eleiminarlo e copiarlo nella clipboard
+            silent! nunmap <Leader>d
+            silent! vunmap <Leader>d
+            nnoremap <unique><silent> <leader>d "_d
+            vnoremap <unique><silent> <leader>d "_d
+
+            " Copia il testo con indentazione corretta
+            nnoremap <leader>p "+p'[='] 
+        " }}} Editing
+
+        " Visualization {{{
+
+            " per evidenziare riga e colonna
+            silent! unmap <Leader>cl
+            silent! unmap <Leader>cc
+            silent! unmap <Leader>ca
+            map <unique><silent> <Leader>cl         :set   cursorline! <CR>
+            map <unique><silent> <Leader>cc         :set   cursorcolumn! <CR>
+            map <unique><silent> <Leader>ca         :set   cursorcolumn!  cursorline! <CR>
+
+
+            " aumenta la dimensione dei font
+            nnoremap <Leader>= :silent! let &guifont = substitute(
+                \ &guifont,
+                \ ':h\zs\d\+',
+                \ '\=eval(submatch(0)+1)',
+                \ 'g')<CR>
+
+            " diminuisce la dimensione dei font
+            nnoremap <Leader>- :silent! let &guifont = substitute(
+                \ &guifont,
+                \ ':h\zs\d\+',
+                \ '\=eval(submatch(0)-1)',
+                \ 'g')<CR>
+
+            " Mi evidenzia il testo piu lungo 100 colonne
+            highlight OverLength guibg=#454D5F
+            if hlexists("OverLength")
+                function! ToggleOverLength()
+                    if exists('w:m1')
+                        call matchdelete(w:m1)
+                        unlet w:m1
+                    else
+                        let w:m1=matchadd('OverLength', '\%101v.\+', 11)
+                    endif
+                endfunction
+                " Toggle evidiazione riga troppo lunga
+                map <localleader>; :call ToggleOverLength()<CR>
+                call ToggleOverLength()
+            else"
+                map <leader>k :echo "No 'OverLength' highlight group in color settings."<CR>
+            endif
+        " }}} Visualization
+
+        " Search & Replace {{{
+            " start a substitute
+            " map <leader>r :%s/
+            " sostituisce tutte le occorrenze della parola che si trova sotto il cursore
+            nmap <leader>sw :%s/<C-r>=expand("<cword>")<CR>/
+
+            " Clear search highlight
+            map <silent> <leader>c :let @/=""<CR>:echo "Cleared search register."<cr>
+            
+            " Modifico il comportamento di ricerca con *
+            " - Non si sposta alla prima occorrenza
+            " - Setta il mark s per poi ritornarci, lo usa come segnaposto
+            " -  * cerca esattamette la parola
+            " - g* cerca tutte le parole che contengono la parola
+            nnoremap <silent> *  ms:<c-u>let @/='\V\<'.escape(expand('<cword>'), '/\').'\>'<bar>call histadd('/',@/)<bar>set hlsearch<cr>
+            nnoremap <silent> g* ms:<c-u>let @/='\V' . escape(expand('<cword>'), '/\')     <bar>call histadd('/',@/)<bar>set hlsearch<cr>
+        " }}} Search & Replace
+
+        " Ctags {{{
+            " va indietro dopo essere andato a una definizione
+            silent! unmap t<left>
+            map <unique><silent> t<left> <C-T>
+
+            " alternative to <C-]>
+            " place your cursor on an id or class and hit <leader>]
+            " to jump to the definition
+            silent! unmap t<Right>
+            map <unique><silent> t<Right> :tjump /<c-r>=expand('<cword>')<cr><cr>
+            " map <silent>t<Right> :tag /<c-r>=expand('<cword>')<cr><cr>
+
+            " va al tag sotto il cursore in vertial split window
+            silent! unmap tv
+            map <unique><silent> tv :vsp <CR>:exec("tjump ".expand("<cword>"))<CR>
+            " va al tag sotto il cursore in split window
+            silent! unmap ts
+            map <unique><silent> ts :sp <CR>:exec("tjump ".expand("<cword>"))<CR>
+
+            " mi apre il tag in preview window, senza spostare il cursore nel buffer corrente
+            " dopo per chiudere la preview window C-w-z
+            silent! unmap tp
+            map <unique><silent> tp <Esc>:exe "ptjump " . expand("<cword>")<Esc><C-Down><Right>z<Right>
+
+            " mi apre il tags stack
+            silent! unmap tts
+            map <unique><silent> tts :tags <CR>
+
+            " ritorna avanti nello stack
+            silent! unmap tt<Right>
+            map <unique><silent> tt<Right> <C-]>
+
+        " }}} Ctags
+
+        " Diff mode {{{
+            " per spostarmi tra le differenze in modalità diff
+            "" Toggle on diff mode for the current buffer.
+            " nmap <leader>d :call DiffToggle()<CR>
+            function! DiffToggle()
+                if &diff
+                    diffoff
+                else
+                    diffthis
+                end
+            endfunction
+
+            if &diff
+                noremap <M-down> ]cz
+                noremap <M-up> [cz
+            endif
+        " }}} Diff mode
+
+    " }}} Key Setting
+
+" }}} General
+
+" In prova {{{
+
+    " chiude la finestra preview
+    nnoremap cp :pclose<cr>
+
+    set signcolumn=number
+    ab todo # @TODO:
+    ab <silent> bp binding.pry<C-o>
+    " let g:peekaboo_ins_prefix = '<c-x>'
+
+    " highlight Beacon guibg=white ctermbg=15
+
+    " Dicono che migliori le perfomance da testare
+    set noruler
+    set noshowcmd
+    " set inccommand=split
+
+    set concealcursor=niv
+    set conceallevel=2
+    set virtualedit=block
+    set shiftround
+    set ttimeout
+    set ttimeoutlen=500
+    set updatetime=500
+    set redrawtime=1500
+    set grepformat=%f:%l:%c:%m
+    if executable('rg')
+        set grepprg=rg\ --vimgrep\ --no-heading\ --smart-case
+        set grepformat=%f:%l:%c:%m,%f:%l:%m
+    endif
+    set startofline
+    set shortmess=aoOTIcF
+    set scrolloff=2
+    set sidescrolloff=5
+    " Jump 5 lines when running out of the screen
+    set scrolljump=5
+
+    let g:markdown_fenced_languages = ['go', 'rust', 'ruby', 'html']
+    let g:vim_markdown_folding_style_pythonic = 1
+    let g:vim_markdown_conceal_code_blocks = 0
+    let g:vim_markdown_frontmatter = 1
+    let g:vim_markdown_strikethrough = 1
+
+    let g:vimsyn_embed = 'l'
+
+    " copio current file and line to clipboard
+    " utile da usare con pry, per settare brekpoint
+    " :break app/actions/forecast/connect_excel.rb:36
+    nnoremap <leader>y :let @+=substitute(fnamemodify(expand("%"), ":~:."),"\\","/", "g") . ':' . line(".")<CR>
+
+    " VimL
+    let g:vimsyn_folding  = 'af' "Fold augroups and functions
+
+    function! GenTagRuby()
+        let tags_file  = getcwd() . "\\" . "tags"
+        " echom 'ripper-tags ' . "-f -R " . shellescape(tags_file)
+        " echom shellescape(current_dir)
+        call system('ripper-tags ' . "-R -f " . shellescape(tags_file) . " --exclude=test --exclude=config --exclude=.rblcl --exclude=doc  --exclude=.yardoc --exclude=.git")
+    endfunction
+    command! -range=% Ciao :call GenTagRuby()
+	
+	" keep cursor in the same column (if possible) when moving cursor
+	set nostartofline                         
+
+
+    packadd! hlyank
+    let g:hlyank_hlgroup = 'IncSearch'
+    let g:hlyank_duration = 1000
+    let g:hlyank_invisual = v:true
+	
+" }}} In Prove
+
+" TODO {{{
+"     [] Settare unique le map importanti
+
+
+
+" }}} TODO
+
+" Unused Stuff {{{
+
+    " Stratup Vim-Plug {{{
+        " call plug#begin($HOME.'/vimfiles/plugged')
+            " Plug 'ayu-theme/ayu-vim'
+            " Plug 'vim-ctrlspace/vim-ctrlspace'
+            " Plug 'junegunn/vim-peekaboo'
+            " Plug 'majutsushi/tagbar',                       {'on': 'TagbarToggle'}
+            " Plug 'Shougo/defx.nvim'
+            " Plug 'kristijanhusak/defx-icons'
+            " Plug 'mhinz/vim-grepper', { 'on': ['Grepper', '<plug>(GrepperOperator)'] }
+            " Plug 'dyng/ctrlsf.vim'
+            " Plug 'fatih/vim-go', {'for': ['go'] }
+            " Plug 'SirVer/ultisnips'
+            " Plug 'kassio/neoterm',                          {'on': ['T', 'TREPLSendSelection', 'TREPLSendLine', 'Topen']}
+            " Plug 'w0rp/ale'
+            " Plug 'zhaocai/GoldenView.Vim'
+            " Plug 'tpope/vim-rails'
+            " Plug 'ternjs/tern_for_vim', {'for': 'javascript'}
+            " Plug 'hackhowtofaq/vim-solargraph', {'for': 'ruby'}
+            " Plug 'dbakker/vim-projectroot', {'for': 'ruby'}
+            " Plug 'itchyny/vim-cursorword'
+            " Plug 'vim-scripts/MarkLines',
+            " Plug 'bounceme/poppy.vim',                      {'on': []}
+            " Plug $VIM.'/vimfiles/plugged/VimProcWin'
+            " Plug $VIM.'/vimfiles/plugged/YouCompleteMe'
+            " Plug $VIM.'/vimfiles/plugged/Matchlines'
+            " Plug $VIM.'/vimfiles/plugged/MakeHeader'
+        " call plug#end()
+    " }}}Stratup Vim-Plug
+
+    " General {{{
+
+    " }}} General
+
+    " Language Support {{{
+
+        " Ruby & Rails {{{
+            """""""""""""""""""""""""""""""""""""""""PARAMETRI""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+            """""""""""""""""""""""""""""""""""""""""SHORTCUT"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+            " ho creato una funzione in Helper functions per andare in rails
+            " al file corrispondente se presente in un tab
+            " map <F8> :call GoBuf()<CR>
+
+
+            "" torno indietro con plugin rails
+            "map <leader>p <c-^>
+            " map <localleader><PageUp> [m
+            " map <localleader><PageDown> ]m
+            " map <localleader><S-PageUp> [[
+            " map <localleader><S-PageDown> ]]
+
+            """""""""""""""""""""""""""""""""""""""""NOTE"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+            " Vedere impostazione presenti in Autocmd
+
+        " }}} Ruby & Rails
+
+    " }}} Language Support
+
+    " Plugin {{{
+
+        " Ale {{{
+            """"""""""""""""""""""""""""""""""""""""""PARAMETRI""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+            "let g:ale_linters = {
+            "    \   'javascript': ['eslint'],
+            "    \   'css':  ['stylelint'],
+            "    \   'ruby':  ['rubocop'],
+            "    \}
+
+            "let g:ale_fixers = {
+            "    \   'javascript': ['eslint'],
+            "    \   'scss': ['prettier'],
+            "    \   'ruby':  ['rubocop'],
+            "    \}
+
+            "let g:airline#extensions#ale#enabled = 1
+            "let g:ale_open_list = 0
+            "let g:ale_set_loclist = 0
+            "let g:ale_set_quickfix = 0
+            "let g:ale_linters_explicit = 1
+            "let g:ale_set_balloons = 0
+            "let g:ale_sign_error = '✘'
+            "let g:ale_sign_warning = '⚠'
+            "let g:ale_lint_on_enter = 1
+            "let g:ale_lint_on_text_changed = 'never'
+            "let g:ale_lint_on_save = 1
+            "let g:ale_echo_msg_error_str = 'E'
+            "let g:ale_echo_msg_warning_str = 'W'
+            "let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
+            """"""""""""""""""""""""""""""""""""""""""SHORTCUT"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+            "nmap <F8> <Plug>(ale_fix)
+            "nmap <silent> <Leader>a<Up> <Plug>(ale_previous_wrap)
+            "nmap <silent> <Leader>a<Down> <Plug>(ale_next_wrap)
+        " }}} ALe
+
+        " CtrlSpace {{{
+            """"""""""""""""""""""""""""""""""""""""""PARAMETRI""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+            "set showtabline=0
+            "let g:CtrlSpaceDefaultMappingKey = "<C-space> "
+            "let g:CtrlSpaceFileEngine = 'file_engine_windows_amd64'
+            "let g:CtrlSpaceStatuslineFunction = "airline#extensions#ctrlspace#statusline()"
+            "let g:ctrlspace_use_mouse_and_arrows = 1
+            "let g:airline_exclude_preview = 1
+
+            "" let g:CtrlSpaceGlobCommand = 'rg --files-with-matches .'
+            "let g:CtrlSpaceGlobCommand = 'fd --type file --hidden --exclude .git --exclude node_modules_custom .'
+            "let g:ctrlspace_show_key_info=1
+            "let g:ctrlspace_load_last_workspace_on_start=0
+            "let g:ctrlspace_save_workspace_on_exit=0
+            "let g:CtrlSpaceSearchTiming = 500
+            "let g:CtrlSpaceUseTabline = 1
+            "let g:airline#extensions#ctrlspace#enabled = 1
+
+            "" """""""""""""""""""""""""""""""""""""""""SHORTCUT"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+            "nnoremap <silent> <A-Left>  :CtrlSpaceGoUp<CR>
+            "nnoremap <silent> <A-Right> :CtrlSpaceGoDown<CR>
+            "inoremap <silent> <A-Left>  :CtrlSpaceGoUp<CR>
+            "inoremap <silent> <A-Right> :CtrlSpaceGoDown<CR>
+            "vnoremap <silent> <A-Left>  :CtrlSpaceGoUp<CR>
+            "vnoremap <silent> <A-Right> :CtrlSpaceGoDown<CR>
+            "function! Down(k)
+            "    call feedkeys("j")
+            "endfunction
+            "function! Up(k)
+            "    call feedkeys("k")
+            "endfunction
+            "let g:CtrlSpaceKeys = { "Buffer": { "Down": "Down", "Up": "Up" } , "File": { "Down": "Down", "Up": "Up" } }
+            "" mi mostra i buffer solo del tab in cui mi trovo e mi posso spostare con le frecce
+            "nnoremap <Leader>tb :CtrlSpace h<cr>
+            "" mi mostra i buffer solo del tab in cui mi in modalità fuzzy
+            "nnoremap <Leader>tbi :CtrlSpace H<cr>
+        " }}} CtrlSpace
+
+        " Defx {{{
+            """""""""""""""""""""""""""""""""""""""""PARAMETRI""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+            "let g:defx_icons_enable_syntax_highlight = 1
+            "au! FileType defx VimadeBufDisable
+
+            "call defx#custom#option('_', {
+            "        \ 'winwidth': 36,
+            "        \ 'split': 'vertical',
+            "        \ 'direction': 'topleft',
+            "        \ 'columns': 'mark:indent:icons:filename:type',
+            "        \ 'toggle': 0,
+            "        \ 'listed': 0,
+            "        \ 'resume': 0,
+           "        \ })
+
+            "call defx#custom#column('filename', {
+            "        \ 'min_width': 23,
+            "        \ 'max_width': 23
+            "        \ })
+
+            "function! Root(path) abort
+            "  return fnamemodify(a:path, ':t') . '/'
+            "endfunction
+            "call defx#custom#source('file', {'root': 'Root'})
+            "autocmd FileType defx call s:defx_my_settings()
+            "function! s:defx_my_settings() abort
+
+            "  "
+            "  " Apertura
+            "  "
+            "  " Se sono in una dir la espande
+            "  " Apre il file al posto del buffer in cui mi trovo
+            "  nnoremap <silent><buffer><expr> o
+            "  \ defx#is_directory() ?
+            "  \ defx#do_action('open_or_close_tree') :
+            "  \ defx#do_action('drop')
+            "  " Se sono in una dir la espande
+            "  " Apre il file al posto del buffer in cui mi trovo
+            "  " Chiude defx
+            "  nnoremap <silent><buffer><expr> O
+            "  \ defx#is_directory() ?
+            "  \ defx#do_action('open_or_close_tree') :
+            "  \ defx#do_action('multi', ['drop', 'quit'])
+            "  " Apre il file e crea una nuova finestra vsplit
+            "  nnoremap <silent><buffer><expr> v
+            "  \ defx#do_action('open', 'vsplit')
+            "  " Apre il file e crea una nuova finestra vsplit
+            "  " Chiude defx
+            "  nnoremap <silent><buffer><expr> V
+            "  \ defx#do_action('multi', [['open', 'vsplit'], 'quit'])
+
+            "  "
+            "  " Navigazione
+            "  "
+            "  " torno su di un livello
+            "  nnoremap <silent><buffer><expr> <Esc>
+            "  \ defx#do_action('cd', ['..'])
+            "  nnoremap <silent><buffer><expr> cw
+            "  \ defx#do_action('change_vim_cwd')
+            "  nnoremap <silent><buffer><expr> cd
+            "  \ defx#do_action('cd', [defx#get_candidate().action__path] )
+
+            "  nnoremap <silent><buffer><expr> q
+            "  \ defx#do_action('quit')
+
+            "  "
+            "  " Selezione
+            "  "
+            "  nnoremap <silent><buffer><expr> <Space>
+            "  \ defx#do_action('toggle_select') . 'j'
+            "  nnoremap <silent><buffer><expr> *
+            "  \ defx#do_action('toggle_select_all')
+
+            "  "
+            "  " Modifica
+            "  "
+            "  nnoremap <silent><buffer><expr> K
+            "  \ defx#do_action('new_directory')
+            "  nnoremap <silent><buffer><expr> N
+            "  \ defx#do_action('new_file')
+            "  nnoremap <silent><buffer><expr> c
+            "  \ defx#do_action('copy')
+            "  nnoremap <silent><buffer><expr> p
+            "  \ defx#do_action('paste')
+            "  nnoremap <silent><buffer><expr> m
+            "  \ defx#do_action('move')
+            "  nnoremap <silent><buffer><expr> r
+            "  \ defx#do_action('rename')
+            "  nnoremap <silent><buffer><expr> d
+            "  \ defx#do_action('remove')
+            "   nnoremap <silent><buffer><expr> yy
+            "  \ defx#do_action('yank_path')
+
+            "  "
+            "  " Visualizzazione
+            "  "
+            "  nnoremap <silent><buffer><expr> .
+            "  \ defx#do_action('toggle_ignored_files')
+            "  nnoremap <silent><buffer><expr> S
+            "  \ defx#do_action('toggle_sort', 'time')
+
+            "  "
+            "  " Eseguo comandi
+            "  "
+            "  nnoremap <silent><buffer><expr> !
+            "  \ defx#do_action('execute_command')
+            "  nnoremap <silent><buffer><expr> x
+            "  \ defx#do_action('execute_system')
+            "endfunction
+            """"""""""""""""""""""""""""""""""""""""""SHORTCUT"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+            "map   <silent> <F4> :Defx -ignored-files="\"\",*.exe,.*,*.bat,*.ico,*.ini,*.key,*.crt,yarn.lock,*.rblcl,*.yardoc,*.git,tags,node_modules_custom,node_modules,\"\""<cr>
+            "vmap  <silent> <F4> <esc>:Defx -ignored-files="\"\",*.exe,.*,*.bat,*.ico,*.ini,*.key,*.crt,yarn.lock,*.rblcl,*.yardoc,*.git,tags,node_modules_custom,node_modules,\"\""<cr>
+            "imap  <silent> <F4> <esc>:Defx -ignored-files="\"\",*.exe,.*,*.bat,*.ico,*.ini,*.key,*.crt,yarn.lock,*.rblcl,*.yardoc,*.git,tags,node_modules_custom,node_modules,\"\""<cr>
+        " }}}Defx
+
+        " Go {{{
+            """""""""""""""""""""""""""""""""""""""""PARAMETRI""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+            " let g:go_highlight_fields = 1
+            " let g:go_highlight_types = 1
+            " let g:go_highlight_functions = 1
+            " let g:go_highlight_operators = 1
+            """""""""""""""""""""""""""""""""""""""""SHORTCUT"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+        " }}} Go
+
+        " Grepper {{{
+            """"""""""""""""""""""""""""""""""""""""""PARAMETRI"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+            "let g:grepper       = {}
+            "let g:grepper.tools = ['rg', 'ag', 'pt', 'git']
+            "let g:grepper.highlight = 1
+            "let g:grepper.side      = 1
+            "autocmd FileType GrepperSide
+            "  \  silent execute 'keeppatterns v#'.b:grepper_side.'#>'
+            "  \| silent normal! ggn
+            " highlight Directory ctermfg=216 ctermbg=NONE cterm=NONE guifg=#ffaf87 guibg=NONE gui=NONE
+            " highlight qfLineNr ctermfg=238 ctermbg=NONE cterm=NONE guifg=#444444 guibg=NONE gui=NONE
+            " highlight qfSeparator ctermfg=243 ctermbg=NONE cterm=NONE guifg=#767676 guibg=NONE gui=NONE
+            " highlight GrepperSideFile ctermfg=161 cterm=reverse
+            " highlight Conceal ctermfg=NONE ctermbg=250
+            " let g:grepper.quickfix      = 1
+            " " autocmd FileType qf wincmd K
+            "" """""""""""""""""""""""""""""""""""""""""SHORTCUT"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+            " " nmap gs  <plug>(GrepperOperator)
+            " " xmap gs  <plug>(GrepperOperator)
+            " nnoremap <localleader>sg :Grepper -tool git -side<cr>
+            " nnoremap <localleader>sa :Grepper -tool ag -side<cr>
+            " nnoremap <localleader>s  :Grepper -tool rg -side<cr>
+            " nnoremap <localleader>*  :Grepper -tool rg -side -cword<cr>
+            " nnoremap <localleader>sb  :Grepper -tool rg -side -buffer<cr>
+            " nnoremap <localleader>sbw  :Grepper -tool rg -side -buffer -cword<cr>
+
+
+            " command! Todo :Grepper
+            "       \ -noprompt
+            "       \ -tool git
+            "       \ -grepprg git grep -nIi '\(TODO\|FIXME\|todo\|fixme\)'
+        " }}} Grepper
+
+        "" Neoterm {{{
+        "    if s:IsPlugged('neoterm')
+        "        " Note {{{
+        "            " AVVIO SESSIONE DEBUG CON PRY
+        "            " Setto un'interuzzione nel codice con:
+        "            " binding.pry
+        "            " In Neovim avvio il Debug com il comando per chiamare l'avvio del programma
+        "            " :T ruby application.rb args*
+        "            " Ora sono dentro la sessione di Debug con PRY, posso lanciare qualsiasi comandi pry da quindi
+        "            " Per settare un breakpoint nel codice ho creato una funzione SetBreakPoint, che invia a PRY il nome del
+        "            " file e la riga e setta il breakpoint
+        "            " per settarlo ho settato la map <localleader>nb
+        "        " }}} Note
+
+        "        " Config {{{
+        "            let g:neoterm_callbacks = {}
+        "            function! g:neoterm_callbacks.before_new()
+        "                if winwidth('.') > 100
+        "                    let g:neoterm_default_mod = 'botright vertical'
+        "                else
+        "                    let g:neoterm_default_mod = 'botright'
+        "                end
+        "            endfunction
+
+        "            " let g:neoterm_autoscroll = '1'
+        "            "let g:neoterm_shell = 'pwsh'
+        "            " if has("win32")
+        "            "     let g:neoterm_eof = "\r"
+        "            " endif
+        "            " let &shell = 'pwsh'
+        "            " let &shellcmdflag = '-NoLogo -NoProfile -ExecutionPolicy RemoteSigned -Command [Console]::InputEncoding=[Console]::OutputEncoding=[System.Text.Encoding]::UTF8;'
+        "            " let &shellredir = '2>&1 | Out-File -Encoding UTF8 %s; exit $LastExitCode'
+        "            " let &shellpipe = '2>&1 | Out-File -Encoding UTF8 %s; exit $LastExitCode'
+        "            let g:neoterm_repl_ruby = 'pry'
+        "            " set shellquote= shellxquote=
+        "            " tnoremap <Esc> <C-\><C-n>
+        "            " command! -nargs=+ TT Topen | T
+        "        " }}} Config
+
+        "        " Map {{{
+        "            vnoremap <localleader>ns :TREPLSendSelection
+        "            nnoremap <localleader>nl :TREPLSendLine
+        "            function! SetBreakPoint() abort
+        "                let l:path_and_line = substitute(fnamemodify(expand("%"), ":~:."),"\\","/", "g") . ':' . line(".")
+        "                echom "Set break Point" . l:path_and_line
+        "                execute "T break " . l:path_and_line
+        "            endfunction
+        "            nnoremap <silent> <localleader>nb :<C-U>call SetBreakPoint()<CR>
+        "        " }}} Map
+        "    endif
+        "" }}} Neoterm
+
+        " MarkLines {{{
+        "     " Config {{{
+        "         let g:marklines_noautomap = 1
+        "     " }}} Config
+
+        "     " Map {{{
+        "         silent! nunmap <leader>bc
+        "         silent! nunmap <leader>bl
+        "         silent! nunmap <leader>bt
+        "         silent! nunmap <leader>be
+        "         silent! vunmap <leader>bc
+        "         silent! vunmap <leader>bl
+        "         silent! vunmap <leader>bt
+        "         silent! vunmap <leader>be
+
+        "         nmap <silent> <unique> <leader>bc :MarkLinesOff<CR>
+        "         nmap <silent> <unique> <leader>bl :MarkLinesOn<CR>
+        "         nmap <silent> <unique> <leader>bt :MarkLinesToggle<CR>
+        "         nmap <silent> <unique> <leader>be :MarkLinesToggle ErrorMsg<CR>
+        "         vmap <silent> <unique> <leader>bc :MarkLinesOff<CR>
+        "         vmap <silent> <unique> <leader>bl :MarkLinesOn<CR>
+        "         vmap <silent> <unique> <leader>bt :MarkLinesToggle<CR>
+        "         vmap <silent> <unique> <leader>be :MarkLinesToggle ErrorMsg<CR>
+        "     " }}} Map  
+        " }}} MarkLines
+
+        " MakeHeader {{{
+            """""""""""""""""""""""""""""""""""""""""PARAMETRI""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+            " let g:header_comment_author="Boscolo Michele"
+            """""""""""""""""""""""""""""""""""""""""SHORTCUT"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+        " }}} MakeHeader
+
+        " Poppy {{{
+            """""""""""""""""""""""""""""""""""""""""PARAMETRI""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+            " au! cursormoved *.rb,*.js call PoppyInit()
+            """""""""""""""""""""""""""""""""""""""""""NOTE"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+            " Mi fa il rainbow rainbow parenthesis
+        " }}} Poppy
+
+        " Tagbar {{{
+            """""""""""""""""""""""""""""""""""""""""PARAMETRI""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+            " let g:tagbar_autoclose = 0
+            " let g:tagbar_usearrows = 1
+            " let g:tagbar_sort = 0
+            " let g:tagbar_width=28
+            " let g:tagbar_autofocus = 1
+            " let g:tagbar_show_linenumbers = 1
+            " let g:tagbar_iconchars = ['▶', '▼']
+            " let g:tagbar_type_ruby = {
+            "   \ 'kinds'      : ['m:modules',
+            "                   \ 'c:classes',
+            "                   \ 'C:constants',
+            "                   \ 'F:singleton methods',
+            "                   \ 'f:methods',
+            "                   \ 'a:aliases'],
+            "   \ 'kind2scope' : { 'c' : 'class',
+            "                    \ 'm' : 'class' },
+            "   \ 'scope2kind' : { 'class' : 'c' },
+            "   \ 'ctagsbin'   : 'ripper-tags',
+            "   \ 'ctagsargs'  : ['-f', '-']
+            "   \ }
+            """""""""""""""""""""""""""""""""""""""""SHORTCUT"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+            " nmap <F3> :TagbarToggle<CR>
+        " }}} Tagbar
+
+        " Tern {{{
+            """"""""""""""""""""""""""""""""""""""""""PARAMETRI""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+            "let g:tern_show_argument_hints='on_hold'
+            "let g:tern_show_signature_in_pum = 1
+            "let g:tern_map_keys=0
+            """"""""""""""""""""""""""""""""""""""""""SHORTCUT"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+            "nnoremap <Leader><Leader><Right>  :TernDef<CR>
+            "nnoremap <Leader><Leader>s<Right> :TernDefSplit<CR>
+            "nnoremap <Leader><Leader>p<Right> :TernDefPreview<CR>
+            "nnoremap <Leader><Leader>r :TernRename<CR>
+            "nnoremap <Leader><leader><Left> <C-o>
+            "" apre il file sotto il cursore
+            "map <leader>o :vertical wincmd f<CR>
+        " }}} Tern
+
+        " Youcompleteme {{{
+            "set noshowmode shortmess+=c
+            "set completeopt-=preview
+            "set completeopt+=menuone,noinsert,noselect
+
+            "let g:acp_enableAtStartup = 0                     " mi assicuro di disabilitare AutoComplPop
+            "let g:ycm_use_ultisnips_completer = 1             " enable ultisnip integration
+            "let g:ycm_collect_identifiers_from_tags_files = 1 " enable completion from tags
+            "let g:ycm_min_num_of_chars_for_completion = 4
+            "let g:ycm_min_num_identifier_candidate_chars = 0
+            "let g:ycm_max_num_candidates = 10
+            "let g:ycm_show_diagnostics_ui = 0
+            "let g:tern_show_argument_hints = 'on_hold'
+            "let g:ycm_add_preview_to_completeopt = 1
+            "let g:ycm_auto_start_csharp_server = 0
+            "let g:ycm_collect_identifiers_from_comments_and_strings = 1
+            "let g:ycm_autoclose_preview_window_after_completion = 1
+            "let g:ycm_complete_in_comments = 1
+            "let g:ycm_key_invoke_completion = '<C-o>' " devo premere c-x e c-o
+            "" let g:ycm_key_invoke_completion = '<C-Space>'
+            "let g:ycm_autoclose_completion_window_after_selecting = 1
+            "let g:ycm_python_interpreter_path = 'C:\APPL\Python38'
+            "let g:ycm_filetype_blacklist = {
+            "\ 'tagbar' : 1,
+            "\ 'qf'    : 1,
+            "\ 'notes' : 1,
+            "\ 'markdown' : 1,
+            "\ 'unite' : 1,
+            "\ 'text' : 1,
+            "\ 'infolog' : 1,
+            "\ 'nerdtree': 1,
+            "\}
+            "let g:ycm_semantic_triggers =  {
+            "\   'css': [ 're!^\s{4}', 're!:\s+' ],
+            "\   'ruby' : ['re!\.\w\w$', '::'],
+            "\ }
+            """"""""""""""""""""""""""""""""""""""""""SHORTCUT"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+            "inoremap <expr> <Esc>      pumvisible() ? "\<C-y>\<Esc>" : "\<Esc>"
+            "inoremap <expr> <CR>       pumvisible() ? "\<C-y>\<Esc>a" : "\<CR>"
+        " }}} Youcompleteme
+
+        " Ultisnip {{{
+            """""""""""""""""""""""""""""""""""""""""PARAMETRI""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+            " let g:UltiSnipsExpandTrigger = "<NUL>"
+            "" Setto le cartelle dove cercare gli snippet
+            "if WINDOWS()
+            "    let g:UltiSnipsSnippetsDir=$HOME."/vimfiles/plugged/ultisnips/UltiSnips"
+            "endif
+
+            "let g:UltiSnipsUsePythonVersion = 3
+            "let g:UltiSnipsSnippetDirectories=["UltiSnips","CssUltiSnips","snippet"]
+            """"""""""""""""""""""""""""""""""""""""""SHORTCUT"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+            "" let g:UltiSnipsListSnippets="<C-e>"
+        " }}} Ultisnip
+
+    " }}} Plugin
+
+    " Autocmd {{{
+        " " ULTISNIP ==> Viene utilizzato per migliorare l'integrazione con l'autocompletamento
+        " au BufEnter * exec "inoremap <silent> " . g:UltiSnipsExpandTrigger . " <C-R>=g:UltiSnips_Complete()<cr>"
+        " au BufEnter * exec "inoremap <silent> " . g:UltiSnipsJumpBackwardTrigger . " <C-R>=g:UltiSnips_Reverse()<cr>"
+    "  }}} Autocmd
+
+    " Helper functions {{{
+        "    " Trasforma in HTML il testo selezionato mantenendo la sintassi
+        "    let g:html_use_css = 1
+        "    let html_number_lines = 0
+        "    function! MyToHtml(line1, line2)
+        "        " make sure to generate in the correct format
+        "        let old_css = 1
+        "        if exists('g:html_use_css')
+        "            let old_css = g:html_use_css
+        "        endif
+        "        let g:html_use_css = 0
+
+        "        " generate and delete unneeded lines
+        "        exec a:line1.','.a:line2.'TOhtml'
+        "        %g/<body/normal k$dgg
+
+        "        " convert body to a table
+        "        %s/<body\s*\(bgcolor="[^"]*"\)\s*text=\("[^"]*"\)\s*>/<table \1 cellPadding=0><tr><td><font color=\2>/
+        "        %s#</body>\(.\|\n\)*</html>#\='</font></td></tr></table>'#i
+
+        "        " restore old setting
+        "        let g:html_use_css = old_css
+        "    endfunction
+        "    command! -range=% MyToHtml :call MyToHtml(<line1>,<line2>)
+
+        "    function! GoBuf()
+        "        for t in range(tabpagenr('$'))
+        "            let winnr       = tabpagewinnr(t)
+        "            let buflist     = tabpagebuflist(t)
+        "            let bufnr       = buflist[winnr - 1]
+        "            let bufname     = bufname(bufnr)
+        "            let tabTitle    = ctrlspace#api#TabTitle(t, bufnr, bufname)
+        "            echo tabTitle
+        "         endfor
+        "        let path_file = findfile(rails#cfile())
+        "        let currentTab = tabpagenr()
+        "        let title   = ctrlspace#util#Gettabvar(2, "CtrlSpaceLabel")
+        "        try
+        "            execute ":sb "path_file
+        "        catch
+        "        if path_file =~ '\<app/views/'
+        "          execute ":tabn 2 "
+        "          execute ":sp "path_file
+        "         endif
+        "        endtry
+        "    endfunction
+
+
+        "    " Controlla se il file è stato modificato aggiorna l'header se presente, salva il file
+        "    function! Autosave ()
+        "        if &modified
+        "             " silent call UpdateHeader()
+        "             write
+        "        endif
+        "    endfunction
+
+    " }}} Helper functions
+
+" }}} Unused Stuff

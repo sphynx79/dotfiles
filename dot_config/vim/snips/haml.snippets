@@ -1,0 +1,15 @@
+priority -50
+
+
+snippet simpleform "simple_form_for(@model) do |f|"
+= simple_form_for(${1:Model}) do |f|
+	= f.input :${2:Field1}
+	= f.input :${3:Field2}
+	= f.input :${4:Field3}
+	%br/
+	= content_tag :div, class: "form-group" do
+		= f.button :submit
+endsnippet
+
+# vim:ft=snippets:
+
