@@ -5,9 +5,6 @@ setlocal
 
 set SOURCE={{ .chezmoi.sourceDir }}\dot_config\vim
 set DEST=%USERPROFILE%\vimfiles
-set HEXO_SOURCE={{ .chezmoi.sourceDir }}\support_files\hexokinase.exe
-set HEXO_DEST_DIR=%DEST%\plugged\vim-hexokinase\hexokinase
-set HEXO_DEST_FILE=%HEXO_DEST_DIR%\hexokinase.exe
 
 echo Sincronizzazione Vim files...
 
@@ -35,15 +32,6 @@ if errorlevel 1 (
     vim.exe -c "PlugInstall" -c "qa"
     echo Plugin installati.
 
-    if exist "%HEXO_SOURCE%" (
-        :: Controlla se la cartella di destinazione è stata creata da vim-plug
-        if exist "%HEXO_DEST_DIR%" (
-            echo Copiando hexokinase.exe...
-            copy /y "%HEXO_SOURCE%" "%HEXO_DEST_FILE%" > nul
-        ) else (
-            echo      ATTENZIONE: La cartella per hexokinase non esiste. Il plugin potrebbe non essere installato.
-        )
-    )
 ) else (
     echo Nessuna modifica rilevata.
 )
