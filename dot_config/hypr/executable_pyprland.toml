@@ -4,7 +4,6 @@ include = [
     "~/.config/hypr/pyprland.d/",
 ]
 
-plugins = [
-	"toggle_special",
-]
-
+# plugins = [
+# 	"toggle_special",
+# ]

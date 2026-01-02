@@ -1,0 +1,171 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+SOCK="$XDG_RUNTIME_DIR/hypr/$HYPRLAND_INSTANCE_SIGNATURE/.socket2.sock"
+OFFSET=18
+
+get_client_json() {
+  local addr="$1" # senza 0x
+  hyprctl clients -j | jq -c --arg a "0x$addr" '.[] | select(.address == $a)'
+}
+
+get_group_members() {
+  local addr="$1" # senza 0x
+  # ritorna lista di address SENZA 0x (uno per riga)
+  hyprctl clients -j | jq -r --arg a "0x$addr" '
+    .[] | select(.address == $a) | .grouped[]? | sub("^0x";"")
+  '
+}
+
+get_monitor_json() {
+  local monid="$1"
+  hyprctl monitors -j | jq -c --argjson id "$monid" '.[] | select(.id == $id)'
+}
+
+get_layout_tag() {
+  # normalizza "center*" -> "center"
+  jq -r '
+    [ .tags[]? | sub("\\*$";"") | select(.=="left" or .=="center" or .=="right") ][0] // empty
+  '
+}
+
+calc_geom() {
+  local mon_json="$1"
+  local tag="$2"
+  local grouped_state="$3" # 0/1
+
+  jq -nr \
+    --argjson mon "$mon_json" \
+    --arg tag "$tag" \
+    --argjson grouped "$grouped_state" \
+    --argjson offset "$OFFSET" '
+    def i: floor;
+
+    # <<< FIX IMPORTANTE: usa dimensioni LOGICHE (width/scale) >>>
+    (($mon.scale // 1.0) | tonumber) as $s |
+    (($mon.width  / $s) | i) as $mw |
+    (($mon.height / $s) | i) as $mh |
+
+    # x/y di solito sono già nello stesso spazio di clients; se su multi-monitor vedi offset strani,
+    # prova a dividere anche questi per $s.
+    ($mon.x | i) as $mx |
+    ($mon.y | i) as $my |
+
+    (if $tag=="left" then
+        { w: ($mw*0.36|i),  h: (($mh-38)|i), x: ($mx+5|i),             y: ($my+34|i) }
+     elif $tag=="center" then
+        { w: ($mw*0.47|i),  h: (($mh-38)|i), x: ($mx+($mw*0.36)+10|i), y: ($my+34|i) }
+     elif $tag=="right" then
+        { w: ($mw*0.164|i), h: (($mh-38)|i), x: ($mx+($mw*0.83)+18|i), y: ($my+34|i) }
+     else empty end) |
+
+    (if $grouped==1 then .y += $offset | .h -= $offset else . end) |
+
+    "\(.x)\t\(.y)\t\(.w)\t\(.h)"
+  '
+}
+
+apply_layout_for_addr() {
+  local addr="$1"        # senza 0x
+  local grouped="$2"     # 0/1
+
+  local cjson
+  cjson="$(get_client_json "$addr" || true)"
+  [[ -z "$cjson" ]] && return 0
+
+  # limita al tuo caso (workspace 1)
+  local ws
+  ws="$(jq -r '.workspace.id // empty' <<<"$cjson")"
+  [[ "$ws" != "1" ]] && return 0
+
+  local tag
+  tag="$(get_layout_tag <<<"$cjson")"
+  [[ -z "$tag" ]] && return 0
+
+
+  local monid
+  monid="$(jq -r '.monitor' <<<"$cjson")"
+
+  local mjson
+  mjson="$(get_monitor_json "$monid" || true)"
+  [[ -z "$mjson" ]] && return 0
+
+  local geom x y w h
+  geom="$(calc_geom "$mjson" "$tag" "$grouped")"
+  read -r x y w h <<<"$(tr '\t' ' ' <<<"$geom")"
+
+  hyprctl --batch \
+    "dispatch movewindowpixel exact $x $y,address:0x$addr;"\
+    "dispatch resizewindowpixel exact $w $h,address:0x$addr;"\
+    > /dev/null
+}
+
+dedup_addrs() {
+  # input: array di address senza 0x
+  # output: stampa una lista deduplicata (uno per riga)
+  declare -A seen=()
+  for a in "$@"; do
+    [[ -z "$a" ]] && continue
+    if [[ -z "${seen[$a]+x}" ]]; then
+      seen[$a]=1
+      printf '%s\n' "$a"
+    fi
+  done
+}
+
+handle_togglegroup() {
+  local data="$1"
+
+  # data: state,addr1,addr2,...  (addr senza 0x) ([wiki.hypr.land](https://wiki.hypr.land/IPC/))
+  local -a parts=()
+  IFS=',' read -r -a parts <<< "$data"
+  local state="${parts[0]:-}"
+  [[ -z "$state" ]] && return 0
+
+  local grouped="$state"  # 1 => in gruppo (applica offset), 0 => fuori gruppo (layout base)
+
+  (
+    # retry per “vincere” su eventuali reposition post-evento
+    for delay in 0.03 0.10 0.25; do
+      sleep "$delay"
+
+      local -a members=()
+
+      if [[ "$state" == "0" ]]; then
+        # Gruppo distrutto: la lista EVENTO è la fonte più affidabile.
+        members=("${parts[@]:1}")
+      else
+        # Gruppo creato: spesso arriva solo l'address "root".
+        local root="${parts[1]:-}"
+        [[ -z "$root" ]] && return 0
+
+        # Ora .grouped di solito è valorizzato e contiene TUTTI i membri
+        mapfile -t members < <(get_group_members "$root" || true)
+
+        # fallback: se per qualche motivo non trovi nulla, usa almeno root
+        if [[ "${#members[@]}" -eq 0 ]]; then
+          members=("$root")
+        fi
+      fi
+
+      # dedup (utile perché .grouped include spesso anche se stesso, e per sicurezza)
+      mapfile -t members < <(dedup_addrs "${members[@]}")
+
+      for a in "${members[@]}"; do
+        apply_layout_for_addr "$a" "$grouped"
+      done
+    done
+  ) &
+}
+
+socat -U - UNIX-CONNECT:"$SOCK" | while read -r line; do
+  event="${line%%>>*}"
+  data="${line#*>>}"
+
+  case "$event" in
+    togglegroup)
+      handle_togglegroup "$data"
+      ;;
+  esac
+done
+

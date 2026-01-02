@@ -1,0 +1,4 @@
+#!/bin/bash
+
+cmd="$*"
+exec setsid app2unit.sh xdg-terminal-exec --app-id=org.hyprarch.terminal --title=HyprArch -e bash -c "show-logo; $cmd; show-done"

@@ -1,0 +1,15 @@
+#!/bin/bash
+
+lockscreen="${HYPRLAND_LOCKSCREEN:-$lockscreen}"
+lockscreen="${LOCKSCREEN:-hyprlock}"
+lockscreen="${HYDE_LOCKSCREEN:-$lockscreen}"
+
+#? To cleanly exit hyprlock we should use a systemd scope unit.
+#? This allows us to manage the lockscreen process more effectively.
+#? This fix the zombie process issue when hyprlock is unlocked but still running.
+unit_id=(-u "hyde-lockscreen.scope")
+
+~/.config/hypr/bin/app2unit.sh "${unit_id[@]}" -- "${lockscreen}" "${@}"
+
+# Avoid running screensaver when locked
+pkill -f org.hyprarch.screensaver

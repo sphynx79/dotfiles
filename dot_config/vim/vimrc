@@ -1935,7 +1935,7 @@
         " Quante righe indietreo max per determinare la sinatassi
         syntax sync minlines=100
         set nocursorcolumn
-        " more characters will be sent tothe screen for redrawing, instead of using insert/delete line commands
+        " more characters will be sent to the screen for redrawing, instead of using insert/delete line commands
         set ttyfast
         " Don't redraw while executing macros (good performance config)
         set lazyredraw
@@ -1953,7 +1953,7 @@
         set updatecount =100
         set sessionoptions-=options
 
-        " Imposta viminfo fileC:\Users\en27553\.dotfiles\vimfiles
+        " Imposta viminfo file
         let &viminfo = "!,'50,<500,s10,n" . g:vim_config_dir . "/files/info/viminfo"
 
         " Crea le directory se non esistono
@@ -1983,7 +1983,6 @@
 
         execute 'set undodir=' . g:vim_config_dir . '/files/undo'
         execute 'set viewdir=' . g:vim_config_dir . '/files/view'
-
     " }}} Files, backups and undo
 
     " Tab and indent {{{
@@ -2236,22 +2235,22 @@
             endif
 
             " Disabilita i tasti freccia nella modalità normale
-            nnoremap <Up>    <nop>
-            nnoremap <Down>  <nop>
-            nnoremap <Left>  <nop>
-            nnoremap <Right> <nop>
+            " nnoremap <Up>    <nop>
+            " nnoremap <Down>  <nop>
+            " nnoremap <Left>  <nop>
+            " nnoremap <Right> <nop>
 
             " Disabilita i tasti freccia nella modalità inserimento
-            inoremap <Up>    <nop>
-            inoremap <Down>  <nop>
-            inoremap <Left>  <nop>
-            inoremap <Right> <nop>
+            " inoremap <Up>    <nop>
+            " inoremap <Down>  <nop>
+            " inoremap <Left>  <nop>
+            " inoremap <Right> <nop>
 
             " Disabilita i tasti freccia nella modalità visuale
-            vnoremap <Up>    <nop>
-            vnoremap <Down>  <nop>
-            vnoremap <Left>  <nop>
-            vnoremap <Right> <nop>
+            " vnoremap <Up>    <nop>
+            " vnoremap <Down>  <nop>
+            " vnoremap <Left>  <nop>
+            " vnoremap <Right> <nop>
 
 
             " remap ` for to go right position mark
