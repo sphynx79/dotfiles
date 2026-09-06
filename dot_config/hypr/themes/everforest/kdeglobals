@@ -2,7 +2,7 @@
 TerminalApplication=alacritty
 
 [Icons]
-Theme=Gruvbox-Blue
+Theme=Papirus-Dark
 
 [KDE]
 ShowDeleteCommand=false

@@ -13,10 +13,9 @@ fi
 gtk_theme="${GTK_THEME:-Adwaita-dark}"
 icon_theme="${ICON_THEME:-Papirus-Dark}"
 color_scheme="${COLOR_SCHEME:-prefer-dark}"
-cursor_theme="${CURSOR_THEME:-Adwaita}"
+cursor_theme="${CURSOR_THEME:-nitrux_cursors}"
 
 gsettings set org.gnome.desktop.interface gtk-theme "$gtk_theme"       || true
 gsettings set org.gnome.desktop.interface color-scheme "$color_scheme" || true
 gsettings set org.gnome.desktop.interface icon-theme "$icon_theme"     || true
 gsettings set org.gnome.desktop.interface cursor-theme "$cursor_theme" || true
-

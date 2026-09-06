@@ -1,17 +1,8 @@
 #!/bin/bash
 
-# Path del file cache
-cache_file="${XDG_RUNTIME_DIR}/tmp/keybinds_hint.rofi"
 script_path="$HOME/.config/hypr/bin/keybinds.hint.py"
 
-# Leggi da cache se esiste, altrimenti genera
-if [[ -f "$cache_file" ]]; then
-  raw_output=$(cat "$cache_file")
-else
-  mkdir -p "${XDG_RUNTIME_DIR}/tmp"
-  raw_output=$("$script_path" --format rofi 2>/dev/null)
-  echo "$raw_output" > "$cache_file"
-fi
+raw_output=$("$script_path" --format rofi) || exit "$?"
 
 # Formatta output con gruppi
 output=$(echo "$raw_output" | awk -F ' ::: ' '

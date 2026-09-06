@@ -5,6 +5,7 @@ set -euo pipefail
 THEMES_DIR="$HOME/.config/hypr/themes"
 CURRENT_THEME_DIR="$THEMES_DIR/current/theme"
 DEBUG="${DEBUG:-0}"
+failed_updates=()
 
 # === Functions ===
 die() {
@@ -12,31 +13,66 @@ die() {
   exit "${2:-1}"
 }
 
+update() {
+  if ! "$@"; then
+    printf 'Warning: theme update failed: %s\n' "$*" >&2
+    failed_updates+=("$*")
+  fi
+}
+
 debug_log() {
   [[ "$DEBUG" == "1" ]] && notify-send -t 5000 "Debug Script" "$1"
   return 0
 }
 
+validate_theme() {
+  local config
+  [[ -d "$1" ]] || return 1
+  for config in qt6ct.conf kvantum/kvantum.kvconfig; do
+    if [[ ! -f "$1/$config" || ! -r "$1/$config" ]]; then
+      printf 'Error: Missing or unreadable theme config: %s\n' "$1/$config" >&2
+      return 1
+    fi
+  done
+}
+
+available_themes() {
+  local path
+  for path in "$THEMES_DIR"/*; do
+    [[ "${path##*/}" == current || "${path##*/}" == --list ]] && continue
+    if validate_theme "$path" 2>/dev/null; then
+      printf '%s\n' "${path##*/}"
+    fi
+  done | sort
+}
+
 list_themes() {
   echo "Available themes:" >&2
-  find "$THEMES_DIR" -mindepth 1 -maxdepth 1 -type d ! -name 'current' -printf '%f\n' 2>/dev/null \
-    | sort \
-    | sed 's/^/  - /' >&2
+  available_themes | sed 's/^/  - /' >&2
 }
 
 # === Argument validation ===
+if [[ "${1:-}" == --list ]]; then
+  available_themes
+  exit 0
+fi
+
 if [[ -z "${1:-}" ]]; then
-  echo "Usage: $(basename "$0") <theme-name>" >&2
+  echo "Usage: $(basename "$0") <theme-name> | --list" >&2
   list_themes
   exit 1
 fi
 
-# === Input sanitization ===
-clean_input="${1//[<>\"\']/}"      # Rimuove <>"'
-clean_input="${clean_input//\//}"  # Rimuove /
-clean_input="${clean_input//../}"  # Rimuove ..
-
-declare -l THEME_NAME="${clean_input// /-}"
+# Preserve exact basenames returned by --list; normalize only shorthand input.
+THEME_NAME="$1"
+[[ "$THEME_NAME" != */* && "$THEME_NAME" != . && "$THEME_NAME" != .. ]] ||
+  die "Invalid theme basename"
+if [[ ! -d "$THEMES_DIR/$THEME_NAME" ]]; then
+  clean_input="${1//[<>\"\']/}"
+  clean_input="${clean_input//../}"
+  THEME_NAME="${clean_input// /-}"
+  THEME_NAME="${THEME_NAME,,}"
+fi
 
 [[ -z "$THEME_NAME" ]] && die "Invalid theme name after sanitization"
 
@@ -55,6 +91,8 @@ if [[ ! -d "$THEME_PATH" ]]; then
   exit 1
 fi
 
+validate_theme "$THEME_PATH" || exit 1
+
 # === Verify/create current directory ===
 CURRENT_DIR="$THEMES_DIR/current"
 [[ ! -d "$CURRENT_DIR" ]] && mkdir -p "$CURRENT_DIR"
@@ -62,30 +100,38 @@ CURRENT_DIR="$THEMES_DIR/current"
 # === Update symlink ===
 ln -snf "$THEME_PATH" "$CURRENT_THEME_DIR"
 
+# qt6ct watches this directory, not the theme symlink; Kvantum colors may still need an app restart.
+update touch "$HOME/.config/qt6ct"
+
 # Change background with theme
-theme-bg-next
+update theme-bg-next
 
 # Reload components to apply new theme
-reload-app waybar
+update reload-app waybar
 
-restart-terminal
-hyprctl reload
+update restart-terminal
+update hyprctl reload
 
-reload-app btop
+update reload-app btop
 
 
 # makoctl reload
-swaync-client -R && swaync-client -rs
+update swaync-client --skip-wait -R
+update swaync-client --skip-wait -rs
 
-theme-set-gnome
+update theme-set-gnome
 
 # theme-set-browser
-theme-set-obsidian
+update theme-set-obsidian
 
 # Set Neovim colorscheme
-theme-set-neovim "$THEME_PATH"
+update theme-set-neovim "$THEME_PATH"
 
-restart-app dolphin
-restart-app krusader
+update restart-app dolphin
+update restart-app krusader
+
+if ((${#failed_updates[@]})); then
+  timeout 3s notify-send "Tema applicato con avvisi" "$(printf '%s\n' "${failed_updates[@]}")" || true
+fi
 # Call hook on theme set
 # hook theme-set "$THEME_NAME"

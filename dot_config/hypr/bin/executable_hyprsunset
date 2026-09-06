@@ -1,14 +1,7 @@
 #!/bin/bash
 
-# shellcheck source=$HOME/.local/bin/hyde-shell
-# shellcheck disable=SC1091
-if ! source "$(which hyde-shell)"; then
-    echo "[$0] :: Error: hyde-shell not found."
-    echo "[$0] :: Is HyDE installed?"
-    exit 1
-fi
-
-sunsetConf="${XDG_STATE_HOME:-$HOME/.local/state}/hyde/hyprsunset"
+sunsetConf="${XDG_STATE_HOME:-$HOME/.local/state}/hypr/hyprsunset"
+mkdir -p "$(dirname "$sunsetConf")"
 
 # Default settings
 default_temp=6500
@@ -56,9 +49,9 @@ send_notification() {
 
     # Send notification with title and message separated
     if [ -n "$message" ]; then
-        notify-send -a "HyDE Notify" -r 19 -t 800 -i redshift "$message" "$title"
+        notify-send -a "Hyprsunset" -r 19 -t 800 -i redshift "$message" "$title"
     else
-        notify-send -a "HyDE Notify" -r 19 -t 800 -i redshift  "$title"
+        notify-send -a "Hyprsunset" -r 19 -t 800 -i redshift  "$title"
     fi
 }
 # Signal process function
@@ -108,7 +101,14 @@ clamp_gamma() {
 
 # Query current running temperature from hyprctl
 get_running_temp() {
-    hyprctl hyprsunset temperature 2>/dev/null || echo "$default_temp"
+    local t
+    t=$(hyprctl hyprsunset temperature 2>/dev/null)
+    # hyprctl prints connection errors on stdout: accept only a number
+    if [[ "$t" =~ ^[0-9]+$ ]]; then
+        echo "$t"
+    else
+        echo "$default_temp"
+    fi
 }
 
 show_help() {
@@ -345,14 +345,20 @@ esac
 # Send signal to process if specified
 send_signal_to_process
 
-# Ensure that hyprsunset process is running (only when we need to apply changes)
-    if ! pgrep -x "hyprsunset" >/dev/null; then
-        # If socket exists but process is not running, remove the stale socket
-        if [ -f "$XDG_RUNTIME_DIR/hypr/$HYPRLAND_INSTANCE_SIGNATURE/.hyprsunset.sock" ]; then
-            rm "$XDG_RUNTIME_DIR/hypr/$HYPRLAND_INSTANCE_SIGNATURE/.hyprsunset.sock"
-        fi
-        hyprctl --quiet dispatch exec -- hyprsunset
-    fi
+# Ensure the hyprsunset daemon is running (only when we need to apply changes).
+# NB: this script has the same name as the daemon, so pgrep -x would match
+# ourselves; probe the IPC socket instead and start the binary by full path.
+sunsetSock="$XDG_RUNTIME_DIR/hypr/$HYPRLAND_INSTANCE_SIGNATURE/.hyprsunset.sock"
+if ! hyprctl hyprsunset temperature 2>/dev/null | grep -qE '^[0-9]+$'; then
+    # If socket exists but daemon is not responding, remove the stale socket
+    [ -e "$sunsetSock" ] && rm "$sunsetSock"
+    setsid "$HOME/.config/hypr/bin/app2unit.sh" -t service -- /usr/bin/hyprsunset >/dev/null 2>&1
+    # Wait for the IPC socket before applying values below
+    for _ in $(seq 1 20); do
+        [ -e "$sunsetSock" ] && break
+        sleep 0.1
+    done
+fi
 
 if [ "$action" = "read" ]; then
     if [ "$toggle_mode" -eq 1 ]; then

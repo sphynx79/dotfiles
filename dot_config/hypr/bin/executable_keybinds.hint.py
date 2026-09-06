@@ -237,16 +237,10 @@ def generate_rofi(binds):
 
     delimiter = os.getenv("ROFI_KEYBIND_HINT_DELIMITER", ">")
     for bind in binds:
-        if not bind.get("has_description", False):
-            continue
-
         if bind["dispatcher"] == "submap" and bind["arg"] == "reset":
             continue
 
-        if bind.get("mouse", False):
-            continue
-
-        catch_all = bind.get("catch_all", False)
+        catch_all = bind.get("catchall", False)
         if catch_all:  # hide the catch all keybind from the rofi menu
             continue
 
@@ -323,7 +317,12 @@ def expand_meta_data(binds_data):
             parsed_description = parse_description(bind["description"])
             bind.update(parsed_description)
         else:
-            bind["description"] = f"{map_dispatcher(bind['dispatcher'])} {bind['arg']}"
+            if bind["dispatcher"] == "__lua":
+                bind["description"] = "Lua action (no description)"
+            else:
+                bind["description"] = (
+                    f"{map_dispatcher(bind['dispatcher'])} {bind['arg']}"
+                )
             bind.update(
                 {"header1": "Misc", "header2": "", "header3": "", "header4": ""}
             )
@@ -365,11 +364,13 @@ def expand_meta_data(binds_data):
                 if submap_mod_display
                 else ""
             ) + f"{formatted_keys}"
-            bind["description"] = f"[{submap}] {bind['description']}"
         else:
             bind["submap_mod"] = ""
             bind["submap_key"] = ""
             bind["displayed_keys"] = formatted_keys
+
+        if submap:
+            bind["description"] = f"[{submap}] {bind['description']}"
 
 
 if __name__ == "__main__":

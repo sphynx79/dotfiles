@@ -6,8 +6,10 @@ USAGE() {
         Usage: $(basename "$0") [option]
         Options:
                 p     Print all outputs
+                pn    Print all outputs but not edit
                 s     Select area or window to screenshot
                 sn    Select area or window to screenshot but not edit
+                sp    Select area, save and copy the file path to clipboard
                 sf    Select area or window with frozen screen
                 m     Screenshot focused monitor
                 sc    Use tesseract to scan image, then add to clipboard
@@ -43,7 +45,7 @@ post_cmd() {
 temp_screenshot=$(mktemp -t screenshot_XXXXXX.png)
 
 if [ -z "$XDG_PICTURES_DIR" ]; then
-        XDG_PICTURES_DIR="$HOME/Pictures"
+        XDG_PICTURES_DIR="$HOME/Immagini"
 fi
 
 confDir="${confDir:-$XDG_CONFIG_HOME}"
@@ -179,12 +181,23 @@ case $1 in
 p) # print all outputs
 	take_screenshot "screen"
 	;;
+pn) # print all outputs but no edit (salva diretto + clipboard)
+	annotation_tool=""
+	take_screenshot "screen"
+	;;
 s) # drag to manually snip an area / click on a window to print it
 	take_screenshot "area"
 	;;
 sn) # drag to manually snip an are / click on window but note edit
         annotation_tool=""
         take_screenshot "area" "--freeze"
+        ;;
+sp) # select area, salva diretto e copia il PATH (non l'immagine) negli appunti
+        if "$HOME/.config/hypr/bin/grimblast" --freeze save "area" "${save_dir}/${save_file}"; then
+                printf '%s' "${save_dir}/${save_file}" | wl-copy
+        else
+                notify-send -a "Alert" "Screenshot Error" "Failed to take screenshot"
+        fi
         ;;
 sf) # frozen screen, drag to manually snip an area / click on a window to print it
 	take_screenshot "area" "--freeze"

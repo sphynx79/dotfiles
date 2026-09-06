@@ -1,4 +1,11 @@
-#!/bin/bash
+#!/usr/bin/env bash
+
+for cmd in yay fzf sudo updatedb show-done; do
+  command -v "$cmd" >/dev/null || {
+    printf 'Missing command: %s\n' "$cmd" >&2
+    exit 127
+  }
+done
 
 fzf_args=(
   --multi
@@ -14,11 +21,23 @@ fzf_args=(
   --color 'pointer:green,marker:green'
 )
 
-pkg_names=$(yay -Slqa | fzf "${fzf_args[@]}")
+pkg_names=$(yay -Slqa) || exit "$?"
+pkg_names=$(printf '%s\n' "$pkg_names" | fzf "${fzf_args[@]}")
+status=$?
+case "$status" in
+0) ;;
+1 | 130) exit 0 ;;
+*) exit "$status" ;;
+esac
+[[ -n "$pkg_names" ]] || exit 0
 
-if [[ -n "$pkg_names" ]]; then
-  # Convert newline-separated selections to space-separated for yay
-  echo "$pkg_names" | tr '\n' ' ' | xargs yay -S --noconfirm
+mapfile -t packages <<<"$pkg_names"
+yay -S --noconfirm -- "${packages[@]}"
+status=$?
+if ((status == 0)); then
   sudo updatedb
   show-done
+else
+  printf 'AUR installation failed (exit %s).\n' "$status" >&2
 fi
+exit "$status"
